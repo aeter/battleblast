@@ -45,25 +45,35 @@ public class BattleBlast extends ApplicationAdapter {
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean keyUp(int keycode) {
+                float movement = 0;
                 switch(keycode) {
                     case Keys.LEFT:
                         player.setRotation(270);
-                        float movement = player.getX() - 1000 * Gdx.graphics.getDeltaTime();
+                        movement = player.getX() - 1000 * Gdx.graphics.getDeltaTime();
                         if (movement > 0) {
                             player.setX(movement);
                         }
                         break;
                     case Keys.RIGHT:
                         player.setRotation(90);
-                        player.setX(player.getX() + 1000 * Gdx.graphics.getDeltaTime());
+                        movement = player.getX() + 1000 * Gdx.graphics.getDeltaTime();
+                        if (movement < Gdx.graphics.getWidth() - player.getWidth()) {
+                            player.setX(movement);
+                        }
                         break;
                     case Keys.UP:
                         player.setRotation(180);
-                        player.setY(player.getY() + 1000 * Gdx.graphics.getDeltaTime());
+                        movement = player.getY() + 1000 * Gdx.graphics.getDeltaTime();
+                        if (movement < Gdx.graphics.getHeight() - player.getHeight()) {
+                            player.setY(movement);
+                        }
                         break;
                     case Keys.DOWN:
                         player.setRotation(0);
-                        player.setY(player.getY() - 1000 * Gdx.graphics.getDeltaTime());
+                        movement = player.getY() - 1000 * Gdx.graphics.getDeltaTime();
+                        if (movement > 0) {
+                            player.setY(movement);
+                        }
                         break;
                 }
                 return false;
