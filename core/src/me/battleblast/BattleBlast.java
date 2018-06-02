@@ -25,14 +25,14 @@ public class BattleBlast extends ApplicationAdapter {
     @Override
     public void create () {
         manager = new AssetManager();
-        manager.load("kenney_topdownTanksRedux/PNG/Retina/tank_blue.png", Texture.class);
-        manager.load("kenney_topdownTanksRedux/PNG/Retina/tank_dark.png", Texture.class);
+        manager.load("kenney_topdownTanksRedux/PNG/Retina/tank_blue_64x64.png", Texture.class);
+        manager.load("kenney_topdownTanksRedux/PNG/Retina/tank_dark_64x64.png", Texture.class);
         manager.setLoader(TiledMap.class, new TmxMapLoader());
         manager.load("tanks.tmx", TiledMap.class);
         manager.finishLoading();
         map = manager.get("tanks.tmx", TiledMap.class);
-        player = new Sprite(manager.get("kenney_topdownTanksRedux/PNG/Retina/tank_blue.png", Texture.class));
-        enemy = new Sprite(manager.get("kenney_topdownTanksRedux/PNG/Retina/tank_dark.png", Texture.class));
+        player = new Sprite(manager.get("kenney_topdownTanksRedux/PNG/Retina/tank_blue_64x64.png", Texture.class));
+        enemy = new Sprite(manager.get("kenney_topdownTanksRedux/PNG/Retina/tank_dark_64x64.png", Texture.class));
         renderer = new OrthogonalTiledMapRenderer(map);
 
         camera = new OrthographicCamera();
