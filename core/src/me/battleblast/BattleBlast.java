@@ -2,6 +2,8 @@ package me.battleblast;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -39,6 +41,39 @@ public class BattleBlast extends ApplicationAdapter {
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         batch = new SpriteBatch();
+
+        Gdx.input.setInputProcessor(new InputAdapter() {
+            @Override
+            public boolean keyUp(int keycode) {
+                switch(keycode) {
+                    case Keys.LEFT:
+                        player.setRotation(270);
+                        float movement = player.getX() - 1000 * Gdx.graphics.getDeltaTime();
+                        if (movement > 0) {
+                            player.setX(movement);
+                        }
+                        break;
+                    case Keys.RIGHT:
+                        player.setRotation(90);
+                        player.setX(player.getX() + 1000 * Gdx.graphics.getDeltaTime());
+                        break;
+                    case Keys.UP:
+                        player.setRotation(180);
+                        player.setY(player.getY() + 1000 * Gdx.graphics.getDeltaTime());
+                        break;
+                    case Keys.DOWN:
+                        player.setRotation(0);
+                        player.setY(player.getY() - 1000 * Gdx.graphics.getDeltaTime());
+                        break;
+                }
+                return false;
+            }
+
+            @Override
+            public boolean keyDown(int keycode) {
+                return false;
+            }
+        });
     }
 
     @Override
@@ -51,7 +86,6 @@ public class BattleBlast extends ApplicationAdapter {
         renderer.render();
 
         batch.begin();
-        player.setRotation(180);
         player.draw(batch);
         enemy.setPosition(Gdx.graphics.getWidth() - enemy.getWidth(), Gdx.graphics.getHeight() - enemy.getHeight());
         enemy.draw(batch);
