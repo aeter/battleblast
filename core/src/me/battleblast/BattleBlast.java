@@ -52,6 +52,8 @@ public class BattleBlast extends ApplicationAdapter {
                         movement = player.getX() - 1000 * Gdx.graphics.getDeltaTime();
                         if (movement > 0) {
                             player.setX(movement);
+                        } else {
+                            player.setX(0);
                         }
                         break;
                     case Keys.RIGHT:
@@ -59,6 +61,8 @@ public class BattleBlast extends ApplicationAdapter {
                         movement = player.getX() + 1000 * Gdx.graphics.getDeltaTime();
                         if (movement < Gdx.graphics.getWidth() - player.getWidth()) {
                             player.setX(movement);
+                        } else {
+                            player.setX(Gdx.graphics.getWidth() - player.getWidth());
                         }
                         break;
                     case Keys.UP:
@@ -66,6 +70,8 @@ public class BattleBlast extends ApplicationAdapter {
                         movement = player.getY() + 1000 * Gdx.graphics.getDeltaTime();
                         if (movement < Gdx.graphics.getHeight() - player.getHeight()) {
                             player.setY(movement);
+                        } else {
+                            player.setY(Gdx.graphics.getHeight() - player.getHeight());
                         }
                         break;
                     case Keys.DOWN:
@@ -73,6 +79,8 @@ public class BattleBlast extends ApplicationAdapter {
                         movement = player.getY() - 1000 * Gdx.graphics.getDeltaTime();
                         if (movement > 0) {
                             player.setY(movement);
+                        } else {
+                            player.setY(0);
                         }
                         break;
                 }
