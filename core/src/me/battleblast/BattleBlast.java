@@ -15,33 +15,32 @@ public class BattleBlast extends ApplicationAdapter {
     private AssetManager manager;
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
-	
-	@Override
-	public void create () {
+
+    @Override
+    public void create () {
         manager = new AssetManager();
         manager.setLoader(TiledMap.class, new TmxMapLoader());
         manager.load("tanks.tmx", TiledMap.class);
         manager.finishLoading();
         map = manager.get("tanks.tmx", TiledMap.class);
+        renderer = new OrthogonalTiledMapRenderer(map);
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.update();
-        renderer = new OrthogonalTiledMapRenderer(map);
-	}
+    }
 
-	@Override
-	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    @Override
+    public void render () {
+        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
         renderer.setView(camera);
         renderer.render();
-	}
-	
-	@Override
-	public void dispose () {
+    }
+
+    @Override
+    public void dispose () {
         manager.dispose();
-	}
+    }
 }
