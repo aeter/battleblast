@@ -5,20 +5,24 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class PlayerTank {
-    public Sprite sprite;
-    private float moveSpeed = 200;
-    private float previousX = 0;
-    private float previousY = 0;
+    private Sprite sprite;
+    private static final float MOVE_SPEED = 200f;
+    private float previousX = 0f;
+    private float previousY = 0f;
 
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
+    }
+
+    public Sprite getSprite() {
+        return sprite;
     }
 
     public void moveLeft() {
         sprite.setRotation(270);
         previousX = sprite.getX();
         previousY = sprite.getY();
-        float movement = sprite.getX() - moveSpeed * Gdx.graphics.getDeltaTime();
+        float movement = sprite.getX() - MOVE_SPEED * Gdx.graphics.getDeltaTime();
         if (movement < 0) movement = 0;
         sprite.setX(movement);
     }
@@ -27,10 +31,9 @@ public class PlayerTank {
         sprite.setRotation(90);
         previousX = sprite.getX();
         previousY = sprite.getY();
-        float movement = sprite.getX() + moveSpeed * Gdx.graphics.getDeltaTime();
-        if (movement > Gdx.graphics.getWidth() - sprite.getWidth()) {
-            movement = Gdx.graphics.getWidth() - sprite.getWidth();
-        }
+        float movement = sprite.getX() + MOVE_SPEED * Gdx.graphics.getDeltaTime();
+        float endOfScreen = Gdx.graphics.getWidth() - sprite.getWidth();
+        if (movement > endOfScreen) movement = endOfScreen;
         sprite.setX(movement);
     }
 
@@ -38,10 +41,9 @@ public class PlayerTank {
         sprite.setRotation(180);
         previousX = sprite.getX();
         previousY = sprite.getY();
-        float movement = sprite.getY() + moveSpeed * Gdx.graphics.getDeltaTime();
-        if (movement > Gdx.graphics.getHeight() - sprite.getHeight()) {
-            movement = Gdx.graphics.getHeight() - sprite.getHeight();
-        }
+        float movement = sprite.getY() + MOVE_SPEED * Gdx.graphics.getDeltaTime();
+        float endOfScreen = Gdx.graphics.getHeight() - sprite.getHeight();
+        if (movement > endOfScreen) movement = endOfScreen;
         sprite.setY(movement);
     }
 
@@ -49,7 +51,7 @@ public class PlayerTank {
         sprite.setRotation(0);
         previousX = sprite.getX();
         previousY = sprite.getY();
-        float movement = sprite.getY() - moveSpeed * Gdx.graphics.getDeltaTime();
+        float movement = sprite.getY() - MOVE_SPEED * Gdx.graphics.getDeltaTime();
         if (movement < 0) movement = 0;
         sprite.setY(movement);
     }

@@ -79,17 +79,22 @@ public class BattleBlast extends ApplicationAdapter {
     }
 
     private void handleInput() {
-        if(Gdx.input.isKeyPressed(Keys.LEFT)) player.moveLeft();
-        if(Gdx.input.isKeyPressed(Keys.RIGHT)) player.moveRight();
-        if(Gdx.input.isKeyPressed(Keys.UP)) player.moveUp();
-        if(Gdx.input.isKeyPressed(Keys.DOWN)) player.moveDown();
+        if (Gdx.input.isKeyPressed(Keys.LEFT)) {
+            player.moveLeft();
+        } else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
+            player.moveRight();
+        } else if (Gdx.input.isKeyPressed(Keys.UP)) {
+            player.moveUp();
+        } else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+            player.moveDown();
+        }
     }
 
     private void handleCollisions() {
         MapObjects stabiles = map.getLayers().get("collidable").getObjects();
         for (MapObject stabile: stabiles) {
             Rectangle rectangle = ((RectangleMapObject) stabile).getRectangle();
-            if (rectangle.overlaps(player.sprite.getBoundingRectangle())) {
+            if (rectangle.overlaps(player.getSprite().getBoundingRectangle())) {
                 player.onCollisionWithStabile();
             }
         }
