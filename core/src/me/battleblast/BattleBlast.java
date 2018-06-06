@@ -30,23 +30,17 @@ public class BattleBlast extends ApplicationAdapter {
     @Override
     public void create () {
         loadAssets();
-        enemy = new Sprite(manager.get("kenney_topdownTanksRedux/PNG/Retina/tank_dark_64x64.png", Texture.class));
-
-        player = new PlayerTank();
-        player.setSprite(new Sprite(manager.get("kenney_topdownTanksRedux/PNG/Retina/tank_blue_64x64.png", Texture.class)));
-
-        renderer = new OrthogonalTiledMapRenderer(map);
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        renderMap();
+        setupCamera();
+        spawnEnemy();
+        spawnPlayer();
         batch = new SpriteBatch();
     }
 
     @Override
     public void render () {
         handleInput(); 
-
         // TODO - moveWorld();
-
         handleCollisions();
         draw();
     }
@@ -56,6 +50,7 @@ public class BattleBlast extends ApplicationAdapter {
         batch.dispose();
         manager.dispose();
     }
+
 
     private void handleInput() {
         if (Gdx.input.isKeyPressed(Keys.LEFT)) {
@@ -89,7 +84,6 @@ public class BattleBlast extends ApplicationAdapter {
 
         batch.begin();
         player.draw(batch);
-        enemy.setPosition(Gdx.graphics.getWidth() - enemy.getWidth(), Gdx.graphics.getHeight() - enemy.getHeight());
         enemy.draw(batch);
         batch.end();
     }
@@ -101,6 +95,25 @@ public class BattleBlast extends ApplicationAdapter {
         manager.setLoader(TiledMap.class, new TmxMapLoader());
         manager.load("tanks.tmx", TiledMap.class);
         manager.finishLoading();
+    }
+
+    private void spawnEnemy() {
+        enemy = new Sprite(manager.get("kenney_topdownTanksRedux/PNG/Retina/tank_dark_64x64.png", Texture.class));
+        enemy.setPosition(Gdx.graphics.getWidth() - enemy.getWidth(), Gdx.graphics.getHeight() - enemy.getHeight());
+    }
+
+    private void spawnPlayer() {
+        player = new PlayerTank();
+        player.setSprite(new Sprite(manager.get("kenney_topdownTanksRedux/PNG/Retina/tank_blue_64x64.png", Texture.class)));
+    }
+
+    private void renderMap() {
         map = manager.get("tanks.tmx", TiledMap.class);
+        renderer = new OrthogonalTiledMapRenderer(map);
+    }
+
+    private void setupCamera() {
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 }
