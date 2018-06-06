@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -29,23 +29,15 @@ public class BattleBlast extends ApplicationAdapter {
 
     @Override
     public void create () {
-        manager = new AssetManager();
-        manager.load("kenney_topdownTanksRedux/PNG/Retina/tank_blue_64x64.png", Texture.class);
-        manager.load("kenney_topdownTanksRedux/PNG/Retina/tank_dark_64x64.png", Texture.class);
-        manager.setLoader(TiledMap.class, new TmxMapLoader());
-        manager.load("tanks.tmx", TiledMap.class);
-        manager.finishLoading();
-        map = manager.get("tanks.tmx", TiledMap.class);
+        loadAssets();
         enemy = new Sprite(manager.get("kenney_topdownTanksRedux/PNG/Retina/tank_dark_64x64.png", Texture.class));
 
         player = new PlayerTank();
         player.setSprite(new Sprite(manager.get("kenney_topdownTanksRedux/PNG/Retina/tank_blue_64x64.png", Texture.class)));
 
         renderer = new OrthogonalTiledMapRenderer(map);
-
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
         batch = new SpriteBatch();
     }
 
@@ -56,20 +48,7 @@ public class BattleBlast extends ApplicationAdapter {
         // TODO - moveWorld();
 
         handleCollisions();
-
-        // draw
-        Gdx.gl.glClearColor(1, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        camera.update();
-        renderer.setView(camera);
-        renderer.render();
-
-        batch.begin();
-        player.draw(batch);
-        enemy.setPosition(Gdx.graphics.getWidth() - enemy.getWidth(), Gdx.graphics.getHeight() - enemy.getHeight());
-        enemy.draw(batch);
-        batch.end();
+        draw();
     }
 
     @Override
@@ -98,5 +77,30 @@ public class BattleBlast extends ApplicationAdapter {
                 player.onCollisionWithStabile();
             }
         }
+    }
+
+    private void draw() {
+        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        camera.update();
+        renderer.setView(camera);
+        renderer.render();
+
+        batch.begin();
+        player.draw(batch);
+        enemy.setPosition(Gdx.graphics.getWidth() - enemy.getWidth(), Gdx.graphics.getHeight() - enemy.getHeight());
+        enemy.draw(batch);
+        batch.end();
+    }
+
+    private void loadAssets() {
+        manager = new AssetManager();
+        manager.load("kenney_topdownTanksRedux/PNG/Retina/tank_blue_64x64.png", Texture.class);
+        manager.load("kenney_topdownTanksRedux/PNG/Retina/tank_dark_64x64.png", Texture.class);
+        manager.setLoader(TiledMap.class, new TmxMapLoader());
+        manager.load("tanks.tmx", TiledMap.class);
+        manager.finishLoading();
+        map = manager.get("tanks.tmx", TiledMap.class);
     }
 }
