@@ -23,14 +23,14 @@ public class BattleBlast extends ApplicationAdapter {
     private AssetManager manager;
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
-    private PlayerTank player;
-    private Sprite enemy;
+    private Tank player;
+    private Tank enemy;
     private SpriteBatch batch;
 
     @Override
-    public void create () {
+    public void create() {
         loadAssets();
-        renderMap();
+        setupMap();
         setupCamera();
         spawnEnemy();
         spawnPlayer();
@@ -38,7 +38,7 @@ public class BattleBlast extends ApplicationAdapter {
     }
 
     @Override
-    public void render () {
+    public void render() {
         handleInput(); 
         // TODO - moveWorld();
         handleCollisions();
@@ -46,7 +46,7 @@ public class BattleBlast extends ApplicationAdapter {
     }
 
     @Override
-    public void dispose () {
+    public void dispose() {
         batch.dispose();
         manager.dispose();
     }
@@ -98,8 +98,11 @@ public class BattleBlast extends ApplicationAdapter {
     }
 
     private void spawnEnemy() {
-        enemy = new Sprite(manager.get("kenney_topdownTanksRedux/PNG/Retina/tank_dark_64x64.png", Texture.class));
-        enemy.setPosition(Gdx.graphics.getWidth() - enemy.getWidth(), Gdx.graphics.getHeight() - enemy.getHeight());
+        enemy = new EnemyTank();
+        enemy.setSprite(new Sprite(manager.get("kenney_topdownTanksRedux/PNG/Retina/tank_dark_64x64.png", Texture.class)));
+        enemy.getSprite().setPosition(
+                Gdx.graphics.getWidth() - enemy.getSprite().getWidth(),
+                Gdx.graphics.getHeight() - enemy.getSprite().getHeight());
     }
 
     private void spawnPlayer() {
@@ -107,7 +110,7 @@ public class BattleBlast extends ApplicationAdapter {
         player.setSprite(new Sprite(manager.get("kenney_topdownTanksRedux/PNG/Retina/tank_blue_64x64.png", Texture.class)));
     }
 
-    private void renderMap() {
+    private void setupMap() {
         map = manager.get("tanks.tmx", TiledMap.class);
         renderer = new OrthogonalTiledMapRenderer(map);
     }
