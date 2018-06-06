@@ -9,9 +9,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 
 
 public class BattleBlast extends ApplicationAdapter {
@@ -47,6 +51,13 @@ public class BattleBlast extends ApplicationAdapter {
 
     @Override
     public void render () {
+        handleInput(); 
+
+        // TODO - moveWorld();
+
+        handleCollisions();
+
+        // draw
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -59,8 +70,6 @@ public class BattleBlast extends ApplicationAdapter {
         enemy.setPosition(Gdx.graphics.getWidth() - enemy.getWidth(), Gdx.graphics.getHeight() - enemy.getHeight());
         enemy.draw(batch);
         batch.end();
-
-        handleInput();
     }
 
     @Override
@@ -74,5 +83,15 @@ public class BattleBlast extends ApplicationAdapter {
         if(Gdx.input.isKeyPressed(Keys.RIGHT)) player.moveRight();
         if(Gdx.input.isKeyPressed(Keys.UP)) player.moveUp();
         if(Gdx.input.isKeyPressed(Keys.DOWN)) player.moveDown();
+    }
+
+    private void handleCollisions() {
+        MapObjects stabiles = map.getLayers().get("collidable").getObjects();
+        for (MapObject stabile: stabiles) {
+            Rectangle rectangle = ((RectangleMapObject) stabile).getRectangle();
+            if (rectangle.overlaps(player.sprite.getBoundingRectangle())) {
+                player.onCollisionWithStabile();
+            }
+        }
     }
 }
