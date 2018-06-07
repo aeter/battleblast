@@ -7,8 +7,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class Tank {
-    private Sprite sprite;
     private static final float MOVE_SPEED = 200f;
+    private static final long ONE_MILLISECOND = 1000000; // in nanoseconds
+
+    private Sprite sprite;
     private float previousX = 0f;
     private float previousY = 0f;
     private long lastShootTime;
@@ -80,10 +82,14 @@ public class Tank {
             bulletSpawnY = sprite.getY() + sprite.getHeight() / 2 - bulletSprite.getHeight() / 2;
         }
 
-        if (TimeUtils.nanoTime() - lastShootTime > 100000000) {
+        if (TimeUtils.nanoTime() - lastShootTime > 100 * ONE_MILLISECOND) {
             BattleBlast.ALL_BULLETS.add(new Bullet(bulletSpawnX, bulletSpawnY, sprite.getRotation(), bulletSprite));
             lastShootTime = TimeUtils.nanoTime();
         }
+    }
+
+    public void onCollisionWithEnemy() {
+        stepBack();
     }
 
     public void onCollisionWithStabile() {

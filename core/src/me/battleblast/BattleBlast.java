@@ -100,6 +100,11 @@ public class BattleBlast extends ApplicationAdapter {
             }
         }
 
+        if (enemy.getSprite().getBoundingRectangle().overlaps(
+            player.getSprite().getBoundingRectangle())) {
+            player.onCollisionWithEnemy();
+            enemy.onCollisionWithEnemy();
+        }
         for(Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
             Bullet bullet = i.next();
             if (bullet.isOutOfScreen()) i.remove();
