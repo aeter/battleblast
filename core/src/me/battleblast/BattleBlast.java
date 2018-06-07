@@ -1,5 +1,7 @@
 package me.battleblast;
 
+import java.util.Iterator;
+
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Input.Keys;
@@ -90,7 +92,11 @@ public class BattleBlast extends ApplicationAdapter {
                 enemy.onCollisionWithStabile();
             }
         }
-            // TODO - remove bullet from ALL_BULLETS if out of screen
+
+		for(Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
+			Bullet bullet = i.next();
+            if (bullet.isOutOfScreen()) i.remove();
+		}
     }
 
     private void draw() {
