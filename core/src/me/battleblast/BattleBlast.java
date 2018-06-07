@@ -69,7 +69,8 @@ public class BattleBlast extends ApplicationAdapter {
             player.moveUp();
         } else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
             player.moveDown();
-        } else if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+        } 
+        if (Gdx.input.isKeyPressed(Keys.SPACE)) {
             player.shoot();
         }
     }
@@ -90,6 +91,12 @@ public class BattleBlast extends ApplicationAdapter {
             }
             if (rectangle.overlaps(enemy.getSprite().getBoundingRectangle())) {
                 enemy.onCollisionWithStabile();
+            }
+            for(Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
+                Bullet bullet = i.next();
+                if (rectangle.overlaps(bullet.getSprite().getBoundingRectangle())) {
+                    i.remove(); 
+                }
             }
         }
 

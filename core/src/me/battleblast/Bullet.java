@@ -32,6 +32,10 @@ public class Bullet {
         sprite.draw(sb);
     }
 
+    public Sprite getSprite() {
+        return sprite;
+    }
+
     public boolean isOutOfScreen() {
         return (sprite.getX() < 0 || sprite.getX() > Gdx.graphics.getWidth()
                 || sprite.getY() < 0 || sprite.getY() > Gdx.graphics.getHeight());
