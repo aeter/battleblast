@@ -3,12 +3,14 @@ package me.battleblast;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class Tank {
     private Sprite sprite;
     private static final float MOVE_SPEED = 200f;
     private float previousX = 0f;
     private float previousY = 0f;
+    private long lastShootTime;
 
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
@@ -54,6 +56,13 @@ public class Tank {
         float movement = sprite.getY() - MOVE_SPEED * Gdx.graphics.getDeltaTime();
         if (movement < 0) movement = 0;
         sprite.setY(movement);
+    }
+
+    public void shoot() {
+        if (TimeUtils.nanoTime() - lastShootTime > 100000000) {
+            BattleBlast.ALL_BULLETS.add(new Bullet(getSprite().getX(), getSprite().getY(), getSprite().getRotation()));
+        }
+        lastShootTime = TimeUtils.nanoTime();
     }
 
     public void onCollisionWithStabile() {

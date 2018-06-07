@@ -16,16 +16,23 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 
 
 public class BattleBlast extends ApplicationAdapter {
+    public static Array<Bullet> ALL_BULLETS = new Array<Bullet>();
+    private static AssetManager manager;
+
     private TiledMap map;
-    private AssetManager manager;
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
-    private Tank player;
-    private Tank enemy;
+    private PlayerTank player;
+    private EnemyTank enemy;
     private SpriteBatch batch;
+
+    public static AssetManager getAssetManager() {
+        return manager;
+    }
 
     @Override
     public void create() {
@@ -40,7 +47,7 @@ public class BattleBlast extends ApplicationAdapter {
     @Override
     public void render() {
         handleInput(); 
-        // TODO - moveWorld();
+        moveWorld();
         handleCollisions();
         draw();
     }
@@ -51,7 +58,6 @@ public class BattleBlast extends ApplicationAdapter {
         manager.dispose();
     }
 
-
     private void handleInput() {
         if (Gdx.input.isKeyPressed(Keys.LEFT)) {
             player.moveLeft();
@@ -61,6 +67,15 @@ public class BattleBlast extends ApplicationAdapter {
             player.moveUp();
         } else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
             player.moveDown();
+        } else if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+            player.shoot();
+        }
+    }
+
+    private void moveWorld() {
+        enemy.move();
+        for (Bullet bullet: ALL_BULLETS) {
+            bullet.move();
         }
     }
 
@@ -71,7 +86,11 @@ public class BattleBlast extends ApplicationAdapter {
             if (rectangle.overlaps(player.getSprite().getBoundingRectangle())) {
                 player.onCollisionWithStabile();
             }
+            if (rectangle.overlaps(enemy.getSprite().getBoundingRectangle())) {
+                enemy.onCollisionWithStabile();
+            }
         }
+            // TODO - remove bullet from ALL_BULLETS if out of screen
     }
 
     private void draw() {
@@ -85,6 +104,9 @@ public class BattleBlast extends ApplicationAdapter {
         batch.begin();
         player.draw(batch);
         enemy.draw(batch);
+        for (Bullet bullet: ALL_BULLETS) {
+            bullet.draw(batch);
+        }
         batch.end();
     }
 
@@ -92,6 +114,7 @@ public class BattleBlast extends ApplicationAdapter {
         manager = new AssetManager();
         manager.load("kenney_topdownTanksRedux/PNG/Retina/tank_blue_64x64.png", Texture.class);
         manager.load("kenney_topdownTanksRedux/PNG/Retina/tank_dark_64x64.png", Texture.class);
+        manager.load("kenney_topdownTanksRedux/PNG/Retina/bulletDark1.png", Texture.class);
         manager.setLoader(TiledMap.class, new TmxMapLoader());
         manager.load("tanks.tmx", TiledMap.class);
         manager.finishLoading();
