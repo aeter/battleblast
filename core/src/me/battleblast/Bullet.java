@@ -1,7 +1,6 @@
 package me.battleblast;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -11,15 +10,11 @@ public class Bullet {
     private static final int SPAWN_DISTANCE_FROM_TANK = 5;
     private Sprite sprite;
 
-    public Bullet(float x, float y, float rotation) {
-        sprite = new Sprite(BattleBlast.getAssetManager().get("kenney_topdownTanksRedux/PNG/Retina/bulletDark1.png", Texture.class));
-        sprite.setX(x);
-        sprite.setY(y);
+    public Bullet(float spawnX, float spawnY, float rotation, Sprite sprite) {
+        this.sprite = sprite;
+        sprite.setX(spawnX);
+        sprite.setY(spawnY);
         sprite.setRotation(rotation);
-        if (rotation == 0) sprite.setY(y - SPAWN_DISTANCE_FROM_TANK);
-        if (rotation == 90) sprite.setX(x + SPAWN_DISTANCE_FROM_TANK);
-        if (rotation == 180) sprite.setY(y + SPAWN_DISTANCE_FROM_TANK);
-        if (rotation == 270) sprite.setX(x - SPAWN_DISTANCE_FROM_TANK);
     }
 
     public void move() {

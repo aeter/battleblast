@@ -3,6 +3,7 @@ package me.battleblast;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class Tank {
@@ -59,10 +60,30 @@ public class Tank {
     }
 
     public void shoot() {
-        if (TimeUtils.nanoTime() - lastShootTime > 100000000) {
-            BattleBlast.ALL_BULLETS.add(new Bullet(getSprite().getX(), getSprite().getY(), getSprite().getRotation()));
+        float bulletSpawnX = 0;
+        float bulletSpawnY = 0;
+        Sprite bulletSprite = new Sprite(BattleBlast.getAssetManager().get("kenney_topdownTanksRedux/PNG/Retina/bulletDark1.png", Texture.class));
+        if (sprite.getRotation() == 0) {
+            bulletSpawnX = sprite.getX() + sprite.getWidth() / 2 - bulletSprite.getWidth() / 2;
+            bulletSpawnY = sprite.getY();
         }
-        lastShootTime = TimeUtils.nanoTime();
+        if (sprite.getRotation() == 90) {
+            bulletSpawnX = sprite.getX() + sprite.getWidth();
+            bulletSpawnY = sprite.getY() + sprite.getHeight() / 2 - bulletSprite.getHeight() / 2;
+        }
+        if (sprite.getRotation() == 180) {
+            bulletSpawnX = sprite.getX() + sprite.getWidth() / 2 - bulletSprite.getWidth() / 2;
+            bulletSpawnY = sprite.getY() + sprite.getHeight();
+        }
+        if (sprite.getRotation() == 270) {
+            bulletSpawnX = sprite.getX();
+            bulletSpawnY = sprite.getY() + sprite.getHeight() / 2 - bulletSprite.getHeight() / 2;
+        }
+
+        if (TimeUtils.nanoTime() - lastShootTime > 100000000) {
+            BattleBlast.ALL_BULLETS.add(new Bullet(bulletSpawnX, bulletSpawnY, sprite.getRotation(), bulletSprite));
+            lastShootTime = TimeUtils.nanoTime();
+        }
     }
 
     public void onCollisionWithStabile() {
