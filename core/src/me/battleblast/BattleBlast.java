@@ -93,10 +93,10 @@ public class BattleBlast extends ApplicationAdapter {
             }
         }
 
-		for(Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
-			Bullet bullet = i.next();
+        for(Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
+            Bullet bullet = i.next();
             if (bullet.isOutOfScreen()) i.remove();
-		}
+        }
     }
 
     private void draw() {
