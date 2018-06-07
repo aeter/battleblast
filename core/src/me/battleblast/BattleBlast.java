@@ -85,23 +85,22 @@ public class BattleBlast extends ApplicationAdapter {
     private void handleCollisions() {
         MapObjects stabiles = map.getLayers().get("collidable").getObjects();
         for (MapObject stabile: stabiles) {
-            Rectangle rectangle = ((RectangleMapObject) stabile).getRectangle();
-            if (rectangle.overlaps(player.getSprite().getBoundingRectangle())) {
+            Rectangle stabileBounds = ((RectangleMapObject) stabile).getRectangle();
+            if (stabileBounds.overlaps(player.getBounds())) {
                 player.onCollisionWithStabile();
             }
-            if (rectangle.overlaps(enemy.getSprite().getBoundingRectangle())) {
+            if (stabileBounds.overlaps(enemy.getBounds())) {
                 enemy.onCollisionWithStabile();
             }
             for(Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
                 Bullet bullet = i.next();
-                if (rectangle.overlaps(bullet.getSprite().getBoundingRectangle())) {
+                if (stabileBounds.overlaps(bullet.getSprite().getBoundingRectangle())) {
                     i.remove(); 
                 }
             }
         }
 
-        if (enemy.getSprite().getBoundingRectangle().overlaps(
-            player.getSprite().getBoundingRectangle())) {
+        if (player.getBounds().overlaps(enemy.getBounds())) {
             player.onCollisionWithEnemy();
             enemy.onCollisionWithEnemy();
         }
