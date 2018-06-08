@@ -35,8 +35,6 @@ public class BattleBlast extends ApplicationAdapter {
     private EnemyTank enemy;
     private SpriteBatch batch;
 
-    private Array<Bullet> bulletsWithPendingEffects = new Array<Bullet>();
-
     public static AssetManager getAssetManager() {
         return manager;
     }
@@ -100,8 +98,6 @@ public class BattleBlast extends ApplicationAdapter {
             for(Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
                 Bullet bullet = i.next();
                 if (stabileBounds.overlaps(bullet.getSprite().getBoundingRectangle())) {
-                    bullet.onCollisionWithAnything();
-                    bulletsWithPendingEffects.add(bullet);
                     i.remove(); 
                 }
             }
@@ -131,10 +127,6 @@ public class BattleBlast extends ApplicationAdapter {
         for (Bullet bullet: ALL_BULLETS) {
             bullet.draw(batch);
         }
-        for (Bullet bullet: bulletsWithPendingEffects) {
-            bullet.draw(batch);
-        }
-        bulletsWithPendingEffects.clear();
         batch.end();
     }
 

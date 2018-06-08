@@ -1,6 +1,7 @@
 package me.battleblast;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,6 +16,7 @@ public class Tank {
     private float previousX = 0f;
     private float previousY = 0f;
     private long lastShootTime;
+    private ParticleEffect pe;
 
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
@@ -85,6 +87,7 @@ public class Tank {
 
         if (TimeUtils.nanoTime() - lastShootTime > 100 * ONE_MILLISECOND) {
             BattleBlast.ALL_BULLETS.add(new Bullet(bulletSpawnX, bulletSpawnY, sprite.getRotation(), bulletSprite));
+            makeShootEffect(bulletSpawnX, bulletSpawnY);
             lastShootTime = TimeUtils.nanoTime();
         }
     }
@@ -99,10 +102,21 @@ public class Tank {
 
     public void draw(SpriteBatch sb) {
         sprite.draw(sb);
+        if (pe != null) {
+            pe.update(Gdx.graphics.getDeltaTime());
+            pe.draw(sb);
+        }
     }
 
     public Rectangle getBounds() {
         return sprite.getBoundingRectangle();
+    }
+
+    private void makeShootEffect(float x, float y) {
+        pe = new ParticleEffect(BattleBlast.getAssetManager().get("effects/sparks.p", ParticleEffect.class));
+        pe.getEmitters().first().setPosition(x, y);
+        pe.scaleEffect(0.4f);
+        pe.start();
     }
 
     private void stepBack() {

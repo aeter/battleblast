@@ -1,17 +1,14 @@
 package me.battleblast;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 
 
 public class Bullet {
     private static final int MOVE_SPEED = 400;
     private static final int SPAWN_DISTANCE_FROM_TANK = 5;
     private Sprite sprite;
-    private ParticleEffect pe;
 
     public Bullet(float spawnX, float spawnY, float rotation, Sprite sprite) {
         this.sprite = sprite;
@@ -33,21 +30,10 @@ public class Bullet {
 
     public void draw(SpriteBatch sb) {
         sprite.draw(sb);
-        if (pe != null) {
-            pe.update(Gdx.graphics.getDeltaTime());
-            pe.draw(sb);
-        }
     }
 
     public Sprite getSprite() {
         return sprite;
-    }
-
-    public void onCollisionWithAnything() {
-        pe = new ParticleEffect(BattleBlast.getAssetManager().get("effects/sparks.p", ParticleEffect.class));
-        pe.getEmitters().first().setPosition(sprite.getX() + sprite.getWidth() / 2, sprite.getY() + sprite.getHeight() / 2);
-        pe.start();
-        pe.update(Gdx.graphics.getDeltaTime());
     }
 
     public boolean isOutOfScreen() {
