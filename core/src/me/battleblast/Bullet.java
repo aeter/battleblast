@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Bullet {
     private static final int MOVE_SPEED = 400;
-    private static final int SPAWN_DISTANCE_FROM_TANK = 5;
     private Sprite sprite;
 
     public Bullet(float spawnX, float spawnY, float rotation, Sprite sprite) {

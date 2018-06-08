@@ -11,12 +11,13 @@ import com.badlogic.gdx.utils.TimeUtils;
 public class Tank {
     private static final float MOVE_SPEED = 200f;
     private static final long ONE_MILLISECOND = 1000000; // in nanoseconds
+    private static final long SHOOT_SPEED = 300 * ONE_MILLISECOND;
 
     private Sprite sprite;
     private float previousX = 0f;
     private float previousY = 0f;
     private long lastShootTime;
-    private ParticleEffect pe;
+    private ParticleEffect shootEffect;
 
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
@@ -85,7 +86,7 @@ public class Tank {
             bulletSpawnY = sprite.getY() + sprite.getHeight() / 2 - bulletSprite.getHeight() / 2;
         }
 
-        if (TimeUtils.nanoTime() - lastShootTime > 100 * ONE_MILLISECOND) {
+        if (TimeUtils.nanoTime() - lastShootTime > SHOOT_SPEED) {
             BattleBlast.ALL_BULLETS.add(new Bullet(bulletSpawnX, bulletSpawnY, sprite.getRotation(), bulletSprite));
             makeShootEffect(bulletSpawnX, bulletSpawnY);
             lastShootTime = TimeUtils.nanoTime();
@@ -102,9 +103,9 @@ public class Tank {
 
     public void draw(SpriteBatch sb) {
         sprite.draw(sb);
-        if (pe != null) {
-            pe.update(Gdx.graphics.getDeltaTime());
-            pe.draw(sb);
+        if (shootEffect != null) {
+            shootEffect.update(Gdx.graphics.getDeltaTime());
+            shootEffect.draw(sb);
         }
     }
 
@@ -113,10 +114,10 @@ public class Tank {
     }
 
     private void makeShootEffect(float x, float y) {
-        pe = new ParticleEffect(BattleBlast.getAssetManager().get("effects/sparks.p", ParticleEffect.class));
-        pe.getEmitters().first().setPosition(x, y);
-        pe.scaleEffect(0.4f);
-        pe.start();
+        shootEffect = new ParticleEffect(BattleBlast.getAssetManager().get("effects/sparks.p", ParticleEffect.class));
+        shootEffect.getEmitters().first().setPosition(x, y);
+        shootEffect.scaleEffect(0.3f);
+        shootEffect.start();
     }
 
     private void stepBack() {
