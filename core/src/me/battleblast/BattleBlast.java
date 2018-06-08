@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapObject;
@@ -19,6 +20,8 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.assets.loaders.ParticleEffectLoader;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 
 
 public class BattleBlast extends ApplicationAdapter {
@@ -31,6 +34,8 @@ public class BattleBlast extends ApplicationAdapter {
     private PlayerTank player;
     private EnemyTank enemy;
     private SpriteBatch batch;
+
+    private Array<Bullet> bulletsWithPendingEffects = new Array<Bullet>();
 
     public static AssetManager getAssetManager() {
         return manager;
@@ -95,6 +100,8 @@ public class BattleBlast extends ApplicationAdapter {
             for(Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
                 Bullet bullet = i.next();
                 if (stabileBounds.overlaps(bullet.getSprite().getBoundingRectangle())) {
+                    bullet.onCollisionWithAnything();
+                    bulletsWithPendingEffects.add(bullet);
                     i.remove(); 
                 }
             }
@@ -124,6 +131,10 @@ public class BattleBlast extends ApplicationAdapter {
         for (Bullet bullet: ALL_BULLETS) {
             bullet.draw(batch);
         }
+        for (Bullet bullet: bulletsWithPendingEffects) {
+            bullet.draw(batch);
+        }
+        bulletsWithPendingEffects.clear();
         batch.end();
     }
 
@@ -134,6 +145,8 @@ public class BattleBlast extends ApplicationAdapter {
         manager.load("kenney_topdownTanksRedux/PNG/Retina/bulletDark1.png", Texture.class);
         manager.setLoader(TiledMap.class, new TmxMapLoader());
         manager.load("tanks.tmx", TiledMap.class);
+        manager.setLoader(ParticleEffect.class, new ParticleEffectLoader(new InternalFileHandleResolver()));
+        manager.load("effects/sparks.p", ParticleEffect.class);
         manager.finishLoading();
     }
 
