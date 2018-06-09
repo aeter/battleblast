@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.loaders.ParticleEffectLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -12,9 +13,12 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
 public class BattleBlast extends Game {
     public static AssetManager assets;
+
+    public SpriteBatch batch;
     
     public void create() {
         loadAssets();
+        batch = new SpriteBatch();
         this.setScreen(new GameScreen(this));
     }
 
@@ -23,6 +27,7 @@ public class BattleBlast extends Game {
     }
 
     public void dispose() {
+        batch.dispose();
         assets.dispose();
     }
 

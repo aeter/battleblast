@@ -8,7 +8,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapObject;
@@ -30,7 +29,6 @@ public class GameScreen implements Screen {
     private OrthogonalTiledMapRenderer renderer;
     private PlayerTank player;
     private EnemyTank enemy;
-    private SpriteBatch batch;
 
     public GameScreen(final BattleBlast game) {
         this.game = game;
@@ -39,7 +37,6 @@ public class GameScreen implements Screen {
         setupCamera();
         spawnEnemy();
         spawnPlayer();
-        batch = new SpriteBatch();
     }
 
     @Override
@@ -51,9 +48,7 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void dispose() {
-        batch.dispose();
-    }
+    public void dispose() {}
 
     @Override
     public void resize(int width, int height) {}
@@ -128,13 +123,13 @@ public class GameScreen implements Screen {
         renderer.setView(camera);
         renderer.render();
 
-        batch.begin();
-        player.draw(batch);
-        enemy.draw(batch);
+        game.batch.begin();
+        player.draw(game.batch);
+        enemy.draw(game.batch);
         for (Bullet bullet: ALL_BULLETS) {
-            bullet.draw(batch);
+            bullet.draw(game.batch);
         }
-        batch.end();
+        game.batch.end();
     }
 
     private void spawnEnemy() {
