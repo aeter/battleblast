@@ -14,16 +14,17 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 
 
 public class GameScreen implements Screen {
-    final BattleBlast game;
-
     public static Array<Bullet> ALL_BULLETS = new Array<Bullet>();
+    public static Array<Sprite> ALL_BREAKABLES = new Array<Sprite>();
 
+    private final BattleBlast game;
     private TiledMap map;
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
@@ -88,7 +89,8 @@ public class GameScreen implements Screen {
     }
 
     private void handleCollisions() {
-        MapObjects stabiles = map.getLayers().get("collidable").getObjects();
+        MapObjects stabiles = map.getLayers().get("stabiles").getObjects();
+
         for (MapObject stabile: stabiles) {
             Rectangle stabileBounds = ((RectangleMapObject) stabile).getRectangle();
             if (stabileBounds.overlaps(player.getBounds())) {
@@ -97,10 +99,24 @@ public class GameScreen implements Screen {
             if (stabileBounds.overlaps(enemy.getBounds())) {
                 enemy.onCollisionWithStabile();
             }
-            for(Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
+            for (Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
                 Bullet bullet = i.next();
-                if (stabileBounds.overlaps(bullet.getSprite().getBoundingRectangle())) {
+                if (stabileBounds.overlaps(bullet.getBounds()) && 
+                    !stabile.getProperties().get("breakable", Boolean.class)) {
                     i.remove(); 
+                }
+            }
+        }
+
+        // collision Bullet<->Breakable object
+        for (Iterator<Bullet> b = ALL_BULLETS.iterator(); b.hasNext(); ) {
+            Bullet bullet = b.next();
+            for (Iterator<Sprite> s = ALL_BREAKABLES.iterator(); s.hasNext(); ) {
+                Sprite sprite = s.next();
+                if (bullet.getBounds().overlaps(sprite.getBoundingRectangle())) {
+                    b.remove();
+                    s.remove();
+                    // TODO - boom effect
                 }
             }
         }
@@ -109,7 +125,7 @@ public class GameScreen implements Screen {
             player.onCollisionWithEnemy();
             enemy.onCollisionWithEnemy();
         }
-        for(Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
+        for (Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
             Bullet bullet = i.next();
             if (bullet.isOutOfScreen()) i.remove();
         }
@@ -126,6 +142,9 @@ public class GameScreen implements Screen {
         game.batch.begin();
         player.draw(game.batch);
         enemy.draw(game.batch);
+        for (Sprite breakable: ALL_BREAKABLES) {
+            breakable.draw(game.batch);
+        }
         for (Bullet bullet: ALL_BULLETS) {
             bullet.draw(game.batch);
         }
@@ -148,10 +167,23 @@ public class GameScreen implements Screen {
     private void setupMap() {
         map = game.assets.get("tanks.tmx", TiledMap.class);
         renderer = new OrthogonalTiledMapRenderer(map);
+        setupBreakableTiles();
     }
 
     private void setupCamera() {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    }
+
+    private void setupBreakableTiles() {
+        MapObjects stabiles = map.getLayers().get("stabiles").getObjects();
+        for (MapObject stabile: stabiles) {
+            if (stabile.getProperties().get("breakable", Boolean.class)) {
+                Rectangle stabileBounds = ((RectangleMapObject) stabile).getRectangle();
+                Sprite breakableSprite = new Sprite(game.assets.get("kenney_topdownTanksRedux/PNG/Retina/crateWood.png", Texture.class));
+                breakableSprite.setBounds(stabileBounds.getX(), stabileBounds.getY(), stabileBounds.getWidth(), stabileBounds.getHeight());
+                ALL_BREAKABLES.add(breakableSprite);
+            }
+        }
     }
 }

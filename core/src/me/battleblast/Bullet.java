@@ -3,6 +3,7 @@ package me.battleblast;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 
 
 public class Bullet {
@@ -29,6 +30,10 @@ public class Bullet {
 
     public void draw(SpriteBatch sb) {
         sprite.draw(sb);
+    }
+
+    public Rectangle getBounds() {
+        return sprite.getBoundingRectangle();
     }
 
     public Sprite getSprite() {

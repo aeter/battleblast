@@ -36,6 +36,7 @@ public class BattleBlast extends Game {
         assets.load("kenney_topdownTanksRedux/PNG/Retina/tank_blue_64x64.png", Texture.class);
         assets.load("kenney_topdownTanksRedux/PNG/Retina/tank_dark_64x64.png", Texture.class);
         assets.load("kenney_topdownTanksRedux/PNG/Retina/bulletDark1.png", Texture.class);
+        assets.load("kenney_topdownTanksRedux/PNG/Retina/crateWood.png", Texture.class);
         assets.setLoader(TiledMap.class, new TmxMapLoader());
         assets.load("tanks.tmx", TiledMap.class);
         assets.setLoader(ParticleEffect.class, new ParticleEffectLoader(new InternalFileHandleResolver()));
