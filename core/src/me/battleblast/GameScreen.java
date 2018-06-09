@@ -2,7 +2,6 @@ package me.battleblast;
 
 import java.util.Iterator;
 
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
@@ -10,26 +9,21 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.assets.loaders.ParticleEffectLoader;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 
 
 public class GameScreen implements Screen {
     final BattleBlast game;
 
     public static Array<Bullet> ALL_BULLETS = new Array<Bullet>();
-    private static AssetManager manager;
 
     private TiledMap map;
     private OrthographicCamera camera;
@@ -38,14 +32,9 @@ public class GameScreen implements Screen {
     private EnemyTank enemy;
     private SpriteBatch batch;
 
-    public static AssetManager getAssetManager() {
-        return manager;
-    }
-    
     public GameScreen(final BattleBlast game) {
         this.game = game;
 
-        loadAssets();
         setupMap();
         setupCamera();
         spawnEnemy();
@@ -64,7 +53,6 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
-        manager.dispose();
     }
 
     @Override
@@ -149,21 +137,9 @@ public class GameScreen implements Screen {
         batch.end();
     }
 
-    private void loadAssets() {
-        manager = new AssetManager();
-        manager.load("kenney_topdownTanksRedux/PNG/Retina/tank_blue_64x64.png", Texture.class);
-        manager.load("kenney_topdownTanksRedux/PNG/Retina/tank_dark_64x64.png", Texture.class);
-        manager.load("kenney_topdownTanksRedux/PNG/Retina/bulletDark1.png", Texture.class);
-        manager.setLoader(TiledMap.class, new TmxMapLoader());
-        manager.load("tanks.tmx", TiledMap.class);
-        manager.setLoader(ParticleEffect.class, new ParticleEffectLoader(new InternalFileHandleResolver()));
-        manager.load("effects/sparks.p", ParticleEffect.class);
-        manager.finishLoading();
-    }
-
     private void spawnEnemy() {
         enemy = new EnemyTank();
-        enemy.setSprite(new Sprite(manager.get("kenney_topdownTanksRedux/PNG/Retina/tank_dark_64x64.png", Texture.class)));
+        enemy.setSprite(new Sprite(game.assets.get("kenney_topdownTanksRedux/PNG/Retina/tank_dark_64x64.png", Texture.class)));
         enemy.getSprite().setPosition(
                 Gdx.graphics.getWidth() - enemy.getSprite().getWidth(),
                 Gdx.graphics.getHeight() - enemy.getSprite().getHeight());
@@ -171,11 +147,11 @@ public class GameScreen implements Screen {
 
     private void spawnPlayer() {
         player = new PlayerTank();
-        player.setSprite(new Sprite(manager.get("kenney_topdownTanksRedux/PNG/Retina/tank_blue_64x64.png", Texture.class)));
+        player.setSprite(new Sprite(game.assets.get("kenney_topdownTanksRedux/PNG/Retina/tank_blue_64x64.png", Texture.class)));
     }
 
     private void setupMap() {
-        map = manager.get("tanks.tmx", TiledMap.class);
+        map = game.assets.get("tanks.tmx", TiledMap.class);
         renderer = new OrthogonalTiledMapRenderer(map);
     }
 

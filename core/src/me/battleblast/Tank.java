@@ -68,7 +68,7 @@ public class Tank {
     public void shoot() {
         float bulletSpawnX = 0;
         float bulletSpawnY = 0;
-        Sprite bulletSprite = new Sprite(GameScreen.getAssetManager().get("kenney_topdownTanksRedux/PNG/Retina/bulletDark1.png", Texture.class));
+        Sprite bulletSprite = new Sprite(BattleBlast.assets.get("kenney_topdownTanksRedux/PNG/Retina/bulletDark1.png", Texture.class));
         if (sprite.getRotation() == 0) {
             bulletSpawnX = sprite.getX() + sprite.getWidth() / 2 - bulletSprite.getWidth() / 2;
             bulletSpawnY = sprite.getY();
@@ -114,7 +114,7 @@ public class Tank {
     }
 
     private void makeShootEffect(float x, float y) {
-        shootEffect = new ParticleEffect(GameScreen.getAssetManager().get("effects/sparks.p", ParticleEffect.class));
+        shootEffect = new ParticleEffect(BattleBlast.assets.get("effects/sparks.p", ParticleEffect.class));
         shootEffect.getEmitters().first().setPosition(x, y);
         shootEffect.scaleEffect(0.3f);
         shootEffect.start();
