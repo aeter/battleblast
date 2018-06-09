@@ -22,7 +22,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class GameScreen implements Screen {
     public static Array<Bullet> ALL_BULLETS = new Array<Bullet>();
-    public static Array<Sprite> ALL_BREAKABLES = new Array<Sprite>();
+    public static Array<Sprite> ALL_BREAKABLE_OBSTACLES = new Array<Sprite>();
 
     private final BattleBlast game;
     private TiledMap map;
@@ -89,37 +89,41 @@ public class GameScreen implements Screen {
     }
 
     private void handleCollisions() {
-        MapObjects stabiles = map.getLayers().get("stabiles").getObjects();
-
+        // collisions with unbreakable objects
+        MapObjects stabiles = map.getLayers().get("unbreakable_obstacles").getObjects();
         for (MapObject stabile: stabiles) {
             Rectangle stabileBounds = ((RectangleMapObject) stabile).getRectangle();
             if (stabileBounds.overlaps(player.getBounds())) {
-                player.onCollisionWithStabile();
+                player.onCollisionWithObstacle();
             }
             if (stabileBounds.overlaps(enemy.getBounds())) {
-                enemy.onCollisionWithStabile();
+                enemy.onCollisionWithObstacle();
             }
             for (Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
                 Bullet bullet = i.next();
-                if (stabileBounds.overlaps(bullet.getBounds()) && 
-                    !stabile.getProperties().get("breakable", Boolean.class)) {
-                    i.remove(); 
-                }
+                if (stabileBounds.overlaps(bullet.getBounds())) i.remove(); 
             }
         }
 
-        // collision Bullet<->Breakable object
-        for (Iterator<Bullet> b = ALL_BULLETS.iterator(); b.hasNext(); ) {
-            Bullet bullet = b.next();
-            for (Iterator<Sprite> s = ALL_BREAKABLES.iterator(); s.hasNext(); ) {
-                Sprite sprite = s.next();
-                if (bullet.getBounds().overlaps(sprite.getBoundingRectangle())) {
-                    b.remove();
+        // collisions with breakable objects
+        for (Iterator<Sprite> s = ALL_BREAKABLE_OBSTACLES.iterator(); s.hasNext(); ) {
+            Sprite breakable = s.next();
+            if (breakable.getBoundingRectangle().overlaps(player.getBounds())) {
+                player.onCollisionWithObstacle();
+            }
+            if (breakable.getBoundingRectangle().overlaps(enemy.getBounds())) {
+                enemy.onCollisionWithObstacle();
+            }
+            for (Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
+                Bullet bullet = i.next();
+                if (bullet.getBounds().overlaps(breakable.getBoundingRectangle())) {
+                    i.remove();
                     s.remove();
                     // TODO - boom effect
                 }
             }
         }
+            
 
         if (player.getBounds().overlaps(enemy.getBounds())) {
             player.onCollisionWithEnemy();
@@ -142,7 +146,7 @@ public class GameScreen implements Screen {
         game.batch.begin();
         player.draw(game.batch);
         enemy.draw(game.batch);
-        for (Sprite breakable: ALL_BREAKABLES) {
+        for (Sprite breakable: ALL_BREAKABLE_OBSTACLES) {
             breakable.draw(game.batch);
         }
         for (Bullet bullet: ALL_BULLETS) {
@@ -176,14 +180,12 @@ public class GameScreen implements Screen {
     }
 
     private void setupBreakableTiles() {
-        MapObjects stabiles = map.getLayers().get("stabiles").getObjects();
-        for (MapObject stabile: stabiles) {
-            if (stabile.getProperties().get("breakable", Boolean.class)) {
-                Rectangle stabileBounds = ((RectangleMapObject) stabile).getRectangle();
-                Sprite breakableSprite = new Sprite(game.assets.get("kenney_topdownTanksRedux/PNG/Retina/crateWood.png", Texture.class));
-                breakableSprite.setBounds(stabileBounds.getX(), stabileBounds.getY(), stabileBounds.getWidth(), stabileBounds.getHeight());
-                ALL_BREAKABLES.add(breakableSprite);
-            }
+        MapObjects breakables = map.getLayers().get("breakable_obstacles").getObjects();
+        for (MapObject breakable: breakables) {
+            Rectangle breakableBounds = ((RectangleMapObject) breakable).getRectangle();
+            Sprite breakableSprite = new Sprite(game.assets.get("kenney_topdownTanksRedux/PNG/Retina/crateWood.png", Texture.class));
+            breakableSprite.setBounds(breakableBounds.getX(), breakableBounds.getY(), breakableBounds.getWidth(), breakableBounds.getHeight());
+            ALL_BREAKABLE_OBSTACLES.add(breakableSprite);
         }
     }
 }

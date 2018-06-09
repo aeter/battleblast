@@ -97,7 +97,7 @@ public class Tank {
         stepBack();
     }
 
-    public void onCollisionWithStabile() {
+    public void onCollisionWithObstacle() {
         stepBack();
     }
 
