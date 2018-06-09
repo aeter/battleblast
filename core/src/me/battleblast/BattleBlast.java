@@ -3,7 +3,9 @@ package me.battleblast;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.ParticleEffectLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,6 +22,9 @@ public class BattleBlast extends Game {
         loadAssets();
         batch = new SpriteBatch();
         this.setScreen(new GameScreen(this));
+        Music music = assets.get("snd_music_victorytheme_0.ogg", Music.class);
+        music.setLooping(true);
+        music.play();
     }
 
     public void render() {
@@ -37,6 +42,7 @@ public class BattleBlast extends Game {
         assets.load("kenney_topdownTanksRedux/PNG/Retina/tank_dark_64x64.png", Texture.class);
         assets.load("kenney_topdownTanksRedux/PNG/Retina/bulletDark1.png", Texture.class);
         assets.load("kenney_topdownTanksRedux/PNG/Retina/crateWood.png", Texture.class);
+        assets.load("snd_music_victorytheme_0.ogg", Music.class);
         assets.setLoader(TiledMap.class, new TmxMapLoader());
         assets.load("tanks.tmx", TiledMap.class);
         assets.setLoader(ParticleEffect.class, new ParticleEffectLoader(new InternalFileHandleResolver()));
