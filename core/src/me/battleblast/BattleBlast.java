@@ -20,11 +20,10 @@ public class BattleBlast extends Game {
     
     public void create() {
         loadAssets();
+        playMusic();
         batch = new SpriteBatch();
+
         this.setScreen(new GameScreen(this));
-        Music music = assets.get("snd_music_victorytheme_0.ogg", Music.class);
-        music.setLooping(true);
-        music.play();
     }
 
     public void render() {
@@ -48,5 +47,11 @@ public class BattleBlast extends Game {
         assets.setLoader(ParticleEffect.class, new ParticleEffectLoader(new InternalFileHandleResolver()));
         assets.load("effects/sparks.p", ParticleEffect.class);
         assets.finishLoading();
+    }
+
+    private void playMusic() {
+        Music music = assets.get("snd_music_victorytheme_0.ogg", Music.class);
+        music.setLooping(true);
+        music.play();
     }
 }
