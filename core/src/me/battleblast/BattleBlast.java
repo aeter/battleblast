@@ -2,6 +2,7 @@ package me.battleblast;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.ParticleEffectLoader;
+import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Game;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 
 public class BattleBlast extends Game {
@@ -47,6 +49,8 @@ public class BattleBlast extends Game {
         assets.load("tanks.tmx", TiledMap.class);
         assets.setLoader(ParticleEffect.class, new ParticleEffectLoader(new InternalFileHandleResolver()));
         assets.load("effects/sparks.p", ParticleEffect.class);
+        assets.setLoader(Skin.class, new SkinLoader(new InternalFileHandleResolver()));
+        assets.load("ui/star-soldier/skin/star-soldier-ui.json", Skin.class);
         assets.finishLoading();
     }
 

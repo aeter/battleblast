@@ -24,14 +24,13 @@ public class MainMenuScreen implements Screen {
     public MainMenuScreen(final BattleBlast game) {
         this.game = game;
         stage = new Stage();
+        skin = game.assets.get("ui/star-soldier/skin/star-soldier-ui.json");
+
         Gdx.input.setInputProcessor(stage);
-        // TODO - use AssetManager for the skin
-        skin = new Skin(Gdx.files.internal("ui/star-soldier/skin/star-soldier-ui.json"));
 
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-
 
         table.row();
 
@@ -84,7 +83,6 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        skin.dispose();
     }
 
     @Override
