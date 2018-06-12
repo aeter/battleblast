@@ -3,43 +3,53 @@ package me.battleblast;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 
 public class MainMenuScreen implements Screen {
     private final BattleBlast game;
-    private OrthographicCamera camera;
-    private BitmapFont font;
+    private Stage stage;
+    private Skin skin;
 
     public MainMenuScreen(final BattleBlast game) {
         this.game = game;
-        font = new BitmapFont();
-        setupCamera();
+        stage = new Stage();
+        // TODO - use AssetManager for the skin
+        skin = new Skin(Gdx.files.internal("ui/star-soldier/skin/star-soldier-ui.json"));
+        final TextButton button = new TextButton("New Game", skin, "default");
+
+        Table table = new Table();
+        table.setFillParent(true);
+        stage.addActor(table);
+        table.add(button);
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new GameScreen(game));
+                dispose();
+            }
+        });
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
-
-        game.batch.begin();
-        font.draw(game.batch, "Welcome to Battle Blast!", 100, 150);
-        font.draw(game.batch, "Tap anywhere to begin!", 100, 100);
-        game.batch.end();
-
-        if (Gdx.input.isTouched()) {
-            game.setScreen(new GameScreen(game));
-            dispose();
-        }
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override
     public void dispose() {
-        font.dispose();
+        stage.dispose();
+        skin.dispose();
     }
 
     @Override
@@ -56,9 +66,4 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void resume() {}
-
-    private void setupCamera() {
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-    }
 }
