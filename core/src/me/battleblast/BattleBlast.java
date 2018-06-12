@@ -17,6 +17,7 @@ public class BattleBlast extends Game {
     public static AssetManager assets;
 
     public SpriteBatch batch;
+    public Music music;
     
     public void create() {
         loadAssets();
@@ -50,7 +51,7 @@ public class BattleBlast extends Game {
     }
 
     private void playMusic() {
-        Music music = assets.get("snd_music_victorytheme_0.ogg", Music.class);
+        music = assets.get("snd_music_victorytheme_0.ogg", Music.class);
         music.setLooping(true);
         music.play();
     }
