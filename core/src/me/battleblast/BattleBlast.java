@@ -23,7 +23,7 @@ public class BattleBlast extends Game {
         playMusic();
         batch = new SpriteBatch();
 
-        this.setScreen(new GameScreen(this));
+        this.setScreen(new MainMenuScreen(this));
     }
 
     public void render() {
