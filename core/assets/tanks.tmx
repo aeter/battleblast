@@ -397,22 +397,22 @@
     <property name="breakable" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="88" x="176" y="112" width="24" height="32">
+  <object id="88" x="136" y="128" width="24" height="32">
    <properties>
     <property name="breakable" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="89" x="144" y="88" width="32" height="24">
+  <object id="89" x="104" y="104" width="32" height="24">
    <properties>
     <property name="breakable" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="90" x="176" y="88" width="24" height="24">
+  <object id="90" x="136" y="104" width="24" height="24">
    <properties>
     <property name="breakable" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="91" x="144" y="112" width="32" height="32">
+  <object id="91" x="104" y="128" width="32" height="32">
    <properties>
     <property name="breakable" type="bool" value="true"/>
    </properties>
@@ -437,22 +437,22 @@
     <property name="breakable" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="96" x="120" y="192" width="24" height="32">
+  <object id="96" x="128" y="192" width="24" height="32">
    <properties>
     <property name="breakable" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="97" x="88" y="168" width="32" height="24">
+  <object id="97" x="96" y="168" width="32" height="24">
    <properties>
     <property name="breakable" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="98" x="120" y="168" width="24" height="24">
+  <object id="98" x="128" y="168" width="24" height="24">
    <properties>
     <property name="breakable" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="99" x="88" y="192" width="32" height="32">
+  <object id="99" x="96" y="192" width="32" height="32">
    <properties>
     <property name="breakable" type="bool" value="true"/>
    </properties>
