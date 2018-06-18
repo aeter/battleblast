@@ -9,14 +9,16 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class Tank {
-    private static final float MOVE_SPEED = 200f;
+    private static final int MOVE_SPEED = 4; // pixels
     private static final long ONE_MILLISECOND = 1000000; // in nanoseconds
-    private static final long SHOOT_SPEED = 300 * ONE_MILLISECOND;
+    private static final long NEXT_BULLET_SPAWN_TIME = 300 * ONE_MILLISECOND;
+    private static final float MOVE_ANIMATION_UPDATE_TIME = 20 * ONE_MILLISECOND;
 
     private Sprite sprite;
     private float previousX = 0f;
     private float previousY = 0f;
-    private long lastShootTime;
+    private long lastShootTime = 0l;
+    private long lastMoveTime = 0l;
     private ParticleEffect shootEffect;
 
     public void setSprite(Sprite sprite) {
@@ -31,38 +33,48 @@ public class Tank {
         sprite.setRotation(270);
         previousX = sprite.getX();
         previousY = sprite.getY();
-        float movement = sprite.getX() - MOVE_SPEED * Gdx.graphics.getDeltaTime();
-        if (movement < 0) movement = 0;
-        sprite.setX(movement);
+        if (isTimeToMove()) {
+            sprite.setX(sprite.getX() - MOVE_SPEED);
+            if (sprite.getX() <= 0)
+                sprite.setX(0);
+            lastMoveTime = TimeUtils.nanoTime();
+        }
     }
 
     public void moveRight() {
         sprite.setRotation(90);
         previousX = sprite.getX();
         previousY = sprite.getY();
-        float movement = sprite.getX() + MOVE_SPEED * Gdx.graphics.getDeltaTime();
-        float endOfScreen = Gdx.graphics.getWidth() - sprite.getWidth();
-        if (movement > endOfScreen) movement = endOfScreen;
-        sprite.setX(movement);
+        if (isTimeToMove()) {
+            sprite.setX(sprite.getX() + MOVE_SPEED);
+            if (sprite.getX() + sprite.getWidth() >= Gdx.graphics.getWidth()) 
+                sprite.setX(Gdx.graphics.getWidth() - sprite.getWidth());
+            lastMoveTime = TimeUtils.nanoTime();
+        }
     }
 
     public void moveUp() {
         sprite.setRotation(180);
         previousX = sprite.getX();
         previousY = sprite.getY();
-        float movement = sprite.getY() + MOVE_SPEED * Gdx.graphics.getDeltaTime();
-        float endOfScreen = Gdx.graphics.getHeight() - sprite.getHeight();
-        if (movement > endOfScreen) movement = endOfScreen;
-        sprite.setY(movement);
+        if (isTimeToMove()) {
+            sprite.setY(sprite.getY() + MOVE_SPEED);
+            if (sprite.getY() + sprite.getHeight() >= Gdx.graphics.getHeight())
+                sprite.setY(Gdx.graphics.getHeight() - sprite.getHeight());
+            lastMoveTime = TimeUtils.nanoTime();
+        }
     }
 
     public void moveDown() {
         sprite.setRotation(0);
         previousX = sprite.getX();
         previousY = sprite.getY();
-        float movement = sprite.getY() - MOVE_SPEED * Gdx.graphics.getDeltaTime();
-        if (movement < 0) movement = 0;
-        sprite.setY(movement);
+        if (isTimeToMove()) {
+            sprite.setY(sprite.getY() - MOVE_SPEED);
+            if (sprite.getY() <= 0)
+                sprite.setY(0);
+            lastMoveTime = TimeUtils.nanoTime();
+        }
     }
 
     public void shoot() {
@@ -86,7 +98,7 @@ public class Tank {
             bulletSpawnY = sprite.getY() + sprite.getHeight() / 2 - bulletSprite.getHeight() / 2;
         }
 
-        if (TimeUtils.nanoTime() - lastShootTime > SHOOT_SPEED) {
+        if (TimeUtils.nanoTime() - lastShootTime > NEXT_BULLET_SPAWN_TIME) {
             GameScreen.ALL_BULLETS.add(new Bullet(bulletSpawnX, bulletSpawnY, sprite.getRotation(), bulletSprite));
             makeShootEffect(bulletSpawnX, bulletSpawnY);
             lastShootTime = TimeUtils.nanoTime();
@@ -123,5 +135,9 @@ public class Tank {
     private void stepBack() {
         sprite.setX(previousX);
         sprite.setY(previousY);
+    }
+
+    private boolean isTimeToMove() {
+        return TimeUtils.nanoTime() - lastMoveTime > MOVE_ANIMATION_UPDATE_TIME;
     }
 }
