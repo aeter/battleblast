@@ -9,16 +9,14 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class Tank {
-    private static final int MOVE_SPEED = 4; // pixels
+    private static final float MOVE_SPEED = 200f;
     private static final long ONE_MILLISECOND = 1000000; // in nanoseconds
-    private static final long NEXT_BULLET_SPAWN_TIME = 300 * ONE_MILLISECOND;
-    private static final float MOVE_ANIMATION_UPDATE_TIME = 20 * ONE_MILLISECOND;
+    private static final long SHOOT_SPEED = 300 * ONE_MILLISECOND;
 
-    private Sprite sprite;
-    private float previousX = 0f;
-    private float previousY = 0f;
-    private long lastShootTime = 0l;
-    private long lastMoveTime = 0l;
+    protected Sprite sprite;
+    protected float previousX = 0f;
+    protected float previousY = 0f;
+    private long lastShootTime;
     private ParticleEffect shootEffect;
 
     public void setSprite(Sprite sprite) {
@@ -33,48 +31,38 @@ public class Tank {
         sprite.setRotation(270);
         previousX = sprite.getX();
         previousY = sprite.getY();
-        if (isTimeToMove()) {
-            sprite.setX(sprite.getX() - MOVE_SPEED);
-            if (sprite.getX() <= 0)
-                sprite.setX(0);
-            lastMoveTime = TimeUtils.nanoTime();
-        }
+        float movement = sprite.getX() - MOVE_SPEED * Gdx.graphics.getDeltaTime();
+        if (movement < 0) movement = 0;
+        sprite.setX(tiled(movement));
     }
 
     public void moveRight() {
         sprite.setRotation(90);
         previousX = sprite.getX();
         previousY = sprite.getY();
-        if (isTimeToMove()) {
-            sprite.setX(sprite.getX() + MOVE_SPEED);
-            if (sprite.getX() + sprite.getWidth() >= Gdx.graphics.getWidth()) 
-                sprite.setX(Gdx.graphics.getWidth() - sprite.getWidth());
-            lastMoveTime = TimeUtils.nanoTime();
-        }
+        float movement = sprite.getX() + MOVE_SPEED * Gdx.graphics.getDeltaTime();
+        float endOfScreen = Gdx.graphics.getWidth() - sprite.getWidth();
+        if (movement > endOfScreen) movement = endOfScreen;
+        sprite.setX(tiled(movement));
     }
 
     public void moveUp() {
         sprite.setRotation(180);
         previousX = sprite.getX();
         previousY = sprite.getY();
-        if (isTimeToMove()) {
-            sprite.setY(sprite.getY() + MOVE_SPEED);
-            if (sprite.getY() + sprite.getHeight() >= Gdx.graphics.getHeight())
-                sprite.setY(Gdx.graphics.getHeight() - sprite.getHeight());
-            lastMoveTime = TimeUtils.nanoTime();
-        }
+        float movement = sprite.getY() + MOVE_SPEED * Gdx.graphics.getDeltaTime();
+        float endOfScreen = Gdx.graphics.getHeight() - sprite.getHeight();
+        if (movement > endOfScreen) movement = endOfScreen;
+        sprite.setY(tiled(movement));
     }
 
     public void moveDown() {
         sprite.setRotation(0);
         previousX = sprite.getX();
         previousY = sprite.getY();
-        if (isTimeToMove()) {
-            sprite.setY(sprite.getY() - MOVE_SPEED);
-            if (sprite.getY() <= 0)
-                sprite.setY(0);
-            lastMoveTime = TimeUtils.nanoTime();
-        }
+        float movement = sprite.getY() - MOVE_SPEED * Gdx.graphics.getDeltaTime();
+        if (movement < 0) movement = 0;
+        sprite.setY(tiled(movement));
     }
 
     public void shoot() {
@@ -98,7 +86,7 @@ public class Tank {
             bulletSpawnY = sprite.getY() + sprite.getHeight() / 2 - bulletSprite.getHeight() / 2;
         }
 
-        if (TimeUtils.nanoTime() - lastShootTime > NEXT_BULLET_SPAWN_TIME) {
+        if (TimeUtils.nanoTime() - lastShootTime > SHOOT_SPEED) {
             GameScreen.ALL_BULLETS.add(new Bullet(bulletSpawnX, bulletSpawnY, sprite.getRotation(), bulletSprite));
             makeShootEffect(bulletSpawnX, bulletSpawnY);
             lastShootTime = TimeUtils.nanoTime();
@@ -137,7 +125,18 @@ public class Tank {
         sprite.setY(previousY);
     }
 
-    private boolean isTimeToMove() {
-        return TimeUtils.nanoTime() - lastMoveTime > MOVE_ANIMATION_UPDATE_TIME;
+    /*
+     *  tiles are 32 * 32 pixels. if the tank has moved too fast
+     *  and missed the 32th tile start by a few pixels, position the tank
+     *  to the start of the tile.
+     *  The enemy tank AI may make some decisions when it sees it's at the
+     *  beginning of some tile (like, change direction, etc.)
+     */
+    private float tiled(float movement) {
+        int pixels_tolerance = 3;
+        if (movement % 32 < pixels_tolerance) {
+            return movement - movement % 16;
+        }
+        return movement;
     }
 }
