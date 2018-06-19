@@ -1,21 +1,27 @@
 package me.battleblast;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class EnemyTank extends Tank {
+    private long lastDecision = TimeUtils.millis();
+    private static final int ONE_SECOND_IN_MILLISECONDS = 1000;
+
     public void move() {
-        int random_int = (int) (Math.random() * 10);
-        boolean atTileStart = sprite.getX() % 32 == 0 || sprite.getY() % 32 == 0;
-        Gdx.app.log("%d", String.format("%d", random_int));
-        if (random_int % 9 == 0) {
+        if (TimeUtils.millis() - lastDecision > 2 * ONE_SECOND_IN_MILLISECONDS) {
+            changeDirection();
+            lastDecision = TimeUtils.millis();
+        } else if (atTileStart() && random() == 9) { 
             changeDirection();
         } else {
             keepDirection();
         }
+
+        if (random() == 2) shoot();
     }
 
     private void changeDirection() {
-        int random_int = (int) (Math.random() * 10);
+        int random_int = random();
         if (random_int < 2) {
             moveLeft();
         } else if (random_int < 4) {
@@ -38,4 +44,13 @@ public class EnemyTank extends Tank {
             moveDown();
         }
     }
+
+    private int random() {
+        return (int) (Math.random() * 10);
+    }
+
+    private boolean atTileStart() {
+        return sprite.getX() % 32 == 0 || sprite.getY() % 32 == 0;
+    }
+
 }
