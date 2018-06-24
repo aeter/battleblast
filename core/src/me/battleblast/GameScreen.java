@@ -17,7 +17,11 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+
+import me.battleblast.pathfinding.Node;
+import me.battleblast.pathfinding.PathFinding;
 
 
 public class GameScreen implements Screen {
@@ -38,6 +42,13 @@ public class GameScreen implements Screen {
         setupCamera();
         spawnEnemy();
         spawnPlayer();
+
+        // TODO - this is just for testing stuff, remove later.
+        // TODO *32 etc
+        Vector2 s = new Vector2(0, 0);
+        Vector2 t = new Vector2(0, 2);
+        Node nextNode = new PathFinding().getNextNode(s, t);
+        Gdx.app.log("nextNode", String.format("x: %d, y: %d", nextNode.x, nextNode.y));
     }
 
     @Override
