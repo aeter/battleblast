@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import me.battleblast.screens.GameScreen;
+
+
 public class Tank {
     private static final float MOVE_SPEED = 200f;
     private static final long ONE_MILLISECOND = 1000000; // in nanoseconds

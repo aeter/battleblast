@@ -14,8 +14,14 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
+import me.battleblast.screens.MainMenuScreen;
+
 
 public class BattleBlast extends Game {
+    public static final int MAP_WIDTH = 20; // 20 tiles
+    public static final int MAP_HEIGHT = 20; // 20 tiles
+    public static final int TILE_WIDTH = 32; // 32 pixels
+
     public static AssetManager assets;
 
     public SpriteBatch batch;

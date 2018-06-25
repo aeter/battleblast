@@ -1,4 +1,4 @@
-package me.battleblast;
+package me.battleblast.screens;
 
 import java.util.Iterator;
 
@@ -23,6 +23,12 @@ import com.badlogic.gdx.utils.Array;
 import me.battleblast.pathfinding.Node;
 import me.battleblast.pathfinding.PathFinding;
 
+import me.battleblast.Tank;
+import me.battleblast.EnemyTank;
+import me.battleblast.PlayerTank;
+import me.battleblast.Bullet;
+import me.battleblast.BattleBlast;
+
 
 public class GameScreen implements Screen {
     public static Array<Bullet> ALL_BULLETS = new Array<Bullet>();
@@ -42,17 +48,19 @@ public class GameScreen implements Screen {
         setupCamera();
         spawnEnemy();
         spawnPlayer();
-
-        // TODO - this is just for testing stuff, remove later.
-        // TODO *32 etc
-        Vector2 s = new Vector2(0, 0);
-        Vector2 t = new Vector2(0, 2);
-        Node nextNode = new PathFinding().getNextNode(s, t);
-        Gdx.app.log("nextNode", String.format("x: %d, y: %d", nextNode.x, nextNode.y));
     }
 
     @Override
     public void render(float delta) {
+        /*
+        TODO - remove after tests pass
+        Gdx.app.log("in render", "in render");
+        Vector2 s = new Vector2(0, 0);
+        Vector2 t = new Vector2(0, 2);
+        Node n = new PathFinding().getNextNode(s, t);
+        Gdx.app.log("nextNode", String.format("x: %d, y: %d", n.x, n.y));
+        */
+
         handleInput(); 
         moveWorld();
         handleCollisions();

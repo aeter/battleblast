@@ -1,4 +1,4 @@
-package me.battleblast;
+package me.battleblast.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
+
+import me.battleblast.BattleBlast;
 
 
 public class MainMenuScreen implements Screen {
