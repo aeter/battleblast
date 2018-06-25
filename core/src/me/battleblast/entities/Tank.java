@@ -1,4 +1,4 @@
-package me.battleblast;
+package me.battleblast.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import me.battleblast.screens.GameScreen;
+import me.battleblast.BattleBlast;
 
 
 public class Tank {

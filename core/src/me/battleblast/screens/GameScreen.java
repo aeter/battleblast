@@ -20,14 +20,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
+import me.battleblast.BattleBlast;
+import me.battleblast.entities.Tank;
+import me.battleblast.entities.EnemyTank;
+import me.battleblast.entities.PlayerTank;
+import me.battleblast.entities.Bullet;
 import me.battleblast.pathfinding.Node;
 import me.battleblast.pathfinding.PathFinding;
-
-import me.battleblast.Tank;
-import me.battleblast.EnemyTank;
-import me.battleblast.PlayerTank;
-import me.battleblast.Bullet;
-import me.battleblast.BattleBlast;
 
 
 public class GameScreen implements Screen {
