@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+import me.battleblast.BattleBlast;
 import me.battleblast.pathfinding.Node;
 import me.battleblast.pathfinding.PathFinding;
 import me.battleblast.screens.GameScreen;
@@ -19,24 +20,19 @@ public class EnemyTank extends Tank {
     public void actClever() {
         Array walls = new Array<Vector2>();
         for (Sprite s: GameScreen.ALL_BREAKABLE_OBSTACLES) {
-            walls.add(new Vector2(s.getX(), s.getY()));
+            walls.add(new Vector2(s.getX() / BattleBlast.TILE_WIDTH, s.getY() / BattleBlast.TILE_WIDTH));
         }
         for (Vector2 v: GameScreen.ALL_UNBREAKABLE_OBSTACLES) {
-            walls.add(v);
+            walls.add(new Vector2(v.x / BattleBlast.TILE_WIDTH, v.y / BattleBlast.TILE_WIDTH));
         }
-        // TODO - now we have all walls (for this graphics frame
-        // so we need to do the pathfinding magic
-        //
-        /*
-        TODO - remove after tests pass
-        Gdx.app.log("in render", "in render");
-        Vector2 s = new Vector2(0, 0);
-        Vector2 t = new Vector2(0, 2);
-        Node n = new PathFinding().getNextNode(s, t);
-        Gdx.app.log("nextNode", String.format("x: %d, y: %d", n.x, n.y));
-        */
+        Vector2 startPosition = new Vector2(sprite.getX() / BattleBlast.TILE_WIDTH, sprite.getY() / BattleBlast.TILE_WIDTH);
 
-        
+        //TODO - remove after tests pass
+        Vector2 endPosition = new Vector2(10, 10);
+        Node nextNode = new PathFinding(walls).getNextNode(startPosition, endPosition);
+        Gdx.app.log("nextNode", String.format("x: %d, y: %d", nextNode.x, nextNode.y));
+
+
         if (TimeUtils.millis() - lastDecision > 2 * ONE_SECOND_IN_MILLISECONDS) {
             changeDirection();
             lastDecision = TimeUtils.millis();
