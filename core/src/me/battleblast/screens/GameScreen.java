@@ -2,7 +2,6 @@ package me.battleblast.screens;
 
 import java.util.Iterator;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -25,13 +24,12 @@ import me.battleblast.entities.Tank;
 import me.battleblast.entities.EnemyTank;
 import me.battleblast.entities.PlayerTank;
 import me.battleblast.entities.Bullet;
-import me.battleblast.pathfinding.Node;
-import me.battleblast.pathfinding.PathFinding;
 
 
 public class GameScreen implements Screen {
     public static Array<Bullet> ALL_BULLETS = new Array<Bullet>();
     public static Array<Sprite> ALL_BREAKABLE_OBSTACLES = new Array<Sprite>();
+    public static Array<Vector2> ALL_UNBREAKABLE_OBSTACLES = new Array<Vector2>();
 
     private final BattleBlast game;
     private TiledMap map;
@@ -42,7 +40,6 @@ public class GameScreen implements Screen {
 
     public GameScreen(final BattleBlast game) {
         this.game = game;
-
         setupMap();
         setupCamera();
         spawnEnemy();
@@ -51,15 +48,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        /*
-        TODO - remove after tests pass
-        Gdx.app.log("in render", "in render");
-        Vector2 s = new Vector2(0, 0);
-        Vector2 t = new Vector2(0, 2);
-        Node n = new PathFinding().getNextNode(s, t);
-        Gdx.app.log("nextNode", String.format("x: %d, y: %d", n.x, n.y));
-        */
-
         handleInput(); 
         moveWorld();
         handleCollisions();
@@ -100,7 +88,7 @@ public class GameScreen implements Screen {
     }
 
     private void moveWorld() {
-        enemy.move();
+        enemy.actClever();
         for (Bullet bullet: ALL_BULLETS) {
             bullet.move();
         }
@@ -111,6 +99,7 @@ public class GameScreen implements Screen {
         MapObjects stabiles = map.getLayers().get("unbreakable_obstacles").getObjects();
         for (MapObject stabile: stabiles) {
             Rectangle stabileBounds = ((RectangleMapObject) stabile).getRectangle();
+            ALL_UNBREAKABLE_OBSTACLES.add(new Vector2(stabileBounds.getX(), stabileBounds.getY()));
             if (stabileBounds.overlaps(player.getBounds())) {
                 player.onCollisionWithObstacle();
             }
