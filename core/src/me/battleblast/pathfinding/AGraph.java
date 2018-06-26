@@ -38,8 +38,8 @@ public class AGraph implements IndexedGraph<Node> {
         return MAP_WIDTH * MAP_HEIGHT;
     }
 
-    public Node[][] getMap() {
-        return map;
+    public Node getNodeAt(Vector2 position) {
+        return map[toInt(position.x)][toInt(position.y)];
     }
 
     private void setupNodeConnections() {

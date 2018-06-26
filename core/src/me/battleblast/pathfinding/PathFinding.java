@@ -25,8 +25,8 @@ public class PathFinding {
     }
 
     public Node getNextNode(Vector2 source, Vector2 target) {
-        Node sourceNode = graph.getMap()[toInt(source.x)][toInt(source.y)];
-        Node targetNode = graph.getMap()[toInt(target.x)][toInt(target.y)];
+        Node sourceNode = graph.getNodeAt(source);
+        Node targetNode = graph.getNodeAt(target);
         path.clear();
         pathfinder.searchConnectionPath(sourceNode, targetNode, heuristic, path);
         return path.getCount() == 0 ? null : path.get(0).getToNode();
@@ -40,9 +40,5 @@ public class PathFinding {
                 return Math.abs(end.x - start.x) + Math.abs(end.y - start.y);
             }
         };
-    }
-
-    private int toInt(float f) {
-        return MathUtils.floor(f);
     }
 }
