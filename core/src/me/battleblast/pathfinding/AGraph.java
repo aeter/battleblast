@@ -11,7 +11,6 @@ import me.battleblast.BattleBlast;
 
 
 public class AGraph implements IndexedGraph<Node> {
-    // so we don't have to type 'BattleBlast.MAP_WI...'
     private static final int MAP_WIDTH = BattleBlast.MAP_WIDTH;
     private static final int MAP_HEIGHT = BattleBlast.MAP_HEIGHT;
 
@@ -46,34 +45,44 @@ public class AGraph implements IndexedGraph<Node> {
         for (int x = 0; x < MAP_WIDTH; x++) {
             for (int y = 0; y < MAP_HEIGHT; y++) {
                 Node node = map[x][y];
-                Node right = x < MAP_WIDTH - 1 ? map[x+1][y] : null;
-                Node top = y < MAP_HEIGHT - 1 ? map[x][y+1] : null;
-                Node left = x > 0 ? map[x-1][y] : null;
-                Node bottom = y > 0 ? map[x][y-1] : null;
-                // TODO - A tank uses 4 nodes (sprite is 64x64), mark adjacent
-                // nodes as impassable for the pathfinding (i.e. no connections)
-                //
-                // @@
-                // @@
-                // ^
-                // |
-                // we use this tile as starting point, all 4 adjacent tiles
-                // should be passable in order to add connections
-                // For example, this is No for connections if we move into
-                // position: (& denoting an obstacle):
-                // @&
-                // @@
-                //
-                if (right != null  && !right.isWall)
-                    node.connections.add(new DefaultConnection<Node>(node, right));
-                if (top != null && !top.isWall)
-                    node.connections.add(new DefaultConnection<Node>(node, top));
-                if (left != null && !left.isWall)
-                    node.connections.add(new DefaultConnection<Node>(node, left));
-                if (bottom != null && !bottom.isWall)
-                    node.connections.add(new DefaultConnection<Node>(node, bottom));
+                // right
+                if (withinMap(x + 1, y) && tankFitsIn(x + 1, y)) {
+                    node.connections.add(new DefaultConnection<Node>(node, map[x+1][y]));
+                }
+                // top
+                if (withinMap(x, y + 1) && tankFitsIn(x, y + 1)) {
+                    node.connections.add(new DefaultConnection<Node>(node, map[x][y + 1]));
+                }
+                // left
+                if (withinMap(x - 1, y) && tankFitsIn(x - 1, y)) {
+                    node.connections.add(new DefaultConnection<Node>(node, map[x - 1][y]));
+                }
+                // bottom
+                if (withinMap(x, y - 1) && tankFitsIn(x, y - 1)) {
+                    node.connections.add(new DefaultConnection<Node>(node, map[x][y - 1]));
+                }
             }
         }
+    }
+
+    private boolean withinMap(int x, int y) {
+        // a tank takes 2 tiles in each direction. this is the reason 
+        // we add "-1" to the MAP_WIDTH and MAP_HEIGHT here.
+        return x < MAP_WIDTH - 1 && y < MAP_HEIGHT - 1 && x >= 0 && y >= 0; 
+    }
+
+    private boolean tankFitsIn(int x, int y) {
+        // a tank image takes 2 tiles ( @ ) in each direction; if any of these
+        // tiles is a wall ( & ), the tank doesn't fit in the position
+        // @@
+        // @@   <--- fits in this position
+        //
+        // @&
+        // @@   <--- doesn't fit, top-right tile is a wall.
+        //
+        // we use the bottom-left tile (Tank.getSprite().getX(), Tank.getSprite().getY())
+        // as a determining position for a tank, thus the checks below.
+        return !map[x][y].isWall && !map[x+1][y].isWall && !map[x][y + 1].isWall && !map[x+1][y+1].isWall;
     }
 
     private void initNodes() {

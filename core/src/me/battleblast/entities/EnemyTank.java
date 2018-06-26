@@ -30,7 +30,8 @@ public class EnemyTank extends Tank {
         //TODO - remove after tests pass
         Vector2 endPosition = new Vector2(10, 10);
         Node nextNode = new PathFinding(walls).getNextNode(startPosition, endPosition);
-        Gdx.app.log("nextNode", String.format("x: %d, y: %d", nextNode.x, nextNode.y));
+        if (nextNode != null)
+            Gdx.app.log("nextNode", String.format("x: %d, y: %d", nextNode.x, nextNode.y));
 
 
         if (TimeUtils.millis() - lastDecision > 2 * ONE_SECOND_IN_MILLISECONDS) {
