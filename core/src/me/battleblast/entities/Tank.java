@@ -13,9 +13,9 @@ import me.battleblast.BattleBlast;
 
 
 public class Tank {
-    private static final float MOVE_SPEED = 200f;
+    private static final float MOVE_SPEED = 128; // ~pixels per second, depends on frame rate.
     private static final long ONE_MILLISECOND = 1000000; // in nanoseconds
-    private static final long SHOOT_SPEED = 300 * ONE_MILLISECOND;
+    private static final long NEXT_BULLET_SPAWN_TIME = 300 * ONE_MILLISECOND;
 
     protected Sprite sprite;
     protected float previousX = 0f;
@@ -90,7 +90,7 @@ public class Tank {
             bulletSpawnY = sprite.getY() + sprite.getHeight() / 2 - bulletSprite.getHeight() / 2;
         }
 
-        if (TimeUtils.nanoTime() - lastShootTime > SHOOT_SPEED) {
+        if (TimeUtils.nanoTime() - lastShootTime > NEXT_BULLET_SPAWN_TIME) {
             GameScreen.ALL_BULLETS.add(new Bullet(bulletSpawnX, bulletSpawnY, sprite.getRotation(), bulletSprite));
             makeShootEffect(bulletSpawnX, bulletSpawnY);
             lastShootTime = TimeUtils.nanoTime();
@@ -138,7 +138,7 @@ public class Tank {
      */
     private float tiled(float movement) {
         int pixels_tolerance = 3;
-        if (movement % 32 < pixels_tolerance) {
+        if (movement % BattleBlast.TILE_WIDTH < pixels_tolerance) {
             return movement - movement % 16;
         }
         return movement;
