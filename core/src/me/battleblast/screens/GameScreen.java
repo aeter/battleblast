@@ -19,6 +19,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
+import me.battleblast.animations.SmallBoomAnimation;
 import me.battleblast.BattleBlast;
 import me.battleblast.entities.Tank;
 import me.battleblast.entities.EnemyTank;
@@ -31,6 +32,7 @@ public class GameScreen implements Screen {
     public static Array<Sprite> ALL_BREAKABLE_OBSTACLES = new Array<Sprite>();
     public static Array<Vector2> ALL_UNBREAKABLE_OBSTACLES = new Array<Vector2>();
 
+    private Array<SmallBoomAnimation> animations = new Array<SmallBoomAnimation>();
     private final BattleBlast game;
     private TiledMap map;
     private OrthographicCamera camera;
@@ -126,7 +128,7 @@ public class GameScreen implements Screen {
                 if (bullet.getBounds().overlaps(breakable.getBoundingRectangle())) {
                     i.remove();
                     s.remove();
-                    // TODO - boom effect
+                    animations.add(new SmallBoomAnimation(bullet.getBounds().getX(), bullet.getBounds().getY()));
                 }
             }
         }
@@ -151,6 +153,17 @@ public class GameScreen implements Screen {
         renderer.render();
 
         game.batch.begin();
+
+        for (Iterator<SmallBoomAnimation> i = animations.iterator(); i.hasNext(); ) {
+            SmallBoomAnimation animation = i.next();
+            if (animation.isOver()) {
+                animation.dispose();
+                i.remove();
+            } else {
+                animation.draw(game.batch);
+            }
+        }
+
         player.draw(game.batch);
         enemy.draw(game.batch);
         for (Sprite breakable: ALL_BREAKABLE_OBSTACLES) {
