@@ -117,18 +117,19 @@ public class GameScreen implements Screen {
         // collisions with breakable objects
         for (Iterator<Sprite> s = ALL_BREAKABLE_OBSTACLES.iterator(); s.hasNext(); ) {
             Sprite breakable = s.next();
-            if (breakable.getBoundingRectangle().overlaps(player.getBounds())) {
+            Rectangle breakableBounds = breakable.getBoundingRectangle();
+            if (breakableBounds.overlaps(player.getBounds())) {
                 player.onCollisionWithObstacle();
             }
-            if (breakable.getBoundingRectangle().overlaps(enemy.getBounds())) {
+            if (breakableBounds.overlaps(enemy.getBounds())) {
                 enemy.onCollisionWithObstacle();
             }
             for (Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
                 Bullet bullet = i.next();
-                if (bullet.getBounds().overlaps(breakable.getBoundingRectangle())) {
+                if (breakableBounds.overlaps(bullet.getBounds())) {
                     i.remove();
                     s.remove();
-                    animations.add(new SmallBoomAnimation(bullet.getBounds().getX(), bullet.getBounds().getY()));
+                    animations.add(new SmallBoomAnimation(breakableBounds.getX(), breakableBounds.getY()));
                 }
             }
         }

@@ -13,7 +13,7 @@ public class SmallBoomAnimation {
     private float y;
     private float elapsedTime = 0f;
     private TextureAtlas boomAtlas;
-    private float ANIMATION_FRAME_DURATION = 1/30f;
+    private float ANIMATION_FRAME_DURATION = 1/60f;
     private Animation<TextureRegion> animation;
 
     public SmallBoomAnimation(float x, float y) {
