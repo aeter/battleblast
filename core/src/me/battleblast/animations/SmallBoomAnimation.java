@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
-public class SmallBoomAnimation {
+public class SmallBoomAnimation extends BaseAnimation {
     private float x;
     private float y;
     private float elapsedTime = 0f;

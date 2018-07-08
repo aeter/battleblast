@@ -19,7 +19,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
+import me.battleblast.animations.BaseAnimation;
 import me.battleblast.animations.SmallBoomAnimation;
+import me.battleblast.animations.SmallSparksAnimation;
 import me.battleblast.BattleBlast;
 import me.battleblast.entities.Tank;
 import me.battleblast.entities.EnemyTank;
@@ -32,7 +34,7 @@ public class GameScreen implements Screen {
     public static Array<Sprite> ALL_BREAKABLE_OBSTACLES = new Array<Sprite>();
     public static Array<Vector2> ALL_UNBREAKABLE_OBSTACLES = new Array<Vector2>();
 
-    private Array<SmallBoomAnimation> animations = new Array<SmallBoomAnimation>();
+    private Array<BaseAnimation> animations = new Array<BaseAnimation>();
     private final BattleBlast game;
     private TiledMap map;
     private OrthographicCamera camera;
@@ -110,7 +112,10 @@ public class GameScreen implements Screen {
             }
             for (Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
                 Bullet bullet = i.next();
-                if (stabileBounds.overlaps(bullet.getBounds())) i.remove(); 
+                if (stabileBounds.overlaps(bullet.getBounds())) {
+                    i.remove(); 
+                    animations.add(new SmallSparksAnimation(stabileBounds.getX(), stabileBounds.getY()));
+                }
             }
         }
 
@@ -155,8 +160,8 @@ public class GameScreen implements Screen {
 
         game.batch.begin();
 
-        for (Iterator<SmallBoomAnimation> i = animations.iterator(); i.hasNext(); ) {
-            SmallBoomAnimation animation = i.next();
+        for (Iterator<BaseAnimation> i = animations.iterator(); i.hasNext(); ) {
+            BaseAnimation animation = i.next();
             if (animation.isOver()) {
                 animation.dispose();
                 i.remove();
