@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 
 public class Bullet {
-    private static final int MOVE_SPEED = 400;
+    private static final int MOVE_SPEED = 300; // approx. pixels per second
     private Sprite sprite;
 
     public Bullet(float spawnX, float spawnY, float rotation, Sprite sprite) {
@@ -42,6 +42,6 @@ public class Bullet {
 
     public boolean isOutOfScreen() {
         return (sprite.getX() < 0 || sprite.getX() > Gdx.graphics.getWidth()
-                || sprite.getY() < 0 || sprite.getY() > Gdx.graphics.getHeight());
+             || sprite.getY() < 0 || sprite.getY() > Gdx.graphics.getHeight());
     }
 }
