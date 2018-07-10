@@ -21,14 +21,17 @@ public class SmallSparksAnimation extends BaseAnimation {
         animation.start();
     }
 
+    @Override
     public boolean isOver() {
         return animation.isComplete();
     }
 
+    @Override
     public void draw(SpriteBatch batch) {
         animation.update(Gdx.graphics.getDeltaTime());
         animation.draw(batch);
     }
 
+    @Override
     public void dispose() {}
 }

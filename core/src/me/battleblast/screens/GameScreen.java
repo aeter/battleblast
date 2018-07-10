@@ -53,7 +53,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         handleInput(); 
-        moveWorld();
+        moveWorld(delta);
         handleCollisions();
         draw();
     }
@@ -76,6 +76,10 @@ public class GameScreen implements Screen {
     @Override
     public void resume() {}
 
+    public PlayerTank getPlayer() {
+        return player;
+    }
+
     private void handleInput() {
         if (Gdx.input.isKeyPressed(Keys.LEFT)) {
             player.moveLeft();
@@ -91,8 +95,8 @@ public class GameScreen implements Screen {
         }
     }
 
-    private void moveWorld() {
-        enemy.actClever();
+    private void moveWorld(float delta) {
+        enemy.update(delta);
         for (Bullet bullet: ALL_BULLETS) {
             bullet.move();
         }

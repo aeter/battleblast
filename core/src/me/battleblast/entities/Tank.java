@@ -122,6 +122,9 @@ public class Tank {
      *  The enemy tank AI may make some decisions when it sees it's at the
      *  beginning of some tile (like, change direction, etc.)
      */
+    // TODO - also undercompensate (depending on movement direction),
+    // not just overcompensate.
+    // TODO - movement % 32
     private float tiled(float movement) {
         int pixels_tolerance = 3;
         if (movement % BattleBlast.TILE_WIDTH < pixels_tolerance) {

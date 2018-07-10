@@ -23,16 +23,19 @@ public class SmallBoomAnimation extends BaseAnimation {
         animation = new Animation<TextureRegion>(ANIMATION_FRAME_DURATION, boomAtlas.getRegions());
     }
 
+    @Override
     public boolean isOver() {
         return animation.isAnimationFinished(elapsedTime);
     }
 
+    @Override
     public void draw(SpriteBatch batch) {
         elapsedTime += Gdx.graphics.getDeltaTime();
         batch.draw(animation.getKeyFrame(elapsedTime), x, y);
     }
 
     // TODO - see how to use the assetManager to avoid this disposal
+    @Override
     public void dispose() {
         boomAtlas.dispose();
     }
