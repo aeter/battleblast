@@ -3,19 +3,45 @@ package me.battleblast.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+
+import me.battleblast.BattleBlast;
 
 
 public class Bullet {
     private static final int MOVE_SPEED = 300; // approx. pixels per second
     private Sprite sprite;
 
-    public Bullet(float spawnX, float spawnY, float rotation, Sprite sprite) {
-        this.sprite = sprite;
-        sprite.setX(spawnX);
-        sprite.setY(spawnY);
-        sprite.setRotation(rotation);
+    public Bullet() {
+        this.sprite = new Sprite(BattleBlast.assets.get("kenney_topdownTanksRedux/PNG/Retina/bulletDark1.png", Texture.class));
     }
+
+    public Bullet positionedInFrontOf(Sprite tankSprite) {
+        float bulletSpawnX = 0;
+        float bulletSpawnY = 0;
+        if (tankSprite.getRotation() == 0) {
+            bulletSpawnX = tankSprite.getX() + tankSprite.getWidth() / 2 - sprite.getWidth() / 2;
+            bulletSpawnY = tankSprite.getY();
+        }
+        if (tankSprite.getRotation() == 90) {
+            bulletSpawnX = tankSprite.getX() + tankSprite.getWidth();
+            bulletSpawnY = tankSprite.getY() + tankSprite.getHeight() / 2 - sprite.getHeight() / 2;
+        }
+        if (tankSprite.getRotation() == 180) {
+            bulletSpawnX = tankSprite.getX() + tankSprite.getWidth() / 2 - sprite.getWidth() / 2;
+            bulletSpawnY = tankSprite.getY() + tankSprite.getHeight();
+        }
+        if (tankSprite.getRotation() == 270) {
+            bulletSpawnX = tankSprite.getX();
+            bulletSpawnY = tankSprite.getY() + tankSprite.getHeight() / 2 - sprite.getHeight() / 2;
+        }
+        sprite.setX(bulletSpawnX);
+        sprite.setY(bulletSpawnY);
+        sprite.setRotation(tankSprite.getRotation());
+        return this;
+    }
+
 
     public void move() {
         if (sprite.getRotation() == 0)

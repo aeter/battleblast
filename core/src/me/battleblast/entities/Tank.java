@@ -3,7 +3,6 @@ package me.battleblast.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -68,28 +67,10 @@ public class Tank {
     }
 
     public void shoot() {
-        float bulletSpawnX = 0;
-        float bulletSpawnY = 0;
-        Sprite bulletSprite = new Sprite(BattleBlast.assets.get("kenney_topdownTanksRedux/PNG/Retina/bulletDark1.png", Texture.class));
-        if (sprite.getRotation() == 0) {
-            bulletSpawnX = sprite.getX() + sprite.getWidth() / 2 - bulletSprite.getWidth() / 2;
-            bulletSpawnY = sprite.getY();
-        }
-        if (sprite.getRotation() == 90) {
-            bulletSpawnX = sprite.getX() + sprite.getWidth();
-            bulletSpawnY = sprite.getY() + sprite.getHeight() / 2 - bulletSprite.getHeight() / 2;
-        }
-        if (sprite.getRotation() == 180) {
-            bulletSpawnX = sprite.getX() + sprite.getWidth() / 2 - bulletSprite.getWidth() / 2;
-            bulletSpawnY = sprite.getY() + sprite.getHeight();
-        }
-        if (sprite.getRotation() == 270) {
-            bulletSpawnX = sprite.getX();
-            bulletSpawnY = sprite.getY() + sprite.getHeight() / 2 - bulletSprite.getHeight() / 2;
-        }
-
+        // TODO - see if it's possible to use object pooling  for Bullets,
+        // https://github.com/libgdx/libgdx/wiki/Memory-management
         if (TimeUtils.nanoTime() - lastShootTime > NEXT_BULLET_SPAWN_TIME) {
-            GameScreen.ALL_BULLETS.add(new Bullet(bulletSpawnX, bulletSpawnY, sprite.getRotation(), bulletSprite));
+            GameScreen.ALL_BULLETS.add(new Bullet().positionedInFrontOf(sprite));
             lastShootTime = TimeUtils.nanoTime();
         }
     }
