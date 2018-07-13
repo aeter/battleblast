@@ -23,7 +23,6 @@ import com.badlogic.gdx.ai.msg.Telegram;
 
 public class EnemyTank extends Tank {
     public StateMachine<EnemyTank, TankState> state;
-    public Vector2 lastKnownPlayerPosition;
     private Vector2 currentPlayerPosition = new Vector2(0, 0);
     private Vector2 nextPatrollingPosition;
 
@@ -50,20 +49,12 @@ public class EnemyTank extends Tank {
             nextPatrollingPosition = new Vector2(320, 320);
         }
         moveTowards(nextPatrollingPosition);
-        if (new Random().nextInt(40) == 2) shoot();
-    }
-
-    public boolean reachedLastKnownPlayerPosition() {
-        return (sprite.getX() % BattleBlast.TILE_WIDTH == lastKnownPlayerPosition.x &&
-                sprite.getY() % BattleBlast.TILE_WIDTH == lastKnownPlayerPosition.y);
+        if (nPercentChance(2)) shoot();
     }
 
     public void chase() {
-        if (lastKnownPlayerPosition == null) {
-            lastKnownPlayerPosition = new Vector2(currentPlayerPosition.x, currentPlayerPosition.y);
-        }
-        moveTowards(lastKnownPlayerPosition);
-        if (new Random().nextInt(40) == 2) shoot();
+        moveTowards(currentPlayerPosition);
+        if (nPercentChance(3)) shoot();
     }
 
     private void moveTowards(Vector2 position) {
@@ -101,6 +92,10 @@ public class EnemyTank extends Tank {
         return coordinateInPixels / BattleBlast.TILE_WIDTH;
     }
 
+    private boolean nPercentChance(int n) {
+        return Math.random() <= 0.01 * n;
+    }
+
     private enum TankState implements State<EnemyTank> {
         PATROLLING() {
             @Override
@@ -115,8 +110,7 @@ public class EnemyTank extends Tank {
         CHASING() {
             @Override
             public void update(EnemyTank tank) {
-                if (tank.lastKnownPlayerPosition != null && tank.reachedLastKnownPlayerPosition() && !tank.isCloseToPlayer()) {
-                    tank.lastKnownPlayerPosition = null;
+                if (!tank.isCloseToPlayer() || Math.random() <= 0.10) {
                     tank.state.changeState(PATROLLING);
                 } else {
                     tank.chase();        
@@ -135,5 +129,4 @@ public class EnemyTank extends Tank {
             return false; // we don't use messaging.
         }
     }
-
 }
