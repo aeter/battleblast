@@ -22,83 +22,67 @@ import com.badlogic.gdx.ai.msg.Telegram;
 
 
 public class EnemyTank extends Tank {
-    private boolean reachedTarget = false;
-    private Vector2 targetPosition;
     public StateMachine<EnemyTank, TankState> state;
+    public Vector2 lastKnownPlayerPosition;
+    private Vector2 currentPlayerPosition = new Vector2(0, 0);
+    private Vector2 nextPatrollingPosition;
 
     public EnemyTank() {
         state = new DefaultStateMachine<EnemyTank, TankState>(this, TankState.PATROLLING);
     }
 
-    public void update(float delta) {
+    public void update(float delta, float playerX, float playerY) {
         state.update();
-    }
-
-    public void actClever() {
-        // move around the map
-        targetPosition = chooseNewWanderPosition();
-        if (reachedTarget) {
-            targetPosition = chooseNewWanderPosition();
-            reachedTarget = false;
-        } else {
-            Vector2 graphStartPosition = new Vector2(simplify(sprite.getX()), simplify(sprite.getY()));
-            Vector2 graphTargetPosition = new Vector2(simplify(targetPosition.x), simplify(targetPosition.y));
-            Node nextNode = new PathFinding(getCurrentWalls()).getNextNode(graphStartPosition, graphTargetPosition);
-            if (nextNode != null) {
-                Gdx.app.log("nextNode", String.format("x: %d, y: %d", nextNode.x, nextNode.y));
-                int targetX = nextNode.x * BattleBlast.TILE_WIDTH;
-                int targetY = nextNode.y * BattleBlast.TILE_WIDTH;
-                if (targetX < sprite.getX()) {
-                    moveLeft();
-                } else if (targetY < sprite.getY()) {
-                    moveDown();
-                } else if (targetX > sprite.getX()) {
-                    moveRight();
-                } else if (targetY > sprite.getY()) {
-                    moveUp();
-                }
-
-                if (targetX == sprite.getX() && targetY == sprite.getY()) 
-                    reachedTarget = true;
-
-            }
-        }
-
-        if (new Random().nextInt(40) == 2) shoot();
+        this.currentPlayerPosition.x = playerX;
+        this.currentPlayerPosition.y = playerY;
     }
 
     public boolean isCloseToPlayer() {
-        return false;
-        /*
         boolean lessThanThreeTilesAway = ( 
-            Math.abs((GameScreen.getPlayer().getX() - sprite.getX()) / BattleBlast.TILE_WIDTH) <= 3 &&
-            Math.abs((GameScreen.getPlayer().getY() - sprite.getY()) / BattleBlast.TILE_WIDTH) <= 3);
+            Math.abs((currentPlayerPosition.x - sprite.getX()) / BattleBlast.TILE_WIDTH) <= 3 &&
+            Math.abs((currentPlayerPosition.y - sprite.getY()) / BattleBlast.TILE_WIDTH) <= 3);
         return lessThanThreeTilesAway;
-        */
-        /*
-        Vector2 playerPosition = new Vector(GameScreen.getPlayer().getX(), GameScreen.getPlayer().getY());
-        Vector2 enemyPosition = new Vector2(sprite.getX(), sprite.getY());
-        Gdx.app.log("pos", String.format("%f", playerPosition.dst2(enemyPosition)));
-        return playerPosition.dst2(enemyPosition) < 555;
-        */
     }
 
     public void patrol() {
-
+        if (nextPatrollingPosition == null) {
+            // TODO - set the next patrolling positions within a circular structure
+            nextPatrollingPosition = new Vector2(320, 320);
+        }
+        moveTowards(nextPatrollingPosition);
+        if (new Random().nextInt(40) == 2) shoot();
     }
 
-    public boolean reachedLastKnownPlayerLocation() {
-        // TODO - implement
-        return false;
+    public boolean reachedLastKnownPlayerPosition() {
+        return (sprite.getX() % BattleBlast.TILE_WIDTH == lastKnownPlayerPosition.x &&
+                sprite.getY() % BattleBlast.TILE_WIDTH == lastKnownPlayerPosition.y);
     }
 
     public void chase() {
-
+        if (lastKnownPlayerPosition == null) {
+            lastKnownPlayerPosition = new Vector2(currentPlayerPosition.x, currentPlayerPosition.y);
+        }
+        moveTowards(lastKnownPlayerPosition);
+        if (new Random().nextInt(40) == 2) shoot();
     }
 
-    private Vector2 chooseNewWanderPosition() {
-        // TODO - write logic to really choose some position :)
-        return new Vector2(10 * 32,  10 * 32);
+    private void moveTowards(Vector2 position) {
+        Vector2 graphStartPosition = new Vector2(simplify(sprite.getX()), simplify(sprite.getY()));
+        Vector2 graphTargetPosition = new Vector2(simplify(position.x), simplify(position.y));
+        Node nextNode = new PathFinding(getCurrentWalls()).getNextNode(graphStartPosition, graphTargetPosition);
+        if (nextNode != null) {
+            int targetX = nextNode.x * BattleBlast.TILE_WIDTH;
+            int targetY = nextNode.y * BattleBlast.TILE_WIDTH;
+            if (targetX < sprite.getX()) {
+                moveLeft();
+            } else if (targetY < sprite.getY()) {
+                moveDown();
+            } else if (targetX > sprite.getX()) {
+                moveRight();
+            } else if (targetY > sprite.getY()) {
+                moveUp();
+            }
+        }
     }
 
     private Array<Vector2> getCurrentWalls() {
@@ -131,16 +115,13 @@ public class EnemyTank extends Tank {
         CHASING() {
             @Override
             public void update(EnemyTank tank) {
-                if (tank.reachedLastKnownPlayerLocation() && !tank.isCloseToPlayer()) {
+                if (tank.lastKnownPlayerPosition != null && tank.reachedLastKnownPlayerPosition() && !tank.isCloseToPlayer()) {
+                    tank.lastKnownPlayerPosition = null;
                     tank.state.changeState(PATROLLING);
                 } else {
                     tank.chase();        
                 }
             }
-        },
-        DEAD() {
-            @Override
-            public void update(EnemyTank tank) {}
         };
 
         @Override
