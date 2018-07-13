@@ -4,6 +4,7 @@ import java.util.Random;
 import java.lang.Math;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -24,6 +25,7 @@ import com.badlogic.gdx.ai.msg.Telegram;
 public class EnemyTank extends Tank {
     public StateMachine<EnemyTank, TankState> state;
     private Vector2 currentPlayerPosition = new Vector2(0, 0);
+    private Vector2 lastKnownPlayerPosition;
     private Vector2 nextPatrollingPosition;
 
     public EnemyTank() {
@@ -53,8 +55,28 @@ public class EnemyTank extends Tank {
     }
 
     public void chase() {
-        moveTowards(currentPlayerPosition);
+        moveTowards(lastKnownPlayerPosition);
         if (nPercentChance(3)) shoot();
+    }
+
+    public void onSeenPlayer() {
+        lastKnownPlayerPosition = currentPlayerPosition;
+    }
+
+    public boolean seesPlayer() {
+        // TODO - currently the enemy tank sees through walls with this code -
+        // fix that.
+        return (toInt(sprite.getX()) % BattleBlast.TILE_WIDTH == toInt(currentPlayerPosition.x) % BattleBlast.TILE_WIDTH ||
+                toInt(sprite.getY()) % BattleBlast.TILE_WIDTH == toInt(currentPlayerPosition.y) % BattleBlast.TILE_WIDTH);
+    }
+
+    public boolean reachedLastKnownPlayerPosition() {
+        return (sprite.getX() % BattleBlast.TILE_WIDTH == lastKnownPlayerPosition.x &&
+                sprite.getY() % BattleBlast.TILE_WIDTH == lastKnownPlayerPosition.y);
+    }
+
+    private int toInt(float f) {
+        return MathUtils.floor(f);
     }
 
     private void moveTowards(Vector2 position) {
@@ -100,7 +122,8 @@ public class EnemyTank extends Tank {
         PATROLLING() {
             @Override
             public void update(EnemyTank tank) {
-                if (tank.isCloseToPlayer()) {
+                if (tank.seesPlayer()) {
+                    tank.onSeenPlayer();
                     tank.state.changeState(CHASING);
                 } else {
                     tank.patrol();
@@ -110,10 +133,13 @@ public class EnemyTank extends Tank {
         CHASING() {
             @Override
             public void update(EnemyTank tank) {
-                if (!tank.isCloseToPlayer() || Math.random() <= 0.10) {
+                if (tank.seesPlayer()) {
+                    tank.onSeenPlayer();
+                }
+                if (tank.reachedLastKnownPlayerPosition()) {
                     tank.state.changeState(PATROLLING);
                 } else {
-                    tank.chase();        
+                    tank.chase();
                 }
             }
         };
