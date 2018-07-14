@@ -58,9 +58,9 @@ public class EnemyTank extends Tank {
         boolean wallOnLineOfSight = false;
         for (Vector2 wall: currentWalls) {
             if (seenVertically) {
-                wallOnLineOfSight = Math.abs(wall.x - currentPlayerPosition.x) < pixelsTolerance;
+                wallOnLineOfSight = Math.abs(wall.x * BattleBlast.TILE_WIDTH - currentPlayerPosition.x) < pixelsTolerance;
             } else if (seenHorizontally) {
-                wallOnLineOfSight = Math.abs(wall.y - currentPlayerPosition.y) < pixelsTolerance;
+                wallOnLineOfSight = Math.abs(wall.y * BattleBlast.TILE_WIDTH - currentPlayerPosition.y) < pixelsTolerance;
             }
             if (wallOnLineOfSight) {
                 //Gdx.app.log("wall", "wall");
@@ -72,8 +72,7 @@ public class EnemyTank extends Tank {
     }
 
     public boolean reachedPosition(Vector2 position) {
-        return (sprite.getX() % BattleBlast.TILE_WIDTH == position.x % BattleBlast.TILE_WIDTH &&
-                sprite.getY() % BattleBlast.TILE_WIDTH == position.y % BattleBlast.TILE_WIDTH);
+        return toTile(sprite.getX()) == toTile(position.x) && toTile(sprite.getY()) == toTile(position.y);
     }
 
     public boolean reachedLastKnownPlayerPosition() {
@@ -86,6 +85,10 @@ public class EnemyTank extends Tank {
 
     private int toInt(float f) {
         return MathUtils.floor(f);
+    }
+
+    private float toTile(float coordinate) {
+        return coordinate - (coordinate % BattleBlast.TILE_WIDTH);
     }
 
     private void moveTowards(Vector2 position) {
