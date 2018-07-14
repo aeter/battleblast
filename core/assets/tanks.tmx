@@ -277,16 +277,6 @@
     <property name="breakable" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="79" x="256" y="32" width="32" height="32">
-   <properties>
-    <property name="breakable" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="80" x="256" y="0" width="32" height="32">
-   <properties>
-    <property name="breakable" type="bool" value="true"/>
-   </properties>
-  </object>
   <object id="81" x="224" y="0" width="32" height="32">
    <properties>
     <property name="breakable" type="bool" value="true"/>
@@ -397,16 +387,6 @@
     <property name="breakable" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="160" x="192" y="352" width="32" height="32">
-   <properties>
-    <property name="breakable" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="161" x="192" y="384" width="32" height="32">
-   <properties>
-    <property name="breakable" type="bool" value="true"/>
-   </properties>
-  </object>
   <object id="162" x="128" y="448" width="32" height="32">
    <properties>
     <property name="breakable" type="bool" value="true"/>
@@ -418,16 +398,6 @@
    </properties>
   </object>
   <object id="164" x="96" y="480" width="32" height="32">
-   <properties>
-    <property name="breakable" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="165" x="128" y="480" width="32" height="32">
-   <properties>
-    <property name="breakable" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="166" x="160" y="544" width="32" height="32">
    <properties>
     <property name="breakable" type="bool" value="true"/>
    </properties>
@@ -538,11 +508,6 @@
    </properties>
   </object>
   <object id="188" x="256" y="480" width="32" height="32">
-   <properties>
-    <property name="breakable" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="189" x="224" y="448" width="32" height="32">
    <properties>
     <property name="breakable" type="bool" value="true"/>
    </properties>

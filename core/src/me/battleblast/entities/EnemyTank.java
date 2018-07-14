@@ -52,19 +52,22 @@ public class EnemyTank extends Tank {
     }
 
     public boolean seesPlayer() {
-        boolean seenHorizontally = toInt(sprite.getX()) % BattleBlast.TILE_WIDTH == toInt(currentPlayerPosition.x) % BattleBlast.TILE_WIDTH;
-        boolean seenVertically = toInt(sprite.getY()) % BattleBlast.TILE_WIDTH == toInt(currentPlayerPosition.y) % BattleBlast.TILE_WIDTH;
+        int pixelsTolerance = 5;
+        boolean seenHorizontally = Math.abs(sprite.getX() - currentPlayerPosition.x) < pixelsTolerance;
+        boolean seenVertically = Math.abs(sprite.getY() - currentPlayerPosition.y) < pixelsTolerance;
         boolean wallOnLineOfSight = false;
         for (Vector2 wall: currentWalls) {
             if (seenVertically) {
-                wallOnLineOfSight = toInt((wall.x * BattleBlast.TILE_WIDTH) % BattleBlast.TILE_WIDTH) == toInt(currentPlayerPosition.y) % BattleBlast.TILE_WIDTH;
-            } else {
-                wallOnLineOfSight = toInt((wall.y * BattleBlast.TILE_WIDTH) % BattleBlast.TILE_WIDTH) == toInt(currentPlayerPosition.x) % BattleBlast.TILE_WIDTH;
+                wallOnLineOfSight = Math.abs(wall.x - currentPlayerPosition.x) < pixelsTolerance;
+            } else if (seenHorizontally) {
+                wallOnLineOfSight = Math.abs(wall.y - currentPlayerPosition.y) < pixelsTolerance;
             }
-            if (wallOnLineOfSight)
+            if (wallOnLineOfSight) {
+                //Gdx.app.log("wall", "wall");
                 return false;
+            }
         }
-        Gdx.app.log("seen: ", String.format("%s", seenHorizontally || seenVertically ? "true" : "false"));
+        //Gdx.app.log("seen: ", String.format("%s", seenHorizontally || seenVertically ? "true" : "false"));
         return seenVertically || seenHorizontally;
     }
 
@@ -88,8 +91,10 @@ public class EnemyTank extends Tank {
     private void moveTowards(Vector2 position) {
         Vector2 graphStartPosition = new Vector2(simplify(sprite.getX()), simplify(sprite.getY()));
         Vector2 graphTargetPosition = new Vector2(simplify(position.x), simplify(position.y));
+        // TODO - optimise to not do full pathfinding on every frame
         Node nextNode = new PathFinding(currentWalls).getNextNode(graphStartPosition, graphTargetPosition);
         if (nextNode != null) {
+            Gdx.app.log("nextNode", String.format("x: %d, y: %d", nextNode.x, nextNode.y)); 
             int targetX = nextNode.x * BattleBlast.TILE_WIDTH;
             int targetY = nextNode.y * BattleBlast.TILE_WIDTH;
             if (targetX < sprite.getX()) {
@@ -121,13 +126,17 @@ public class EnemyTank extends Tank {
         // @@
         // @@    
         Vector2 bottomLeftCorner = new Vector2(0, 0);
-        Vector2 bottomRightCorner = new Vector2(BattleBlast.TILE_WIDTH * BattleBlast.MAP_WIDTH - BattleBlast.TILE_WIDTH, 0);
-        Vector2 topLeftCorner = new Vector2(0, BattleBlast.TILE_WIDTH * BattleBlast.MAP_HEIGHT - BattleBlast.TILE_WIDTH);
+        //Vector2 bottomRightCorner = new Vector2(BattleBlast.TILE_WIDTH * BattleBlast.MAP_WIDTH - BattleBlast.TILE_WIDTH, 0);
+        //Vector2 topLeftCorner = new Vector2(0, BattleBlast.TILE_WIDTH * BattleBlast.MAP_HEIGHT - BattleBlast.TILE_WIDTH);
         Vector2 topRightCorner = new Vector2(
                 BattleBlast.TILE_WIDTH * BattleBlast.MAP_WIDTH - BattleBlast.TILE_WIDTH,
                 BattleBlast.TILE_WIDTH * BattleBlast.MAP_HEIGHT - BattleBlast.TILE_WIDTH);
         if (nextPatrollingPosition.epsilonEquals(bottomLeftCorner)) {
-            nextPatrollingPosition = bottomRightCorner;
+            nextPatrollingPosition = topRightCorner;
+        } else if (nextPatrollingPosition.epsilonEquals(topRightCorner)) {
+            nextPatrollingPosition = bottomLeftCorner;
+        }
+        /*
         } else if (nextPatrollingPosition.epsilonEquals(bottomRightCorner)) {
             nextPatrollingPosition = topRightCorner;
         } else if (nextPatrollingPosition.epsilonEquals(topRightCorner)) {
@@ -135,6 +144,7 @@ public class EnemyTank extends Tank {
         } else if (nextPatrollingPosition.epsilonEquals(topLeftCorner)) {
             nextPatrollingPosition = bottomLeftCorner;
         }
+        */
     }
 
     private enum TankState implements State<EnemyTank> {
