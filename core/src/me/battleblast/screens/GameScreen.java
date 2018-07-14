@@ -96,7 +96,7 @@ public class GameScreen implements Screen {
     }
 
     private void moveWorld(float delta) {
-        enemy.update(delta, player.getSprite().getX(), player.getSprite().getY());
+        enemy.update(delta, player.getSprite().getX(), player.getSprite().getY(), getCurrentWalls());
         for (Bullet bullet: ALL_BULLETS) {
             bullet.move();
         }
@@ -217,5 +217,14 @@ public class GameScreen implements Screen {
             breakableSprite.setBounds(breakableBounds.getX(), breakableBounds.getY(), breakableBounds.getWidth(), breakableBounds.getHeight());
             ALL_BREAKABLE_OBSTACLES.add(breakableSprite);
         }
+    }
+
+    private Array<Vector2> getCurrentWalls() {
+        Array<Vector2> walls = new Array<Vector2>();
+        for (Sprite s: ALL_BREAKABLE_OBSTACLES)
+            walls.add(new Vector2(s.getX() / BattleBlast.TILE_WIDTH, s.getY() / BattleBlast.TILE_WIDTH));
+        for (Vector2 v: ALL_UNBREAKABLE_OBSTACLES)
+            walls.add(new Vector2(v.x / BattleBlast.TILE_WIDTH, v.y / BattleBlast.TILE_WIDTH));
+        return walls;
     }
 }

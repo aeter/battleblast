@@ -1,54 +1,42 @@
 package me.battleblast.entities;
 
-import java.util.Random;
-import java.lang.Math;
-
+import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
+import com.badlogic.gdx.ai.fsm.State;
+import com.badlogic.gdx.ai.fsm.StateMachine;
+import com.badlogic.gdx.ai.msg.Telegram;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import me.battleblast.BattleBlast;
 import me.battleblast.pathfinding.Node;
 import me.battleblast.pathfinding.PathFinding;
-import me.battleblast.screens.GameScreen;
-
-import com.badlogic.gdx.ai.fsm.State;
-import com.badlogic.gdx.ai.fsm.StateMachine;
-import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
-import com.badlogic.gdx.ai.msg.Telegram;
-
 
 
 public class EnemyTank extends Tank {
     public StateMachine<EnemyTank, TankState> state;
+    private Array<Vector2> currentWalls = new Array<Vector2>();
     private Vector2 currentPlayerPosition = new Vector2(0, 0);
+    private Vector2 nextPatrollingPosition = new Vector2(0, 0);
     private Vector2 lastKnownPlayerPosition;
-    private Vector2 nextPatrollingPosition;
 
     public EnemyTank() {
         state = new DefaultStateMachine<EnemyTank, TankState>(this, TankState.PATROLLING);
     }
 
-    public void update(float delta, float playerX, float playerY) {
-        state.update();
+    public void update(float delta, float playerX, float playerY, Array<Vector2> walls) {
+        this.currentWalls = walls;
         this.currentPlayerPosition.x = playerX;
         this.currentPlayerPosition.y = playerY;
-    }
-
-    public boolean isCloseToPlayer() {
-        boolean lessThanThreeTilesAway = ( 
-            Math.abs((currentPlayerPosition.x - sprite.getX()) / BattleBlast.TILE_WIDTH) <= 3 &&
-            Math.abs((currentPlayerPosition.y - sprite.getY()) / BattleBlast.TILE_WIDTH) <= 3);
-        return lessThanThreeTilesAway;
+        state.update();
     }
 
     public void patrol() {
-        if (nextPatrollingPosition == null) {
-            // TODO - set the next patrolling positions within a circular structure
-            nextPatrollingPosition = new Vector2(320, 320);
+        if (reachedPosition(nextPatrollingPosition)) {
+            chooseNewPatrollingPosition();
         }
         moveTowards(nextPatrollingPosition);
         if (nPercentChance(2)) shoot();
@@ -64,15 +52,33 @@ public class EnemyTank extends Tank {
     }
 
     public boolean seesPlayer() {
-        // TODO - currently the enemy tank sees through walls with this code -
-        // fix that.
-        return (toInt(sprite.getX()) % BattleBlast.TILE_WIDTH == toInt(currentPlayerPosition.x) % BattleBlast.TILE_WIDTH ||
-                toInt(sprite.getY()) % BattleBlast.TILE_WIDTH == toInt(currentPlayerPosition.y) % BattleBlast.TILE_WIDTH);
+        boolean seenHorizontally = toInt(sprite.getX()) % BattleBlast.TILE_WIDTH == toInt(currentPlayerPosition.x) % BattleBlast.TILE_WIDTH;
+        boolean seenVertically = toInt(sprite.getY()) % BattleBlast.TILE_WIDTH == toInt(currentPlayerPosition.y) % BattleBlast.TILE_WIDTH;
+        boolean wallOnLineOfSight = false;
+        for (Vector2 wall: currentWalls) {
+            if (seenVertically) {
+                wallOnLineOfSight = toInt((wall.x * BattleBlast.TILE_WIDTH) % BattleBlast.TILE_WIDTH) == toInt(currentPlayerPosition.y) % BattleBlast.TILE_WIDTH;
+            } else {
+                wallOnLineOfSight = toInt((wall.y * BattleBlast.TILE_WIDTH) % BattleBlast.TILE_WIDTH) == toInt(currentPlayerPosition.x) % BattleBlast.TILE_WIDTH;
+            }
+            if (wallOnLineOfSight)
+                return false;
+        }
+        Gdx.app.log("seen: ", String.format("%s", seenHorizontally || seenVertically ? "true" : "false"));
+        return seenVertically || seenHorizontally;
+    }
+
+    public boolean reachedPosition(Vector2 position) {
+        return (sprite.getX() % BattleBlast.TILE_WIDTH == position.x % BattleBlast.TILE_WIDTH &&
+                sprite.getY() % BattleBlast.TILE_WIDTH == position.y % BattleBlast.TILE_WIDTH);
     }
 
     public boolean reachedLastKnownPlayerPosition() {
-        return (sprite.getX() % BattleBlast.TILE_WIDTH == lastKnownPlayerPosition.x &&
-                sprite.getY() % BattleBlast.TILE_WIDTH == lastKnownPlayerPosition.y);
+        return reachedPosition(lastKnownPlayerPosition);
+    }
+
+    public boolean reachedNextPatrollingPosition() {
+        return reachedPosition(nextPatrollingPosition);
     }
 
     private int toInt(float f) {
@@ -82,7 +88,7 @@ public class EnemyTank extends Tank {
     private void moveTowards(Vector2 position) {
         Vector2 graphStartPosition = new Vector2(simplify(sprite.getX()), simplify(sprite.getY()));
         Vector2 graphTargetPosition = new Vector2(simplify(position.x), simplify(position.y));
-        Node nextNode = new PathFinding(getCurrentWalls()).getNextNode(graphStartPosition, graphTargetPosition);
+        Node nextNode = new PathFinding(currentWalls).getNextNode(graphStartPosition, graphTargetPosition);
         if (nextNode != null) {
             int targetX = nextNode.x * BattleBlast.TILE_WIDTH;
             int targetY = nextNode.y * BattleBlast.TILE_WIDTH;
@@ -98,15 +104,6 @@ public class EnemyTank extends Tank {
         }
     }
 
-    private Array<Vector2> getCurrentWalls() {
-        Array walls = new Array<Vector2>();
-        for (Sprite s: GameScreen.ALL_BREAKABLE_OBSTACLES)
-            walls.add(new Vector2(s.getX() / BattleBlast.TILE_WIDTH, s.getY() / BattleBlast.TILE_WIDTH));
-        for (Vector2 v: GameScreen.ALL_UNBREAKABLE_OBSTACLES)
-            walls.add(new Vector2(v.x / BattleBlast.TILE_WIDTH, v.y / BattleBlast.TILE_WIDTH));
-        return walls;
-    }
-
     // Pathfinding graph coordinates are like (5, 10)
     // Map coordinates are like (160, 320)
     // simplify is like 320 / 32.
@@ -115,7 +112,29 @@ public class EnemyTank extends Tank {
     }
 
     private boolean nPercentChance(int n) {
-        return Math.random() <= 0.01 * n;
+        return MathUtils.random() <= 0.01 * n;
+    }
+
+    private void chooseNewPatrollingPosition() {
+        // we do "- BattleBlast.TILE_WIDTH" for the positions, because a tank
+        // is drawn on 4 tiles, like:
+        // @@
+        // @@    
+        Vector2 bottomLeftCorner = new Vector2(0, 0);
+        Vector2 bottomRightCorner = new Vector2(BattleBlast.TILE_WIDTH * BattleBlast.MAP_WIDTH - BattleBlast.TILE_WIDTH, 0);
+        Vector2 topLeftCorner = new Vector2(0, BattleBlast.TILE_WIDTH * BattleBlast.MAP_HEIGHT - BattleBlast.TILE_WIDTH);
+        Vector2 topRightCorner = new Vector2(
+                BattleBlast.TILE_WIDTH * BattleBlast.MAP_WIDTH - BattleBlast.TILE_WIDTH,
+                BattleBlast.TILE_WIDTH * BattleBlast.MAP_HEIGHT - BattleBlast.TILE_WIDTH);
+        if (nextPatrollingPosition.epsilonEquals(bottomLeftCorner)) {
+            nextPatrollingPosition = bottomRightCorner;
+        } else if (nextPatrollingPosition.epsilonEquals(bottomRightCorner)) {
+            nextPatrollingPosition = topRightCorner;
+        } else if (nextPatrollingPosition.epsilonEquals(topRightCorner)) {
+            nextPatrollingPosition = topLeftCorner;
+        } else if (nextPatrollingPosition.epsilonEquals(topLeftCorner)) {
+            nextPatrollingPosition = bottomLeftCorner;
+        }
     }
 
     private enum TankState implements State<EnemyTank> {
