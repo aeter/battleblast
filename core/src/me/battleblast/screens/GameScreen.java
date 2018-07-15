@@ -107,7 +107,6 @@ public class GameScreen implements Screen {
         MapObjects stabiles = map.getLayers().get("unbreakable_obstacles").getObjects();
         for (MapObject stabile: stabiles) {
             Rectangle stabileBounds = ((RectangleMapObject) stabile).getRectangle();
-            ALL_UNBREAKABLE_OBSTACLES.add(new Vector2(stabileBounds.getX(), stabileBounds.getY()));
             if (stabileBounds.overlaps(player.getBounds())) {
                 player.onCollisionWithObstacle();
             }
@@ -202,6 +201,7 @@ public class GameScreen implements Screen {
         map = game.assets.get("tanks.tmx", TiledMap.class);
         renderer = new OrthogonalTiledMapRenderer(map);
         setupBreakableTiles();
+        setupUnbreakableTiles();
     }
 
     private void setupCamera() {
@@ -219,12 +219,23 @@ public class GameScreen implements Screen {
         }
     }
 
+    private void setupUnbreakableTiles() {
+        MapObjects stabiles = map.getLayers().get("unbreakable_obstacles").getObjects();
+        for (MapObject stabile: stabiles) {
+            Rectangle stabileBounds = ((RectangleMapObject) stabile).getRectangle();
+            ALL_UNBREAKABLE_OBSTACLES.add(new Vector2(stabileBounds.getX(), stabileBounds.getY()));
+        }
+    }
+
     private Array<Vector2> getCurrentWalls() {
         Array<Vector2> walls = new Array<Vector2>();
         for (Sprite s: ALL_BREAKABLE_OBSTACLES)
             walls.add(new Vector2(s.getX() / BattleBlast.TILE_WIDTH, s.getY() / BattleBlast.TILE_WIDTH));
         for (Vector2 v: ALL_UNBREAKABLE_OBSTACLES)
             walls.add(new Vector2(v.x / BattleBlast.TILE_WIDTH, v.y / BattleBlast.TILE_WIDTH));
+        Gdx.app.log("wallssize", String.format("%d", walls.size));
+        Gdx.app.log("breakablesize", String.format("%d", ALL_BREAKABLE_OBSTACLES.size));
+        Gdx.app.log("unbreakablesize", String.format("%d", ALL_UNBREAKABLE_OBSTACLES.size));
         return walls;
     }
 }
