@@ -190,11 +190,13 @@ public class GameScreen implements Screen {
         enemy.getSprite().setPosition(
                 Gdx.graphics.getWidth() - enemy.getSprite().getWidth(),
                 Gdx.graphics.getHeight() - enemy.getSprite().getHeight());
+        enemy.getSprite().setBounds(enemy.getSprite().getX(), enemy.getSprite().getY(), 63, 63);
     }
 
     private void spawnPlayer() {
         player = new PlayerTank();
         player.setSprite(new Sprite(game.assets.get("kenney_topdownTanksRedux/PNG/Retina/tank_blue_64x64.png", Texture.class)));
+        player.getSprite().setBounds(player.getSprite().getX(), player.getSprite().getY(), 63, 63);
     }
 
     private void setupMap() {
@@ -233,9 +235,6 @@ public class GameScreen implements Screen {
             walls.add(new Vector2(s.getX() / BattleBlast.TILE_WIDTH, s.getY() / BattleBlast.TILE_WIDTH));
         for (Vector2 v: ALL_UNBREAKABLE_OBSTACLES)
             walls.add(new Vector2(v.x / BattleBlast.TILE_WIDTH, v.y / BattleBlast.TILE_WIDTH));
-        Gdx.app.log("wallssize", String.format("%d", walls.size));
-        Gdx.app.log("breakablesize", String.format("%d", ALL_BREAKABLE_OBSTACLES.size));
-        Gdx.app.log("unbreakablesize", String.format("%d", ALL_UNBREAKABLE_OBSTACLES.size));
         return walls;
     }
 }
