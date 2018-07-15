@@ -104,7 +104,7 @@ public class Tank {
      *  beginning of some tile (like, change direction, etc.)
      */
     // TODO - also undercompensate (depending on movement direction),
-    // not just overcompensate.
+    // not just overcompensate. -> pixels_tolerance = 29, etc.
     // TODO - movement % 32
     private float tiled(float movement) {
         int pixels_tolerance = 3;

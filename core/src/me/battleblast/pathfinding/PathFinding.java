@@ -23,12 +23,26 @@ public class PathFinding {
         this.path = new DefaultGraphPath<Connection<Node>>();
     }
 
+    // TODO - see if we should keep this unused method
     public Node getNextNode(Vector2 source, Vector2 target) {
         Node sourceNode = graph.getNodeAt(source);
         Node targetNode = graph.getNodeAt(target);
         path.clear();
         pathfinder.searchConnectionPath(sourceNode, targetNode, heuristic, path);
         return path.getCount() == 0 ? null : path.get(0).getToNode();
+    }
+
+    public Array<Vector2> getFullPath(Vector2 source, Vector2 target) {
+        Node sourceNode = graph.getNodeAt(source);
+        Node targetNode = graph.getNodeAt(target);
+        path.clear();
+        Array<Vector2> fullPath = new Array<Vector2>();
+        pathfinder.searchConnectionPath(sourceNode, targetNode, heuristic, path);
+        for (Connection<Node> c: path) {
+            Node node = c.getToNode();
+            fullPath.add(new Vector2(node.x, node.y));
+        }
+        return fullPath;
     }
 
     private void setupHeuristic() {
