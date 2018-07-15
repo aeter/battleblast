@@ -97,19 +97,16 @@ public class Tank {
     }
 
     /*
-     *  tiles are 32 * 32 pixels. if the tank has moved too fast
-     *  and missed the 32th tile start by a few pixels, position the tank
-     *  to the start of the tile.
-     *  The enemy tank AI may make some decisions when it sees it's at the
-     *  beginning of some tile (like, change direction, etc.)
+     *  If the tank had moved too fast and missed the start or the end of the tile by
+     *  a few pixels, place the tank to the start/end of the tile (smoother movement)
      */
-    // TODO - also undercompensate (depending on movement direction),
-    // not just overcompensate. -> pixels_tolerance = 29, etc.
-    // TODO - movement % 32
     private float tiled(float movement) {
-        int pixels_tolerance = 3;
+        int pixels_tolerance = 2;
         if (movement % BattleBlast.TILE_WIDTH < pixels_tolerance) {
-            return movement - movement % 16;
+            return movement - movement % BattleBlast.TILE_WIDTH;
+        }
+        if (movement % BattleBlast.TILE_WIDTH > BattleBlast.TILE_WIDTH - pixels_tolerance) {
+            return (movement - movement % BattleBlast.TILE_WIDTH) + BattleBlast.TILE_WIDTH;
         }
         return movement;
     }
