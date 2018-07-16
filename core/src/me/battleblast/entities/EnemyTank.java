@@ -32,6 +32,9 @@ public class EnemyTank extends Tank {
     }
 
     private void brain() {
+        // TODO - if staying still for the last 3 seconds...recalculatePath to
+        // nextPatrollingPosition.;
+        // TODO - this would be in case of stuck at some tile, etc.
         if (currentPath.size == 0) {
             chooseNewPatrollingPosition();
             recalculateCurrentPath(nextPatrollingPosition);
@@ -58,8 +61,8 @@ public class EnemyTank extends Tank {
         if (currentPath.size == 0) return;
 
         Vector2 nextNode = currentPath.first().cpy();
-		nextNode.x *= BattleBlast.TILE_WIDTH;
-		nextNode.y *= BattleBlast.TILE_WIDTH;
+        nextNode.x *= BattleBlast.TILE_WIDTH;
+        nextNode.y *= BattleBlast.TILE_WIDTH;
         if (reachedPosition(nextNode)) {
             currentPath.removeIndex(0);
             followPath();
@@ -98,9 +101,8 @@ public class EnemyTank extends Tank {
         }
     }
 
-    // TODO - remove commented logging stuff after fixing this method
     private boolean seesPlayer() {
-        int pixelsTolerance = 5;
+        int pixelsTolerance = BattleBlast.TILE_WIDTH / 2;
         boolean seenHorizontally = Math.abs(sprite.getX() - currentPlayerPosition.x) < pixelsTolerance;
         boolean seenVertically = Math.abs(sprite.getY() - currentPlayerPosition.y) < pixelsTolerance;
         boolean wallOnLineOfSight = false;
