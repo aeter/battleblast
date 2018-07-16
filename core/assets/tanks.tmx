@@ -322,16 +322,6 @@
     <property name="breakable" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="133" x="96" y="160" width="32" height="32">
-   <properties>
-    <property name="breakable" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="134" x="64" y="160" width="32" height="32">
-   <properties>
-    <property name="breakable" type="bool" value="true"/>
-   </properties>
-  </object>
   <object id="135" x="64" y="192" width="32" height="32">
    <properties>
     <property name="breakable" type="bool" value="true"/>

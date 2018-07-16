@@ -35,18 +35,18 @@ public class GameScreen implements Screen {
     public static Array<Vector2> ALL_UNBREAKABLE_OBSTACLES = new Array<Vector2>();
 
     private Array<BaseAnimation> animations = new Array<BaseAnimation>();
+    private Array<EnemyTank> enemies = new Array<EnemyTank>();
     private final BattleBlast game;
     private TiledMap map;
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
     private PlayerTank player;
-    private EnemyTank enemy;
 
     public GameScreen(final BattleBlast game) {
         this.game = game;
         setupMap();
         setupCamera();
-        spawnEnemy();
+        spawnEnemies();
         spawnPlayer();
     }
 
@@ -96,7 +96,9 @@ public class GameScreen implements Screen {
     }
 
     private void moveWorld(float delta) {
-        enemy.update(delta, player.getSprite().getX(), player.getSprite().getY(), getCurrentWalls());
+        for (EnemyTank enemy: enemies) {
+            enemy.update(delta, player.getSprite().getX(), player.getSprite().getY(), getCurrentWalls());
+        }
         for (Bullet bullet: ALL_BULLETS) {
             bullet.move();
         }
@@ -110,8 +112,10 @@ public class GameScreen implements Screen {
             if (stabileBounds.overlaps(player.getBounds())) {
                 player.onCollisionWithObstacle();
             }
-            if (stabileBounds.overlaps(enemy.getBounds())) {
-                enemy.onCollisionWithObstacle();
+            for (EnemyTank enemy: enemies) {
+                if (stabileBounds.overlaps(enemy.getBounds())) {
+                    enemy.onCollisionWithObstacle();
+                }
             }
             for (Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
                 Bullet bullet = i.next();
@@ -129,8 +133,10 @@ public class GameScreen implements Screen {
             if (breakableBounds.overlaps(player.getBounds())) {
                 player.onCollisionWithObstacle();
             }
-            if (breakableBounds.overlaps(enemy.getBounds())) {
-                enemy.onCollisionWithObstacle();
+            for (EnemyTank enemy: enemies) {
+                if (breakableBounds.overlaps(enemy.getBounds())) {
+                    enemy.onCollisionWithObstacle();
+                }
             }
             for (Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
                 Bullet bullet = i.next();
@@ -143,9 +149,11 @@ public class GameScreen implements Screen {
         }
             
 
-        if (player.getBounds().overlaps(enemy.getBounds())) {
-            player.onCollisionWithEnemy();
-            enemy.onCollisionWithEnemy();
+        for (EnemyTank enemy: enemies) {
+            if (player.getBounds().overlaps(enemy.getBounds())) {
+                player.onCollisionWithEnemy();
+                enemy.onCollisionWithEnemy();
+            }
         }
         for (Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
             Bullet bullet = i.next();
@@ -174,7 +182,9 @@ public class GameScreen implements Screen {
         }
 
         player.draw(game.batch);
-        enemy.draw(game.batch);
+        for (EnemyTank enemy: enemies) {
+            enemy.draw(game.batch);
+        }
         for (Sprite breakable: ALL_BREAKABLE_OBSTACLES) {
             breakable.draw(game.batch);
         }
@@ -184,13 +194,22 @@ public class GameScreen implements Screen {
         game.batch.end();
     }
 
-    private void spawnEnemy() {
-        enemy = new EnemyTank();
+    private void spawnEnemies() {
+        EnemyTank enemy = new EnemyTank();
         enemy.setSprite(new Sprite(game.assets.get("kenney_topdownTanksRedux/PNG/Retina/tank_dark_64x64.png", Texture.class)));
         enemy.getSprite().setPosition(
                 Gdx.graphics.getWidth() - enemy.getSprite().getWidth(),
                 Gdx.graphics.getHeight() - enemy.getSprite().getHeight());
         enemy.getSprite().setBounds(enemy.getSprite().getX(), enemy.getSprite().getY(), 63, 63);
+        enemies.add(enemy);
+
+        EnemyTank enemy2 = new EnemyTank();
+        enemy2.setSprite(new Sprite(game.assets.get("kenney_topdownTanksRedux/PNG/Retina/tank_dark_64x64.png", Texture.class)));
+        enemy2.getSprite().setPosition(
+                Gdx.graphics.getWidth() - enemy.getSprite().getWidth(),
+                0);
+        enemy2.getSprite().setBounds(enemy2.getSprite().getX(), enemy2.getSprite().getY(), 63, 63);
+        enemies.add(enemy2);
     }
 
     private void spawnPlayer() {
