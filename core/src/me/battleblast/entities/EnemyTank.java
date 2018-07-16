@@ -1,5 +1,7 @@
 package me.battleblast.entities;
 
+import java.lang.Math;
+
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
@@ -22,23 +24,16 @@ public class EnemyTank extends Tank {
     private boolean wallsHaveChanged = false;
 
     public void update(float delta, float playerX, float playerY, Array<Vector2> walls) {
-        this.wallsHaveChanged = currentWalls.size != walls.size;
-        this.currentWalls = walls;
-        this.currentPlayerPosition.x = toTile(playerX);
-        this.currentPlayerPosition.y = toTile(playerY);
+        wallsHaveChanged = currentWalls.size != walls.size;
+        currentWalls = walls;
+        currentPlayerPosition.x = toTile(playerX);
+        currentPlayerPosition.y = toTile(playerY);
         brain();
     }
 
     private void brain() {
         if (currentPath.size == 0) {
             chooseNewPatrollingPosition();
-            recalculateCurrentPath(nextPatrollingPosition);
-        }
-        if (reachedPosition(nextPatrollingPosition)) {
-            chooseNewPatrollingPosition();
-            recalculateCurrentPath(nextPatrollingPosition);
-        }
-        if (reachedPosition(lastKnownPlayerPosition)) {
             recalculateCurrentPath(nextPatrollingPosition);
         }
         if (seesPlayer()) {
@@ -62,43 +57,38 @@ public class EnemyTank extends Tank {
     private void followPath() {
         if (currentPath.size == 0) return;
 
-        Vector2 nextNode = currentPath.first();
-        float targetX = nextNode.x * BattleBlast.TILE_WIDTH;
-        float targetY = nextNode.y * BattleBlast.TILE_WIDTH;
-        if (reachedPosition(new Vector2(targetX, targetY))) {
+        Vector2 nextNode = currentPath.first().cpy();
+		nextNode.x *= BattleBlast.TILE_WIDTH;
+		nextNode.y *= BattleBlast.TILE_WIDTH;
+        if (reachedPosition(nextNode)) {
             currentPath.removeIndex(0);
             followPath();
+            return;
         } else {
-            if (targetX < sprite.getX()) {
+            if (nextNode.x < sprite.getX()) {
                 moveLeft();
-            } else if (targetY < sprite.getY()) {
+            } else if (nextNode.y < sprite.getY()) {
                 moveDown();
-            } else if (targetX > sprite.getX()) {
+            } else if (nextNode.x > sprite.getX()) {
                 moveRight();
-            } else if (targetY > sprite.getY()) {
+            } else if (nextNode.y > sprite.getY()) {
                 moveUp();
             }
         }
     }
 
-    // TODO - uncommment after fixing the general logic
     private void chooseNewPatrollingPosition() {
-        // we do "- BattleBlast.TILE_WIDTH" for the positions, because a tank
-        // is drawn on 4 tiles, like:
+        // a tank is drawn on 4 tiles like:
         // @@
-        // @@    
+        // @@
         Vector2 bottomLeftCorner = new Vector2(0, 0);
-        //Vector2 bottomRightCorner = new Vector2(BattleBlast.TILE_WIDTH * BattleBlast.MAP_WIDTH - BattleBlast.TILE_WIDTH, 0);
-        //Vector2 topLeftCorner = new Vector2(0, BattleBlast.TILE_WIDTH * BattleBlast.MAP_HEIGHT - BattleBlast.TILE_WIDTH);
+        Vector2 bottomRightCorner = new Vector2(BattleBlast.TILE_WIDTH * BattleBlast.MAP_WIDTH - BattleBlast.TILE_WIDTH - BattleBlast.TILE_WIDTH, 0);
+        Vector2 topLeftCorner = new Vector2(0, BattleBlast.TILE_WIDTH * BattleBlast.MAP_HEIGHT - BattleBlast.TILE_WIDTH - BattleBlast.TILE_WIDTH);
         Vector2 topRightCorner = new Vector2(
-                BattleBlast.TILE_WIDTH * BattleBlast.MAP_WIDTH - BattleBlast.TILE_WIDTH,
-                BattleBlast.TILE_WIDTH * BattleBlast.MAP_HEIGHT - BattleBlast.TILE_WIDTH);
+                BattleBlast.TILE_WIDTH * BattleBlast.MAP_WIDTH - BattleBlast.TILE_WIDTH - BattleBlast.TILE_WIDTH,
+                BattleBlast.TILE_WIDTH * BattleBlast.MAP_HEIGHT - BattleBlast.TILE_WIDTH - BattleBlast.TILE_WIDTH);
         if (nextPatrollingPosition.epsilonEquals(bottomLeftCorner)) {
-            nextPatrollingPosition = topRightCorner;
-        } else if (nextPatrollingPosition.epsilonEquals(topRightCorner)) {
-            nextPatrollingPosition = bottomLeftCorner;
-        }
-        /*
+            nextPatrollingPosition = bottomRightCorner;
         } else if (nextPatrollingPosition.epsilonEquals(bottomRightCorner)) {
             nextPatrollingPosition = topRightCorner;
         } else if (nextPatrollingPosition.epsilonEquals(topRightCorner)) {
@@ -106,7 +96,6 @@ public class EnemyTank extends Tank {
         } else if (nextPatrollingPosition.epsilonEquals(topLeftCorner)) {
             nextPatrollingPosition = bottomLeftCorner;
         }
-        */
     }
 
     // TODO - remove commented logging stuff after fixing this method
@@ -117,25 +106,23 @@ public class EnemyTank extends Tank {
         boolean wallOnLineOfSight = false;
         for (Vector2 wall: currentWalls) {
             if (seenVertically) {
-                wallOnLineOfSight = Math.abs(wall.x * BattleBlast.TILE_WIDTH - currentPlayerPosition.x) < pixelsTolerance;
-            } else if (seenHorizontally) {
                 wallOnLineOfSight = Math.abs(wall.y * BattleBlast.TILE_WIDTH - currentPlayerPosition.y) < pixelsTolerance;
+            } else if (seenHorizontally) {
+                wallOnLineOfSight = Math.abs(wall.x * BattleBlast.TILE_WIDTH - currentPlayerPosition.x) < pixelsTolerance;
             }
             if (wallOnLineOfSight) {
-                //Gdx.app.log("wall", "wall");
                 return false;
             }
         }
-        //Gdx.app.log("seen: ", String.format("%s", seenHorizontally || seenVertically ? "true" : "false"));
         return seenVertically || seenHorizontally;
     }
 
     private boolean reachedPosition(Vector2 position) {
-        return toTile(sprite.getX()) == toTile(position.x) && toTile(sprite.getY()) == toTile(position.y);
+        return floatsAreEqual(sprite.getX(), position.x) && floatsAreEqual(sprite.getY(), position.y);
     }
 
-    private int toInt(float f) {
-        return MathUtils.floor(f);
+    private boolean floatsAreEqual(float x, float y) {
+        return Math.abs(x - y) < 0.00001;
     }
 
     private float toTile(float coordinate) {
