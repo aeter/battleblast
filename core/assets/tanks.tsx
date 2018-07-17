@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset name="tanks" tilewidth="96" tileheight="64" tilecount="49" columns="7">
+<tileset name="tanks" tilewidth="96" tileheight="64" tilecount="46" columns="7">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="32" height="32" source="kenney_tank_images/barrelBlack_top_32x32.png"/>
@@ -81,15 +81,6 @@
  </tile>
  <tile id="26">
   <image width="32" height="32" source="kenney_tank_images/sandbagBrown_open_32x32.png"/>
- </tile>
- <tile id="27">
-  <image width="64" height="64" source="kenney_tank_images/tank_blue_64x64png.png"/>
- </tile>
- <tile id="28">
-  <image width="64" height="64" source="kenney_tank_images/tank_boss_64x64.png"/>
- </tile>
- <tile id="29">
-  <image width="64" height="64" source="kenney_tank_images/tank_dark_64x64png.png"/>
  </tile>
  <tile id="30">
   <image width="64" height="64" source="kenney_tank_images/tileGrass1_64x64.png"/>

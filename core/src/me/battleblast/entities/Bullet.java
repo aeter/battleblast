@@ -14,7 +14,7 @@ public class Bullet {
     private Sprite sprite;
 
     public Bullet() {
-        this.sprite = new Sprite(BattleBlast.assets.get("kenney_topdownTanksRedux/PNG/Retina/bulletDark1.png", Texture.class));
+        this.sprite = new Sprite(BattleBlast.assets.get("kenney_tank_images/bulletDark2_8x16.png", Texture.class));
     }
 
     public Bullet positionedInFrontOf(Sprite tankSprite) {

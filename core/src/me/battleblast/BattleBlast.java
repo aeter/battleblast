@@ -46,10 +46,10 @@ public class BattleBlast extends Game {
 
     private void loadAssets() {
         assets = new AssetManager();
-        assets.load("kenney_topdownTanksRedux/PNG/Retina/tank_blue_64x64.png", Texture.class);
-        assets.load("kenney_topdownTanksRedux/PNG/Retina/tank_dark_64x64.png", Texture.class);
-        assets.load("kenney_topdownTanksRedux/PNG/Retina/bulletDark1.png", Texture.class);
-        assets.load("kenney_topdownTanksRedux/PNG/Retina/crateWood.png", Texture.class);
+        assets.load("kenney_tank_images/tank_blue_64x64.png", Texture.class);
+        assets.load("kenney_tank_images/tank_dark_64x64.png", Texture.class);
+        assets.load("kenney_tank_images/bulletDark2_8x16.png", Texture.class);
+        assets.load("kenney_tank_images/crateWood_32x32.png", Texture.class);
         assets.load("snd_music_victorytheme_0.ogg", Music.class);
         assets.setLoader(TiledMap.class, new TmxMapLoader());
         assets.load("tanks.tmx", TiledMap.class);

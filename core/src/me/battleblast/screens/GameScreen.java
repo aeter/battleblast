@@ -97,7 +97,7 @@ public class GameScreen implements Screen {
 
     private void moveWorld(float delta) {
         for (EnemyTank enemy: enemies) {
-            enemy.update(delta, player.getSprite().getX(), player.getSprite().getY(), getCurrentWalls());
+            enemy.update(delta, player.getBounds().getX(), player.getBounds().getY(), getCurrentWalls());
         }
         for (Bullet bullet: ALL_BULLETS) {
             bullet.move();
@@ -196,7 +196,7 @@ public class GameScreen implements Screen {
 
     private void spawnEnemies() {
         EnemyTank enemy = new EnemyTank();
-        enemy.setSprite(new Sprite(game.assets.get("kenney_topdownTanksRedux/PNG/Retina/tank_dark_64x64.png", Texture.class)));
+        enemy.setSprite(new Sprite(game.assets.get("kenney_tank_images/tank_dark_64x64.png", Texture.class)));
         enemy.getSprite().setPosition(
                 Gdx.graphics.getWidth() - enemy.getSprite().getWidth(),
                 Gdx.graphics.getHeight() - enemy.getSprite().getHeight());
@@ -204,7 +204,7 @@ public class GameScreen implements Screen {
         enemies.add(enemy);
 
         EnemyTank enemy2 = new EnemyTank();
-        enemy2.setSprite(new Sprite(game.assets.get("kenney_topdownTanksRedux/PNG/Retina/tank_dark_64x64.png", Texture.class)));
+        enemy2.setSprite(new Sprite(game.assets.get("kenney_tank_images/tank_dark_64x64.png", Texture.class)));
         enemy2.getSprite().setPosition(
                 Gdx.graphics.getWidth() - enemy.getSprite().getWidth(),
                 0);
@@ -214,7 +214,7 @@ public class GameScreen implements Screen {
 
     private void spawnPlayer() {
         player = new PlayerTank();
-        player.setSprite(new Sprite(game.assets.get("kenney_topdownTanksRedux/PNG/Retina/tank_blue_64x64.png", Texture.class)));
+        player.setSprite(new Sprite(game.assets.get("kenney_tank_images/tank_blue_64x64.png", Texture.class)));
         player.getSprite().setBounds(player.getSprite().getX(), player.getSprite().getY(), 63, 63);
     }
 
@@ -234,7 +234,7 @@ public class GameScreen implements Screen {
         MapObjects breakables = map.getLayers().get("breakable_obstacles").getObjects();
         for (MapObject breakable: breakables) {
             Rectangle breakableBounds = ((RectangleMapObject) breakable).getRectangle();
-            Sprite breakableSprite = new Sprite(game.assets.get("kenney_topdownTanksRedux/PNG/Retina/crateWood.png", Texture.class));
+            Sprite breakableSprite = new Sprite(game.assets.get("kenney_tank_images/crateWood_32x32.png", Texture.class));
             breakableSprite.setBounds(breakableBounds.getX(), breakableBounds.getY(), breakableBounds.getWidth(), breakableBounds.getHeight());
             ALL_BREAKABLE_OBSTACLES.add(breakableSprite);
         }
