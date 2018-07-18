@@ -155,8 +155,9 @@ public class GameScreen implements Screen {
             }
         }
 
+        // TODO - collisions tank<->bullet
+
         // collisions bullet<->bullet
-        Array<Integer> collidingBullets = new Array<Integer>();
         for (int i = 0; i < ALL_BULLETS.size; i++) {
             for (int j = 0; j < ALL_BULLETS.size; j++) {
                 Bullet b1 = ALL_BULLETS.get(i);
@@ -183,17 +184,6 @@ public class GameScreen implements Screen {
         renderer.render();
 
         game.batch.begin();
-
-        for (Iterator<BaseAnimation> i = animations.iterator(); i.hasNext(); ) {
-            BaseAnimation animation = i.next();
-            if (animation.isOver()) {
-                animation.dispose();
-                i.remove();
-            } else {
-                animation.draw(game.batch);
-            }
-        }
-
         player.draw(game.batch);
         for (EnemyTank enemy: enemies) {
             enemy.draw(game.batch);
@@ -204,6 +194,7 @@ public class GameScreen implements Screen {
         for (Bullet bullet: ALL_BULLETS) {
             bullet.draw(game.batch);
         }
+        drawAnimations();
         game.batch.end();
     }
 
@@ -265,5 +256,17 @@ public class GameScreen implements Screen {
         for (Vector2 v: ALL_UNBREAKABLE_OBSTACLES)
             walls.add(new Vector2(v.x / BattleBlast.TILE_WIDTH, v.y / BattleBlast.TILE_WIDTH));
         return walls;
+    }
+
+    private void drawAnimations() {
+        for (Iterator<BaseAnimation> i = animations.iterator(); i.hasNext(); ) {
+            BaseAnimation animation = i.next();
+            if (animation.isOver()) {
+                animation.dispose();
+                i.remove();
+            } else {
+                animation.draw(game.batch);
+            }
+        }
     }
 }
