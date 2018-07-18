@@ -97,10 +97,10 @@ public class GameScreen implements Screen {
 
     private void moveWorld(float delta) {
         for (EnemyTank enemy: enemies) {
-            enemy.update(delta, player.getBounds().getX(), player.getBounds().getY(), getCurrentWalls());
+            enemy.update(delta, player.getBounds(), getCurrentWalls());
         }
         for (Bullet bullet: ALL_BULLETS) {
-            bullet.move();
+            bullet.move(delta);
         }
     }
 

@@ -44,15 +44,15 @@ public class Bullet {
     }
 
 
-    public void move() {
+    public void move(float deltaTime) {
         if (sprite.getRotation() == 0)
-            sprite.setY(sprite.getY() - MOVE_SPEED * Gdx.graphics.getDeltaTime());
+            sprite.setY(sprite.getY() - MOVE_SPEED * deltaTime);
         if (sprite.getRotation() == 90)
-            sprite.setX(sprite.getX() + MOVE_SPEED * Gdx.graphics.getDeltaTime());
+            sprite.setX(sprite.getX() + MOVE_SPEED * deltaTime);
         if (sprite.getRotation() == 180)
-            sprite.setY(sprite.getY() + MOVE_SPEED * Gdx.graphics.getDeltaTime());
+            sprite.setY(sprite.getY() + MOVE_SPEED * deltaTime);
         if (sprite.getRotation() == 270)
-            sprite.setX(sprite.getX() - MOVE_SPEED * Gdx.graphics.getDeltaTime());
+            sprite.setX(sprite.getX() - MOVE_SPEED * deltaTime);
     }
 
     public void draw(SpriteBatch sb) {

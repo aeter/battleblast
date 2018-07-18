@@ -5,6 +5,7 @@ import java.lang.Math;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -26,11 +27,11 @@ public class EnemyTank extends Tank {
     private float everyNSecondsX = 0f;
     private float everyNSecondsY = 0f;
 
-    public void update(float delta, float playerX, float playerY, Array<Vector2> walls) {
+    public void update(float delta, Rectangle playerBounds, Array<Vector2> walls) {
         wallsHaveChanged = currentWalls.size != walls.size;
         currentWalls = walls;
-        currentPlayerPosition.x = toTile(playerX);
-        currentPlayerPosition.y = toTile(playerY);
+        currentPlayerPosition.x = toTile(playerBounds.getX());
+        currentPlayerPosition.y = toTile(playerBounds.getY());
         brain();
     }
 
@@ -114,6 +115,8 @@ public class EnemyTank extends Tank {
         } else if (nextPatrollingPosition.epsilonEquals(topRightCorner)) {
             nextPatrollingPosition = topLeftCorner;
         } else if (nextPatrollingPosition.epsilonEquals(topLeftCorner)) {
+            nextPatrollingPosition = bottomLeftCorner;
+        } else {
             nextPatrollingPosition = bottomLeftCorner;
         }
     }
