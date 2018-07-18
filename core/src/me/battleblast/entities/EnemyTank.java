@@ -22,6 +22,9 @@ public class EnemyTank extends Tank {
     private Array<Vector2> currentPath = new Array<Vector2>();
     private Vector2 currentTarget = new Vector2(0, 0);
     private boolean wallsHaveChanged = false;
+    private long everyNSecondsTimer = TimeUtils.millis();
+    private float everyNSecondsX = 0f;
+    private float everyNSecondsY = 0f;
 
     public void update(float delta, float playerX, float playerY, Array<Vector2> walls) {
         wallsHaveChanged = currentWalls.size != walls.size;
@@ -35,7 +38,7 @@ public class EnemyTank extends Tank {
         // TODO - if staying still for the last 3 seconds...recalculatePath to
         // nextPatrollingPosition.;
         // TODO - this would be in case of stuck at some tile, etc.
-        if (currentPath.size == 0) {
+        if (currentPath.size == 0 || stayedStillForSeconds(3)) {
             chooseNewPatrollingPosition();
             recalculateCurrentPath(nextPatrollingPosition);
         }
@@ -48,6 +51,23 @@ public class EnemyTank extends Tank {
         }
         if (nPercentChance(3)) shoot();
         followPath();
+    }
+
+    private boolean stayedStillForSeconds(int nSeconds) {
+        if (everyNSecondsX != getBounds().getX() || everyNSecondsY != getBounds().getY()) {
+            everyNSecondsX = getBounds().getX();
+            everyNSecondsY = getBounds().getY();
+            everyNSecondsTimer = TimeUtils.millis();
+            return false;
+        }
+        int oneSecondInMilliSeconds = 1000;
+        if (TimeUtils.millis() - everyNSecondsTimer > nSeconds * oneSecondInMilliSeconds) {
+            everyNSecondsX = getBounds().getX();
+            everyNSecondsY = getBounds().getY();
+            everyNSecondsTimer = TimeUtils.millis();
+            return true;
+        }
+        return false;
     }
 
     private void recalculateCurrentPath(Vector2 position) {
