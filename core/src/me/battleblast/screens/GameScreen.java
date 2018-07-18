@@ -148,16 +148,29 @@ public class GameScreen implements Screen {
             }
         }
             
-
         for (EnemyTank enemy: enemies) {
             if (player.getBounds().overlaps(enemy.getBounds())) {
                 player.onCollisionWithEnemy();
                 enemy.onCollisionWithEnemy();
             }
         }
+
+        // collisions bullet<->bullet
+        Array<Integer> collidingBullets = new Array<Integer>();
+        for (int i = 0; i < ALL_BULLETS.size; i++) {
+            for (int j = 0; j < ALL_BULLETS.size; j++) {
+                Bullet b1 = ALL_BULLETS.get(i);
+                Bullet b2 = ALL_BULLETS.get(j);
+                if (i != j && b1.getBounds().overlaps(b2.getBounds())) {
+                    b1.markedForRemoval = true;
+                    b2.markedForRemoval = true;
+                }
+            }
+        }
         for (Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
             Bullet bullet = i.next();
             if (bullet.isOutOfScreen()) i.remove();
+            if (bullet.markedForRemoval) i.remove();
         }
     }
 

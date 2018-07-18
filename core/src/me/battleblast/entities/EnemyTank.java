@@ -35,9 +35,6 @@ public class EnemyTank extends Tank {
     }
 
     private void brain() {
-        // TODO - if staying still for the last 3 seconds...recalculatePath to
-        // nextPatrollingPosition.;
-        // TODO - this would be in case of stuck at some tile, etc.
         if (currentPath.size == 0 || stayedStillForSeconds(3)) {
             chooseNewPatrollingPosition();
             recalculateCurrentPath(nextPatrollingPosition);
