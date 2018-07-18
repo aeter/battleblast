@@ -11,7 +11,7 @@ import me.battleblast.screens.GameScreen;
 
 
 public class Tank {
-    private static final float MOVE_SPEED = 128; // ~pixels per second, depends on frame rate.
+    private static final float MOVE_SPEED = 100; // ~pixels per second, depends on frame rate.
     private static final long ONE_MILLISECOND = 1000000; // in nanoseconds
     private static final long NEXT_BULLET_SPAWN_TIME = 300 * ONE_MILLISECOND;
 
@@ -19,6 +19,7 @@ public class Tank {
     protected float previousX = 0f;
     protected float previousY = 0f;
     private long lastShootTime;
+    private Rectangle bounds = new Rectangle(0, 0, 0, 0);
 
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
@@ -88,7 +89,9 @@ public class Tank {
     }
 
     public Rectangle getBounds() {
-        return sprite.getBoundingRectangle();
+        // to reduce garbage collection, we reuse the same rectangle
+        bounds.set(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
+        return bounds;
     }
 
     private void stepBack() {
@@ -101,7 +104,7 @@ public class Tank {
      *  a few pixels, place the tank to the start/end of the tile (smoother movement)
      */
     private float tiled(float movement) {
-        int pixels_tolerance = 2;
+        int pixels_tolerance = 3;
         if (movement % BattleBlast.TILE_WIDTH < pixels_tolerance) {
             return movement - movement % BattleBlast.TILE_WIDTH;
         }

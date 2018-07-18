@@ -200,7 +200,6 @@ public class GameScreen implements Screen {
         enemy.getSprite().setPosition(
                 Gdx.graphics.getWidth() - enemy.getSprite().getWidth(),
                 Gdx.graphics.getHeight() - enemy.getSprite().getHeight());
-        enemy.getSprite().setBounds(enemy.getSprite().getX(), enemy.getSprite().getY(), 63, 63);
         enemies.add(enemy);
 
         EnemyTank enemy2 = new EnemyTank();
@@ -208,14 +207,12 @@ public class GameScreen implements Screen {
         enemy2.getSprite().setPosition(
                 Gdx.graphics.getWidth() - enemy.getSprite().getWidth(),
                 0);
-        enemy2.getSprite().setBounds(enemy2.getSprite().getX(), enemy2.getSprite().getY(), 63, 63);
         enemies.add(enemy2);
     }
 
     private void spawnPlayer() {
         player = new PlayerTank();
         player.setSprite(new Sprite(game.assets.get("kenney_tank_images/tank_blue_64x64.png", Texture.class)));
-        player.getSprite().setBounds(player.getSprite().getX(), player.getSprite().getY(), 63, 63);
     }
 
     private void setupMap() {
