@@ -11,7 +11,7 @@ import me.battleblast.screens.GameScreen;
 
 
 public class Tank {
-    private static final float MOVE_SPEED = 100; // ~pixels per second, depends on frame rate.
+    private static final float MOVE_SPEED = 100f; // ~pixels per second, depends on frame rate.
     private static final long ONE_MILLISECOND = 1000000; // in nanoseconds
     private static final long NEXT_BULLET_SPAWN_TIME = 300 * ONE_MILLISECOND;
 

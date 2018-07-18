@@ -76,10 +76,6 @@ public class GameScreen implements Screen {
     @Override
     public void resume() {}
 
-    public PlayerTank getPlayer() {
-        return player;
-    }
-
     private void handleInput() {
         if (Gdx.input.isKeyPressed(Keys.LEFT)) {
             player.moveLeft();

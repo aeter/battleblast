@@ -43,7 +43,6 @@ public class Bullet {
         return this;
     }
 
-
     public void move(float deltaTime) {
         if (sprite.getRotation() == 0)
             sprite.setY(sprite.getY() - MOVE_SPEED * deltaTime);
@@ -61,10 +60,6 @@ public class Bullet {
 
     public Rectangle getBounds() {
         return sprite.getBoundingRectangle();
-    }
-
-    public Sprite getSprite() {
-        return sprite;
     }
 
     public boolean isOutOfScreen() {

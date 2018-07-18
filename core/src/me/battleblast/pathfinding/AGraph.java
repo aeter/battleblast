@@ -80,8 +80,7 @@ public class AGraph implements IndexedGraph<Node> {
         // @&
         // @@   <--- doesn't fit, top-right tile is a wall.
         //
-        // we use the bottom-left tile (Tank.getSprite().getX(), Tank.getSprite().getY())
-        // as a determining position for a tank, thus the checks below.
+        // we use the bottom-left tile as the tank's position
         return !map[x][y].isWall && !map[x+1][y].isWall && !map[x][y + 1].isWall && !map[x+1][y+1].isWall;
     }
 
