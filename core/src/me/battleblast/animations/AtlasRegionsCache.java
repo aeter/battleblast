@@ -16,11 +16,19 @@ import me.battleblast.BattleBlast;
  */
 public class AtlasRegionsCache {
     private static Array<TextureAtlas.AtlasRegion> smallBoomRegions;
+    private static Array<TextureAtlas.AtlasRegion> tinyBoomRegions;
 
     public static Array<AtlasRegion> getSmallBoomRegions() {
         if (AtlasRegionsCache.smallBoomRegions == null) {
             AtlasRegionsCache.smallBoomRegions = BattleBlast.getAtlas().findRegions("boomSmall");
         }
         return AtlasRegionsCache.smallBoomRegions;
+    }
+
+    public static Array<AtlasRegion> getTinyBoomRegions() {
+        if (AtlasRegionsCache.tinyBoomRegions == null) {
+            AtlasRegionsCache.tinyBoomRegions = BattleBlast.getAtlas().findRegions("boomTiny");
+        }
+        return AtlasRegionsCache.tinyBoomRegions;
     }
 }

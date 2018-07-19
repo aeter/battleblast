@@ -6,17 +6,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
-public class SmallBoomAnimation extends BaseAnimation {
+public class TinyBoomAnimation extends BaseAnimation {
     private float x;
     private float y;
     private float elapsedTime = 0f;
-    private float ANIMATION_FRAME_DURATION = 1/60f;
+    private float ANIMATION_FRAME_DURATION = 1/90f;
     private Animation<TextureRegion> animation;
 
-    public SmallBoomAnimation(float x, float y) {
+    public TinyBoomAnimation(float x, float y) {
         this.x = x;
         this.y = y;
-        animation = new Animation<TextureRegion>(ANIMATION_FRAME_DURATION, AtlasRegionsCache.getSmallBoomRegions());
+        animation = new Animation<TextureRegion>(ANIMATION_FRAME_DURATION, AtlasRegionsCache.getTinyBoomRegions());
     }
 
     @Override

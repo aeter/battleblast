@@ -6,28 +6,28 @@ filter: Nearest,Nearest
 repeat: xy
 barrelBlack_top_32x32
   rotate: false
-  xy: 348, 24
+  xy: 1312, 92
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 barrelRust_top_32x32
   rotate: false
-  xy: 1132, 92
+  xy: 492, 24
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 barricadeMetal_32x32
   rotate: false
-  xy: 492, 24
+  xy: 1204, 92
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 barricadeWood_32x32
   rotate: false
-  xy: 1060, 92
+  xy: 1276, 92
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -41,60 +41,53 @@ boomSmall
   index: 1
 boomSmall
   rotate: false
-  xy: 240, 24
+  xy: 1024, 92
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 3
 boomSmall
   rotate: false
-  xy: 276, 24
+  xy: 1060, 92
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 6
 boomSmall
   rotate: false
-  xy: 384, 24
+  xy: 276, 24
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 8
 boomSmall
   rotate: false
-  xy: 1348, 93
+  xy: 528, 25
   size: 32, 31
   orig: 32, 31
   offset: 0, 0
   index: 2
 boomSmall
   rotate: false
-  xy: 528, 25
+  xy: 1348, 93
   size: 32, 31
   orig: 32, 31
   offset: 0, 0
-  index: 4
-boomSmall
-  rotate: false
-  xy: 1384, 93
-  size: 32, 31
-  orig: 32, 31
-  offset: 0, 0
-  index: 7
+  index: 5
 boomSmall
   rotate: false
   xy: 564, 25
   size: 32, 31
   orig: 32, 31
   offset: 0, 0
-  index: 9
+  index: 7
 boomSmall
   rotate: false
-  xy: 1420, 93
+  xy: 1384, 93
   size: 32, 31
   orig: 32, 31
   offset: 0, 0
-  index: 5
+  index: 9
 boomSmall
   rotate: false
   xy: 600, 25
@@ -102,72 +95,149 @@ boomSmall
   orig: 32, 31
   offset: 0, 0
   index: 10
+boomSmall
+  rotate: false
+  xy: 1420, 93
+  size: 32, 31
+  orig: 32, 31
+  offset: 0, 0
+  index: 4
+boomTiny
+  rotate: false
+  xy: 4, 4
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 5
+boomTiny
+  rotate: false
+  xy: 24, 4
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 7
+boomTiny
+  rotate: false
+  xy: 44, 4
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 9
+boomTiny
+  rotate: false
+  xy: 84, 4
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 4
+boomTiny
+  rotate: false
+  xy: 124, 4
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 6
+boomTiny
+  rotate: false
+  xy: 144, 4
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 8
+boomTiny
+  rotate: false
+  xy: 184, 4
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 10
+boomTiny
+  rotate: false
+  xy: 204, 4
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+boomTiny
+  rotate: false
+  xy: 224, 4
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+boomTiny
+  rotate: false
+  xy: 244, 4
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 3
 bulletDark1_8x16
   rotate: false
-  xy: 88, 4
+  xy: 300, 4
   size: 8, 16
   orig: 8, 16
   offset: 0, 0
   index: -1
 bulletDark2_8x16
   rotate: false
-  xy: 64, 4
+  xy: 312, 4
   size: 8, 16
   orig: 8, 16
   offset: 0, 0
   index: -1
 bulletDark3_8x16
   rotate: false
-  xy: 76, 4
+  xy: 264, 4
   size: 8, 16
   orig: 8, 16
   offset: 0, 0
   index: -1
 bulletRed2_outline_8x16
   rotate: false
-  xy: 100, 4
+  xy: 276, 4
   size: 8, 16
   orig: 8, 16
   offset: 0, 0
   index: -1
 bulletRed3_outline_8x16
   rotate: false
-  xy: 112, 4
+  xy: 288, 4
   size: 8, 16
   orig: 8, 16
   offset: 0, 0
   index: -1
 crateMetal_32x32
   rotate: false
-  xy: 312, 24
+  xy: 1096, 92
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 crateWood_32x32
   rotate: false
-  xy: 1240, 92
+  xy: 348, 24
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 fenceRed_96x32
   rotate: false
-  xy: 104, 24
+  xy: 4, 24
   size: 96, 32
   orig: 96, 32
   offset: 0, 0
   index: -1
 fenceYellow_96x32
   rotate: false
-  xy: 4, 24
+  xy: 104, 24
   size: 96, 32
   orig: 96, 32
   offset: 0, 0
   index: -1
 oilSpill_16x16
   rotate: false
-  xy: 44, 4
+  xy: 164, 4
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -181,21 +251,21 @@ sandbagBeige_32x32
   index: -1
 sandbagBeige_open_32x32
   rotate: false
-  xy: 1024, 92
+  xy: 1240, 92
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 sandbagBrown_32x32
   rotate: false
-  xy: 1276, 92
+  xy: 1168, 92
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 sandbagBrown_open_32x32
   rotate: false
-  xy: 1312, 92
+  xy: 384, 24
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -209,35 +279,35 @@ tank_blue_64x64
   index: -1
 tank_boss_64x64
   rotate: false
-  xy: 412, 60
+  xy: 752, 60
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 tank_dark_64x64
   rotate: false
-  xy: 616, 60
+  xy: 412, 60
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 tileGrass1_64x64
   rotate: false
-  xy: 888, 60
+  xy: 72, 60
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 tileGrass_transitionE_64x64
   rotate: false
-  xy: 820, 60
+  xy: 616, 60
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 tileGrass_transitionN_64x64
   rotate: false
-  xy: 752, 60
+  xy: 548, 60
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -251,7 +321,7 @@ tileGrass_transitionS_64x64
   index: -1
 tileGrass_transitionW_64x64
   rotate: false
-  xy: 72, 60
+  xy: 140, 60
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -265,14 +335,14 @@ tileSand1_64x64
   index: -1
 tileSand2_64x64
   rotate: false
-  xy: 480, 60
+  xy: 820, 60
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 tracksDouble_64x64
   rotate: false
-  xy: 548, 60
+  xy: 888, 60
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -286,35 +356,35 @@ tracksLarge_64x64
   index: -1
 tracksSmall_64x64
   rotate: false
-  xy: 140, 60
+  xy: 684, 60
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 treeBrown_large_64x64
   rotate: false
-  xy: 684, 60
+  xy: 480, 60
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 treeBrown_leaf_16x16
   rotate: false
-  xy: 4, 4
+  xy: 64, 4
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 treeBrown_small_32x32
   rotate: false
-  xy: 456, 24
+  xy: 312, 24
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 treeBrown_twigs_32x32
   rotate: false
-  xy: 1168, 92
+  xy: 456, 24
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -328,21 +398,21 @@ treeGreen_large_64x64
   index: -1
 treeGreen_leaf_16x16
   rotate: false
-  xy: 24, 4
+  xy: 104, 4
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 treeGreen_small_32x32
   rotate: false
-  xy: 1204, 92
+  xy: 1132, 92
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 treeGreen_twigs_32x32
   rotate: false
-  xy: 1096, 92
+  xy: 240, 24
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

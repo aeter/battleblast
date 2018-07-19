@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.Array;
 import me.battleblast.animations.BaseAnimation;
 import me.battleblast.animations.SmallBoomAnimation;
 import me.battleblast.animations.SmallSparksAnimation;
+import me.battleblast.animations.TinyBoomAnimation;
 import me.battleblast.BattleBlast;
 import me.battleblast.entities.Tank;
 import me.battleblast.entities.EnemyTank;
@@ -161,6 +162,9 @@ public class GameScreen implements Screen {
                 if (i != j && b1.getBounds().overlaps(b2.getBounds())) {
                     b1.markedForRemoval = true;
                     b2.markedForRemoval = true;
+                    float animationX = b1.getBounds().getX() + (b1.getBounds().getWidth() / 2);
+                    float animationY = b1.getBounds().getY() + (b1.getBounds().getHeight() / 2);
+                    animations.add(new TinyBoomAnimation(animationX, animationY));
                 }
             }
         }
