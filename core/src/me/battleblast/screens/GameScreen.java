@@ -20,6 +20,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import me.battleblast.animations.BaseAnimation;
+import me.battleblast.animations.BigBoomAnimation;
 import me.battleblast.animations.SmallBoomAnimation;
 import me.battleblast.animations.SmallSparksAnimation;
 import me.battleblast.animations.TinyBoomAnimation;
@@ -150,9 +151,25 @@ public class GameScreen implements Screen {
                 player.onCollisionWithEnemy();
                 enemy.onCollisionWithEnemy();
             }
+
         }
 
-        // TODO - collisions tank<->bullet
+        // collisions tank<->bullet
+        for (Bullet bullet: ALL_BULLETS) {
+            if (player.getBounds().overlaps(bullet.getBounds()) && !bullet.isPlayerBullet) {
+                // TODO - GAME OVER screen...
+                Gdx.app.log("GAME OVER", "GAME OVER");
+            }
+            for (Iterator<EnemyTank> i = enemies.iterator(); i.hasNext(); ) {
+                EnemyTank enemy  = i.next();
+                if (enemy.getBounds().overlaps(bullet.getBounds()) && bullet.isPlayerBullet) {
+                    bullet.markedForRemoval = true;
+                    i.remove();
+                    animations.add(new BigBoomAnimation(enemy.getBounds().getX(), enemy.getBounds().getY()));
+                    // TODO - add boss tank when both tanks are neutralized.
+                }
+            }
+        }
 
         // collisions bullet<->bullet
         for (int i = 0; i < ALL_BULLETS.size; i++) {

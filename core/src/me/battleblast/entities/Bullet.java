@@ -11,6 +11,7 @@ import me.battleblast.BattleBlast;
 
 public class Bullet {
     public boolean markedForRemoval = false;
+    public boolean isPlayerBullet = false;
     private static final int MOVE_SPEED = 300; // approx. pixels per second
     private Sprite sprite;
 

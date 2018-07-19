@@ -71,7 +71,11 @@ public class Tank {
         // TODO - see if it's possible to use object pooling  for Bullets,
         // https://github.com/libgdx/libgdx/wiki/Memory-management
         if (TimeUtils.nanoTime() - lastShootTime > NEXT_BULLET_SPAWN_TIME) {
-            GameScreen.ALL_BULLETS.add(new Bullet().positionedInFrontOf(sprite));
+            Bullet bullet = new Bullet().positionedInFrontOf(sprite);
+            if (this instanceof PlayerTank) {
+                bullet.isPlayerBullet = true;
+            }
+            GameScreen.ALL_BULLETS.add(bullet);
             lastShootTime = TimeUtils.nanoTime();
         }
     }
