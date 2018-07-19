@@ -9,7 +9,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -44,12 +44,13 @@ public class BattleBlast extends Game {
         assets.dispose();
     }
 
+    public static TextureAtlas getAtlas() {
+        return assets.get("tanks.atlas", TextureAtlas.class);
+    }
+
     private void loadAssets() {
         assets = new AssetManager();
-        assets.load("kenney_tank_images/tank_blue_64x64.png", Texture.class);
-        assets.load("kenney_tank_images/tank_dark_64x64.png", Texture.class);
-        assets.load("kenney_tank_images/bulletDark2_8x16.png", Texture.class);
-        assets.load("kenney_tank_images/crateWood_32x32.png", Texture.class);
+        assets.load("tanks.atlas", TextureAtlas.class);
         assets.load("snd_music_victorytheme_0.ogg", Music.class);
         assets.setLoader(TiledMap.class, new TmxMapLoader());
         assets.load("tanks.tmx", TiledMap.class);

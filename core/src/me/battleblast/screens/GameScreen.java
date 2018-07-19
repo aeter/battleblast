@@ -196,14 +196,14 @@ public class GameScreen implements Screen {
 
     private void spawnEnemies() {
         EnemyTank enemy = new EnemyTank();
-        enemy.setSprite(new Sprite(game.assets.get("kenney_tank_images/tank_dark_64x64.png", Texture.class)));
+        enemy.setSprite(new Sprite(BattleBlast.getAtlas().findRegion("tank_dark_64x64")));
         enemy.getSprite().setPosition(
                 Gdx.graphics.getWidth() - enemy.getSprite().getWidth(),
                 Gdx.graphics.getHeight() - enemy.getSprite().getHeight());
         enemies.add(enemy);
 
         EnemyTank enemy2 = new EnemyTank();
-        enemy2.setSprite(new Sprite(game.assets.get("kenney_tank_images/tank_dark_64x64.png", Texture.class)));
+        enemy2.setSprite(new Sprite(BattleBlast.getAtlas().findRegion("tank_dark_64x64")));
         enemy2.getSprite().setPosition(
                 Gdx.graphics.getWidth() - enemy.getSprite().getWidth(),
                 0);
@@ -212,7 +212,7 @@ public class GameScreen implements Screen {
 
     private void spawnPlayer() {
         player = new PlayerTank();
-        player.setSprite(new Sprite(game.assets.get("kenney_tank_images/tank_blue_64x64.png", Texture.class)));
+        player.setSprite(new Sprite(BattleBlast.getAtlas().findRegion("tank_blue_64x64")));
     }
 
     private void setupMap() {
@@ -231,7 +231,7 @@ public class GameScreen implements Screen {
         MapObjects breakables = map.getLayers().get("breakable_obstacles").getObjects();
         for (MapObject breakable: breakables) {
             Rectangle breakableBounds = ((RectangleMapObject) breakable).getRectangle();
-            Sprite breakableSprite = new Sprite(game.assets.get("kenney_tank_images/crateWood_32x32.png", Texture.class));
+            Sprite breakableSprite = new Sprite(BattleBlast.getAtlas().findRegion("crateWood_32x32"));
             breakableSprite.setBounds(breakableBounds.getX(), breakableBounds.getY(), breakableBounds.getWidth(), breakableBounds.getHeight());
             ALL_BREAKABLE_OBSTACLES.add(breakableSprite);
         }
