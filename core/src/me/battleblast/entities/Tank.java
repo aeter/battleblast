@@ -104,7 +104,7 @@ public class Tank {
      *  a few pixels, place the tank to the start/end of the tile (smoother movement)
      */
     private float tiled(float movement) {
-        int pixels_tolerance = 3;
+        int pixels_tolerance = 1;
         if (movement % BattleBlast.TILE_WIDTH < pixels_tolerance) {
             return movement - movement % BattleBlast.TILE_WIDTH;
         }
