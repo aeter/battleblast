@@ -7,6 +7,4 @@ public abstract class BaseAnimation {
     public abstract boolean isOver(); 
 
     public abstract void draw(SpriteBatch batch);
-
-    public abstract void dispose();
 }

@@ -31,7 +31,4 @@ public class SmallSparksAnimation extends BaseAnimation {
         animation.update(Gdx.graphics.getDeltaTime());
         animation.draw(batch);
     }
-
-    @Override
-    public void dispose() {}
 }

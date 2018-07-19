@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset name="tanks" tilewidth="96" tileheight="64" tilecount="46" columns="7">
+<tileset name="tanks" tilewidth="96" tileheight="64" tilecount="36" columns="7">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="32" height="32" source="kenney_tank_images/barrelBlack_top_32x32.png"/>
@@ -30,36 +30,6 @@
  </tile>
  <tile id="9">
   <image width="32" height="32" source="kenney_tank_images/crateMetal_32x32.png"/>
- </tile>
- <tile id="10">
-  <image width="32" height="32" source="kenney_tank_images/explosion1_32x32.png"/>
- </tile>
- <tile id="11">
-  <image width="32" height="31" source="kenney_tank_images/explosion2_32x32.png"/>
- </tile>
- <tile id="12">
-  <image width="32" height="32" source="kenney_tank_images/explosion3_32x32.png"/>
- </tile>
- <tile id="13">
-  <image width="32" height="31" source="kenney_tank_images/explosion4_32x32.png"/>
- </tile>
- <tile id="14">
-  <image width="32" height="31" source="kenney_tank_images/explosion5_32x32.png"/>
- </tile>
- <tile id="15">
-  <image width="32" height="32" source="kenney_tank_images/explosion6_32x32.png"/>
- </tile>
- <tile id="16">
-  <image width="32" height="31" source="kenney_tank_images/explosion7_32x32.png"/>
- </tile>
- <tile id="17">
-  <image width="32" height="32" source="kenney_tank_images/explosion8_32x32.png"/>
- </tile>
- <tile id="18">
-  <image width="32" height="31" source="kenney_tank_images/explosion9_32x32.png"/>
- </tile>
- <tile id="19">
-  <image width="32" height="31" source="kenney_tank_images/explosion10_32x32.png"/>
  </tile>
  <tile id="20">
   <image width="96" height="32" source="kenney_tank_images/fenceRed_96x32.png"/>

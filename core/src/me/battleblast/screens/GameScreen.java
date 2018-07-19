@@ -258,7 +258,6 @@ public class GameScreen implements Screen {
         for (Iterator<BaseAnimation> i = animations.iterator(); i.hasNext(); ) {
             BaseAnimation animation = i.next();
             if (animation.isOver()) {
-                animation.dispose();
                 i.remove();
             } else {
                 animation.draw(game.batch);
