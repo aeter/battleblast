@@ -11,9 +11,8 @@ import me.battleblast.screens.GameScreen;
 
 
 public class Tank {
-    private static final float MOVE_SPEED = 100f; // ~pixels per second, depends on frame rate.
-    private static final long ONE_MILLISECOND = 1000000; // in nanoseconds
-    private static final long NEXT_BULLET_SPAWN_TIME = 300 * ONE_MILLISECOND;
+    protected static final float MOVE_SPEED = 100f; // ~pixels per second, depends on frame rate.
+    protected static final long ONE_MILLISECOND = 1000000; // in nanoseconds
 
     protected Sprite sprite;
     protected float previousX = 0f;
@@ -70,7 +69,7 @@ public class Tank {
     public void shoot() {
         // TODO - see if it's possible to use object pooling  for Bullets,
         // https://github.com/libgdx/libgdx/wiki/Memory-management
-        if (TimeUtils.nanoTime() - lastShootTime > NEXT_BULLET_SPAWN_TIME) {
+        if (TimeUtils.nanoTime() - lastShootTime > nextBulletSpawnTime()) {
             Bullet bullet = new Bullet().positionedInFrontOf(sprite);
             if (this instanceof PlayerTank) {
                 bullet.isPlayerBullet = true;
@@ -96,6 +95,10 @@ public class Tank {
         // to reduce garbage collection, we reuse the same rectangle
         bounds.set(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
         return bounds;
+    }
+
+    protected float nextBulletSpawnTime() {
+        return 300 * ONE_MILLISECOND;
     }
 
     private void stepBack() {
