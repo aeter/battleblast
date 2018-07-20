@@ -46,6 +46,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(final BattleBlast game) {
         this.game = game;
+        ALL_BULLETS.clear(); // in case we're switching screens back and forth
         setupMap();
         setupCamera();
         spawnEnemies();
@@ -90,6 +91,10 @@ public class GameScreen implements Screen {
         } 
         if (Gdx.input.isKeyPressed(Keys.SPACE)) {
             player.shoot();
+        }
+        if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
+            game.setScreen(new MainMenuScreen(game));
+            dispose();
         }
     }
 

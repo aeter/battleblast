@@ -1,5 +1,6 @@
 package me.battleblast.screens;
 
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -22,6 +23,7 @@ public class MainMenuScreen implements Screen {
     private final BattleBlast game;
     private Stage stage;
     private Skin skin;
+    private Slider volumeSlider;
 
     public MainMenuScreen(final BattleBlast game) {
         this.game = game;
@@ -43,6 +45,8 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        handleInput(); 
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -59,10 +63,14 @@ public class MainMenuScreen implements Screen {
     public void resize(int width, int height) {}
 
     @Override
-    public void show() {}
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
+    }
 
     @Override
-    public void hide() {}
+    public void hide() {
+        Gdx.input.setInputProcessor(null);
+    }
 
     @Override
     public void pause() {}
@@ -70,11 +78,31 @@ public class MainMenuScreen implements Screen {
     @Override
     public void resume() {}
 
+    private void handleInput() {
+        if (Gdx.input.isKeyPressed(Keys.LEFT)) {
+            float value = volumeSlider.getValue() - 2 < 0 ? 0f : volumeSlider.getValue() - 2;
+            volumeSlider.setValue(value);
+            game.music.setVolume(volumeSlider.getValue() / 100f);
+        } 
+        if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
+            float value = volumeSlider.getValue() + 2 > 100 ? 100f : volumeSlider.getValue() + 2;
+            volumeSlider.setValue(value);
+            game.music.setVolume(volumeSlider.getValue() / 100f);
+        } 
+        if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+            Gdx.app.exit();
+        }
+        if (Gdx.input.isKeyPressed(Keys.ENTER)) {
+            game.setScreen(new GameScreen(game));
+            dispose();
+        }
+    }
+
     private void addPreferencesSection(Table table) {
         Window window = new Window("Preferences", skin);
         table.add(window);
         window.add(new Label( "Volume", skin)).space(10);
-        final Slider volumeSlider = new Slider(0, 100, 1, false, skin);
+        volumeSlider = new Slider(0, 100, 1, false, skin);
         window.add(volumeSlider).space(10).width(100);
         volumeSlider.setValue(50);
         volumeSlider.addListener( new EventListener() {
