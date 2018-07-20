@@ -25,17 +25,17 @@ import me.battleblast.animations.SmallBoomAnimation;
 import me.battleblast.animations.SmallSparksAnimation;
 import me.battleblast.animations.TinyBoomAnimation;
 import me.battleblast.BattleBlast;
-import me.battleblast.entities.Tank;
+import me.battleblast.entities.Bullet;
 import me.battleblast.entities.EnemyTank;
 import me.battleblast.entities.PlayerTank;
-import me.battleblast.entities.Bullet;
+import me.battleblast.entities.Tank;
+import me.battleblast.entities.Wall;
 
 
 public class GameScreen implements Screen {
     public static Array<Bullet> ALL_BULLETS = new Array<Bullet>();
-    public static Array<Sprite> ALL_BREAKABLE_OBSTACLES = new Array<Sprite>();
-    public static Array<Vector2> ALL_UNBREAKABLE_OBSTACLES = new Array<Vector2>();
 
+    private Array<Wall> walls = new Array<Wall>();
     private Array<BaseAnimation> animations = new Array<BaseAnimation>();
     private Array<EnemyTank> enemies = new Array<EnemyTank>();
     private final BattleBlast game;
@@ -103,49 +103,32 @@ public class GameScreen implements Screen {
     }
 
     private void handleCollisions() {
-        // collisions with unbreakable objects
-        MapObjects stabiles = map.getLayers().get("unbreakable_obstacles").getObjects();
-        for (MapObject stabile: stabiles) {
-            Rectangle stabileBounds = ((RectangleMapObject) stabile).getRectangle();
-            if (stabileBounds.overlaps(player.getBounds())) {
+        // wall collisions
+        for (Iterator<Wall> w = walls.iterator(); w.hasNext();) {
+            Wall wall = w.next();
+            if (wall.getBounds().overlaps(player.getBounds())) {
                 player.onCollisionWithObstacle();
             }
             for (EnemyTank enemy: enemies) {
-                if (stabileBounds.overlaps(enemy.getBounds())) {
+                if (wall.getBounds().overlaps(enemy.getBounds())) {
                     enemy.onCollisionWithObstacle();
                 }
             }
             for (Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
                 Bullet bullet = i.next();
-                if (stabileBounds.overlaps(bullet.getBounds())) {
-                    i.remove(); 
-                    animations.add(new SmallSparksAnimation(stabileBounds.getX(), stabileBounds.getY()));
+                if (wall.getBounds().overlaps(bullet.getBounds())) {
+                    i.remove();
+                    if (wall.isBreakable) {
+                        w.remove();
+                        animations.add(new SmallBoomAnimation(wall.getBounds().getX(), wall.getBounds().getY()));
+                    } else {
+                        animations.add(new SmallSparksAnimation(wall.getBounds().getX(), wall.getBounds().getY()));
+                    }
                 }
             }
         }
 
-        // collisions with breakable objects
-        for (Iterator<Sprite> s = ALL_BREAKABLE_OBSTACLES.iterator(); s.hasNext(); ) {
-            Sprite breakable = s.next();
-            Rectangle breakableBounds = breakable.getBoundingRectangle();
-            if (breakableBounds.overlaps(player.getBounds())) {
-                player.onCollisionWithObstacle();
-            }
-            for (EnemyTank enemy: enemies) {
-                if (breakableBounds.overlaps(enemy.getBounds())) {
-                    enemy.onCollisionWithObstacle();
-                }
-            }
-            for (Iterator<Bullet> i = ALL_BULLETS.iterator(); i.hasNext(); ) {
-                Bullet bullet = i.next();
-                if (breakableBounds.overlaps(bullet.getBounds())) {
-                    i.remove();
-                    s.remove();
-                    animations.add(new SmallBoomAnimation(breakableBounds.getX(), breakableBounds.getY()));
-                }
-            }
-        }
-            
+        // collision player<->tank
         for (EnemyTank enemy: enemies) {
             if (player.getBounds().overlaps(enemy.getBounds())) {
                 player.onCollisionWithEnemy();
@@ -205,8 +188,10 @@ public class GameScreen implements Screen {
         for (EnemyTank enemy: enemies) {
             enemy.draw(game.batch);
         }
-        for (Sprite breakable: ALL_BREAKABLE_OBSTACLES) {
-            breakable.draw(game.batch);
+        for (Wall wall: walls) {
+            if (wall.isBreakable) {
+                wall.getSprite().draw(game.batch);
+            }
         }
         for (Bullet bullet: ALL_BULLETS) {
             bullet.draw(game.batch);
@@ -239,8 +224,8 @@ public class GameScreen implements Screen {
     private void setupMap() {
         map = game.assets.get("tanks.tmx", TiledMap.class);
         renderer = new OrthogonalTiledMapRenderer(map);
-        setupBreakableTiles();
-        setupUnbreakableTiles();
+        setupBreakableWalls();
+        setupUnbreakableWalls();
     }
 
     private void setupCamera() {
@@ -248,31 +233,30 @@ public class GameScreen implements Screen {
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
-    private void setupBreakableTiles() {
-        MapObjects breakables = map.getLayers().get("breakable_obstacles").getObjects();
-        for (MapObject breakable: breakables) {
-            Rectangle breakableBounds = ((RectangleMapObject) breakable).getRectangle();
-            Sprite breakableSprite = new Sprite(BattleBlast.getAtlas().findRegion("crateWood_32x32"));
-            breakableSprite.setBounds(breakableBounds.getX(), breakableBounds.getY(), breakableBounds.getWidth(), breakableBounds.getHeight());
-            ALL_BREAKABLE_OBSTACLES.add(breakableSprite);
+    private void setupBreakableWalls() {
+        MapObjects breakableWalls = map.getLayers().get("breakable_obstacles").getObjects();
+        for (MapObject wall: breakableWalls) {
+            Rectangle bounds = ((RectangleMapObject) wall).getRectangle();
+            walls.add(Wall.getBreakableInstance(bounds));
         }
     }
 
-    private void setupUnbreakableTiles() {
-        MapObjects stabiles = map.getLayers().get("unbreakable_obstacles").getObjects();
-        for (MapObject stabile: stabiles) {
-            Rectangle stabileBounds = ((RectangleMapObject) stabile).getRectangle();
-            ALL_UNBREAKABLE_OBSTACLES.add(new Vector2(stabileBounds.getX(), stabileBounds.getY()));
+    private void setupUnbreakableWalls() {
+        MapObjects unbreakableWalls = map.getLayers().get("unbreakable_obstacles").getObjects();
+        for (MapObject wall: unbreakableWalls) {
+            Rectangle bounds = ((RectangleMapObject) wall).getRectangle();
+            walls.add(new Wall(bounds));
         }
     }
 
     private Array<Vector2> getCurrentWalls() {
-        Array<Vector2> walls = new Array<Vector2>();
-        for (Sprite s: ALL_BREAKABLE_OBSTACLES)
-            walls.add(new Vector2(s.getX() / BattleBlast.TILE_WIDTH, s.getY() / BattleBlast.TILE_WIDTH));
-        for (Vector2 v: ALL_UNBREAKABLE_OBSTACLES)
-            walls.add(new Vector2(v.x / BattleBlast.TILE_WIDTH, v.y / BattleBlast.TILE_WIDTH));
-        return walls;
+        Array<Vector2> currentWalls = new Array<Vector2>();
+        for (Wall wall: walls) {
+            currentWalls.add(new Vector2(
+                        wall.getBounds().getX() / BattleBlast.TILE_WIDTH,
+                        wall.getBounds().getY() / BattleBlast.TILE_WIDTH));
+        }
+        return currentWalls;
     }
 
     private void drawAnimations() {
