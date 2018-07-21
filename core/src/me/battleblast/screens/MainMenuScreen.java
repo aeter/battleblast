@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 
@@ -25,7 +24,6 @@ public class MainMenuScreen implements Screen {
     private Skin skin;
     private Slider volumeSlider;
 
-    // TODO -credits link and screen...
     public MainMenuScreen(final BattleBlast game) {
         this.game = game;
         stage = new Stage();
@@ -38,10 +36,16 @@ public class MainMenuScreen implements Screen {
         stage.addActor(table);
 
         table.row();
-        addPreferencesSection(table);
+        addMusicControls(table);
 
         table.row();
-        addActionsSection(table);
+        addNewGameButton(table);
+
+        table.row();
+        addCreditsButton(table);
+
+        table.row();
+        addQuitButton(table);
     }
 
     @Override
@@ -99,12 +103,10 @@ public class MainMenuScreen implements Screen {
         }
     }
 
-    private void addPreferencesSection(Table table) {
-        Window window = new Window("Preferences", skin);
-        table.add(window);
-        window.add(new Label( "Volume", skin)).space(10);
+    private void addMusicControls(Table table) {
+        table.add(new Label( "Volume", skin)).space(10);
         volumeSlider = new Slider(0, 100, 1, false, skin);
-        window.add(volumeSlider).space(10).width(100);
+        table.add(volumeSlider).space(10).width(100);
         volumeSlider.setValue(50);
         volumeSlider.addListener( new EventListener() {
             @Override
@@ -113,15 +115,11 @@ public class MainMenuScreen implements Screen {
                 return false;
             }
         });
-
     }
 
-    private void addActionsSection(Table table) {
-        Window actions = new Window("Actions", skin);
-        table.add(actions).space(20);
-
+    private void addNewGameButton(Table table) {
         final TextButton startButton = new TextButton("New Game", skin, "default");
-        actions.add(startButton).colspan(2);
+        table.add(startButton).colspan(2);
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -129,9 +127,23 @@ public class MainMenuScreen implements Screen {
                 dispose();
             }
         });
+    }
 
+    private void addCreditsButton(Table table) {
+        final TextButton creditsButton = new TextButton("Credits", skin, "default");
+        table.add(creditsButton).colspan(2);
+        creditsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new CreditsScreen(game));
+                dispose();
+            }
+        });
+    }
+
+    private void addQuitButton(Table table) {
         final TextButton quitButton = new TextButton("Quit", skin, "default");
-        actions.add(quitButton).colspan(2);
+        table.add(quitButton).colspan(2);
         quitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
