@@ -28,6 +28,10 @@ public class Tank {
         return sprite;
     }
 
+    // TODO - when turning somewhere (changing rotation with the current
+    // movement), if x or y is within 1-2 pixels of beginning of the tile, set
+    // to beginning of the tile. Otherwise it's very frustrating with 4-5 tries
+    // to get exactly to the 0th pixel of a position...
     public void moveLeft() {
         sprite.setRotation(270);
         previousX = sprite.getX();

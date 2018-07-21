@@ -35,6 +35,14 @@ public class EnemyTank extends Tank {
         brain();
     }
 
+    protected boolean timeToShootAgain() {
+        return nPercentChance(3);
+    }
+
+    protected boolean nPercentChance(int n) {
+        return MathUtils.random() <= 0.01 * n;
+    }
+
     private void brain() {
         if (currentPath.size == 0 || stayedStillForSeconds(3)) {
             chooseNewPatrollingPosition();
@@ -47,7 +55,7 @@ public class EnemyTank extends Tank {
         if (wallsHaveChanged) {
             recalculateCurrentPath(currentTarget);
         }
-        if (nPercentChance(3)) shoot();
+        if (timeToShootAgain()) shoot();
         followPath();
     }
 
@@ -156,9 +164,5 @@ public class EnemyTank extends Tank {
     // simplify is like 320 / 32.
     private float simplify (float coordinateInPixels) {
         return coordinateInPixels / BattleBlast.TILE_WIDTH;
-    }
-
-    private boolean nPercentChance(int n) {
-        return MathUtils.random() <= 0.01 * n;
     }
 }

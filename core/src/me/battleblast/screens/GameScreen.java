@@ -25,6 +25,7 @@ import me.battleblast.animations.SmallBoomAnimation;
 import me.battleblast.animations.SmallSparksAnimation;
 import me.battleblast.animations.TinyBoomAnimation;
 import me.battleblast.BattleBlast;
+import me.battleblast.entities.BossTank;
 import me.battleblast.entities.Bullet;
 import me.battleblast.entities.EnemyTank;
 import me.battleblast.entities.PlayerTank;
@@ -38,6 +39,7 @@ public class GameScreen implements Screen {
     private Array<Wall> walls = new Array<Wall>();
     private Array<BaseAnimation> animations = new Array<BaseAnimation>();
     private Array<EnemyTank> enemies = new Array<EnemyTank>();
+    private boolean bossSpawnedAlready = false;
     private final BattleBlast game;
     private TiledMap map;
     private OrthographicCamera camera;
@@ -58,6 +60,13 @@ public class GameScreen implements Screen {
         handleInput(); 
         moveWorld(delta);
         handleCollisions();
+        if (enemies.size == 0) {
+            if (bossSpawnedAlready) {
+                // TODO - win GAMe animation
+            } else {
+                spawnBoss();
+            }
+        }
         draw();
     }
 
@@ -224,6 +233,14 @@ public class GameScreen implements Screen {
     private void spawnPlayer() {
         player = new PlayerTank();
         player.setSprite(new Sprite(BattleBlast.getAtlas().findRegion("tank_blue_64x64")));
+    }
+
+    private void spawnBoss() {
+        BossTank boss = new BossTank();
+        boss.setSprite(new Sprite(BattleBlast.getAtlas().findRegion("tank_boss_64x64")));
+        boss.getSprite().setPosition(0, 0);
+        enemies.add(boss);
+        bossSpawnedAlready = true;
     }
 
     private void setupMap() {
