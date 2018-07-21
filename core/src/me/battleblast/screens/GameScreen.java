@@ -65,6 +65,7 @@ public class GameScreen implements Screen {
                 // TODO - win GAMe animation
             } else {
                 spawnBoss();
+                bossSpawnedAlready = true;
             }
         }
         draw();
@@ -163,7 +164,6 @@ public class GameScreen implements Screen {
                     bullet.markedForRemoval = true;
                     i.remove();
                     animations.add(new BigBoomAnimation(enemy.getBounds().getX(), enemy.getBounds().getY()));
-                    // TODO - add boss tank when both tanks are neutralized.
                 }
             }
         }
@@ -240,7 +240,6 @@ public class GameScreen implements Screen {
         boss.setSprite(new Sprite(BattleBlast.getAtlas().findRegion("tank_boss_64x64")));
         boss.getSprite().setPosition(0, 0);
         enemies.add(boss);
-        bossSpawnedAlready = true;
     }
 
     private void setupMap() {
