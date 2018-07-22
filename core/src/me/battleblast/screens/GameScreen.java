@@ -18,6 +18,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 import me.battleblast.animations.BaseAnimation;
 import me.battleblast.animations.BigBoomAnimation;
@@ -155,8 +157,9 @@ public class GameScreen implements Screen {
         // collisions tank<->bullet
         for (Bullet bullet: ALL_BULLETS) {
             if (player.getBounds().overlaps(bullet.getBounds()) && !bullet.isPlayerBullet) {
-                // TODO - GAME OVER screen...
-                Gdx.app.log("GAME OVER", "GAME OVER");
+                animations.add(new BigBoomAnimation(player.getBounds().getX(), player.getBounds().getY()));
+                player.getSprite().setSize(0, 0); // some way to hide it...
+                showGameOverLostScreen();
             }
             for (Iterator<EnemyTank> i = enemies.iterator(); i.hasNext(); ) {
                 EnemyTank enemy  = i.next();
@@ -204,7 +207,7 @@ public class GameScreen implements Screen {
         }
         for (Wall wall: walls) {
             if (wall.isBreakable) {
-                wall.getSprite().draw(game.batch);
+                wall.draw(game.batch);
             }
         }
         for (Bullet bullet: ALL_BULLETS) {
@@ -289,5 +292,18 @@ public class GameScreen implements Screen {
                 animation.draw(game.batch);
             }
         }
+    }
+
+    private void showGameOverLostScreen() {
+        // we want the boom animations to complete, this is why
+        // we use a delay before showing the game over screen.
+        float delayInSeconds = 0.2f;
+        Timer.schedule(new Task() {
+            @Override
+            public void run() {
+                game.setScreen(new GameOverLostScreen(game));
+                dispose();
+            }
+        }, delayInSeconds);
     }
 }

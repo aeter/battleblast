@@ -1,6 +1,7 @@
 package me.battleblast.entities;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
 import me.battleblast.BattleBlast;
@@ -34,5 +35,9 @@ public class Wall {
 
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
+    }
+
+    public void draw(SpriteBatch sb) {
+        sprite.draw(sb);
     }
 }
