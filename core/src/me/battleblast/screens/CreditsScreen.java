@@ -90,6 +90,8 @@ public class CreditsScreen implements Screen {
                 + "* Kenney (kenney.nl)\n"
                 + "\nGame music:\n"
                 + "* 'Spring' (opengameart.org/users/spring)\n"
+                + "\nSounds:\n"
+                + "* 'dklon' (opengameart.org/users/dklon)\n"
                 + "\nGUI theme:\n"
                 + "* Raymond 'Raeleus' Buckley - (ray3k.wordpress.com)\n"
                 + "\nProgramming:\n"

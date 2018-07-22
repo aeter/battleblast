@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.loaders.ParticleEffectLoader;
 import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -51,6 +52,8 @@ public class BattleBlast extends Game {
     private void loadAssets() {
         assets = new AssetManager();
         assets.load("tanks.atlas", TextureAtlas.class);
+        assets.load("boom_sounds_pack_dklon/boom5.wav", Sound.class);
+        assets.load("boom_sounds_pack_dklon/boom9.wav", Sound.class);
         assets.load("snd_music_victorytheme_0.ogg", Music.class);
         assets.setLoader(TiledMap.class, new TmxMapLoader());
         assets.load("tanks.tmx", TiledMap.class);

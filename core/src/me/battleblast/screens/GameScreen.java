@@ -2,6 +2,7 @@ package me.battleblast.screens;
 
 import java.util.Iterator;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -138,7 +139,11 @@ public class GameScreen implements Screen {
                     if (wall.isBreakable) {
                         w.remove();
                         animations.add(new SmallBoomAnimation(wall.getBounds().getX(), wall.getBounds().getY()));
+                        Sound sound = game.assets.get("boom_sounds_pack_dklon/boom5.wav", Sound.class);
+                        sound.play();
                     } else {
+                        Sound sound = game.assets.get("boom_sounds_pack_dklon/boom5.wav", Sound.class);
+                        sound.play();
                         animations.add(new SmallSparksAnimation(wall.getBounds().getX(), wall.getBounds().getY()));
                     }
                 }
@@ -157,6 +162,8 @@ public class GameScreen implements Screen {
         // collisions tank<->bullet
         for (Bullet bullet: ALL_BULLETS) {
             if (player.getBounds().overlaps(bullet.getBounds()) && !bullet.isPlayerBullet) {
+                Sound sound = game.assets.get("boom_sounds_pack_dklon/boom9.wav", Sound.class);
+                sound.play();
                 animations.add(new BigBoomAnimation(player.getBounds().getX(), player.getBounds().getY()));
                 player.getSprite().setSize(0, 0); // some way to hide it...
                 showGameOverLostScreen();
@@ -164,6 +171,8 @@ public class GameScreen implements Screen {
             for (Iterator<EnemyTank> i = enemies.iterator(); i.hasNext(); ) {
                 EnemyTank enemy  = i.next();
                 if (enemy.getBounds().overlaps(bullet.getBounds()) && bullet.isPlayerBullet) {
+                    Sound sound = game.assets.get("boom_sounds_pack_dklon/boom9.wav", Sound.class);
+                    sound.play();
                     bullet.markedForRemoval = true;
                     i.remove();
                     animations.add(new BigBoomAnimation(enemy.getBounds().getX(), enemy.getBounds().getY()));

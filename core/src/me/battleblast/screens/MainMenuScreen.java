@@ -94,10 +94,17 @@ public class MainMenuScreen implements Screen {
             volumeSlider.setValue(value);
             game.music.setVolume(volumeSlider.getValue() / 100f);
         } 
+        // we use isKeyJustPressed - in case the user has come from another screen
+        // by pressing 'ESC' there, we want to give them a choice (i.e. to stay
+        // in the main menu and here if they click 'ESC' again, to exit the app).
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             Gdx.app.exit();
         }
-        if (Gdx.input.isKeyPressed(Keys.ENTER)) {
+        // we use isKeyJustPressed - in case we're coming from a
+        // GameOverLostScreen  we want to give the player a choice (i.e. to
+        // stay in the main menu, and not start a game immediately because
+        // 'ENTER' is still held).
+        if (Gdx.input.isKeyJustPressed(Keys.ENTER)) {
             game.setScreen(new GameScreen(game));
             dispose();
         }
