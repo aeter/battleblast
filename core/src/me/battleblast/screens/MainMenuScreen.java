@@ -114,7 +114,8 @@ public class MainMenuScreen implements Screen {
         table.add(new Label( "Volume", skin)).space(10);
         volumeSlider = new Slider(0, 100, 1, false, skin);
         table.add(volumeSlider).space(10).width(100);
-        volumeSlider.setValue(50);
+        game.music.setVolume(BattleBlast.INITIAL_MUSIC_VOLUME);
+        volumeSlider.setValue(BattleBlast.INITIAL_MUSIC_VOLUME * 100f);
         volumeSlider.addListener( new EventListener() {
             @Override
             public boolean handle(Event event) {

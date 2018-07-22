@@ -22,6 +22,7 @@ public class BattleBlast extends Game {
     public static final int MAP_WIDTH = 20; // 20 tiles
     public static final int MAP_HEIGHT = 20; // 20 tiles
     public static final int TILE_WIDTH = 32; // 32 pixels
+    public static final float INITIAL_MUSIC_VOLUME = 0.1f;
 
     public static AssetManager assets;
 
@@ -67,6 +68,7 @@ public class BattleBlast extends Game {
     private void playMusic() {
         music = assets.get("snd_music_victorytheme_0.ogg", Music.class);
         music.setLooping(true);
+        music.setVolume(INITIAL_MUSIC_VOLUME);
         music.play();
     }
 }
