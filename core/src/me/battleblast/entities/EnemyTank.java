@@ -43,12 +43,12 @@ public class EnemyTank extends Tank {
     }
 
     private void brain() {
+        if (this instanceof BossTank) {
+            recalculateCurrentPath(currentPlayerPosition);
+        }
         if (currentPath.size == 0 || stayedStillForSeconds(3)) {
             chooseNewPatrollingPosition();
             recalculateCurrentPath(nextPatrollingPosition);
-        }
-        if (this instanceof BossTank) {
-            recalculateCurrentPath(currentPlayerPosition);
         }
         if (wallsHaveChanged) {
             recalculateCurrentPath(currentTarget);
