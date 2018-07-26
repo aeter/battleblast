@@ -19,7 +19,6 @@ public class EnemyTank extends Tank {
     private Array<Vector2> currentWalls = new Array<Vector2>();
     private Vector2 currentPlayerPosition = new Vector2(0, 0);
     private Vector2 nextPatrollingPosition = new Vector2(0, 0);
-    private Vector2 lastKnownPlayerPosition = new Vector2(0, 0);
     private Array<Vector2> currentPath = new Array<Vector2>();
     private Vector2 currentTarget = new Vector2(0, 0);
     private boolean wallsHaveChanged = false;
@@ -48,9 +47,8 @@ public class EnemyTank extends Tank {
             chooseNewPatrollingPosition();
             recalculateCurrentPath(nextPatrollingPosition);
         }
-        if (seesPlayer()) {
-            lastKnownPlayerPosition = currentPlayerPosition;
-            recalculateCurrentPath(lastKnownPlayerPosition);
+        if (this instanceof BossTank) {
+            recalculateCurrentPath(currentPlayerPosition);
         }
         if (wallsHaveChanged) {
             recalculateCurrentPath(currentTarget);
@@ -127,24 +125,6 @@ public class EnemyTank extends Tank {
         } else {
             nextPatrollingPosition = bottomLeftCorner;
         }
-    }
-
-    private boolean seesPlayer() {
-        int pixelsTolerance = BattleBlast.TILE_WIDTH / 2;
-        boolean seenHorizontally = Math.abs(sprite.getX() - currentPlayerPosition.x) < pixelsTolerance;
-        boolean seenVertically = Math.abs(sprite.getY() - currentPlayerPosition.y) < pixelsTolerance;
-        boolean wallOnLineOfSight = false;
-        for (Vector2 wall: currentWalls) {
-            if (seenVertically) {
-                wallOnLineOfSight = Math.abs(wall.y * BattleBlast.TILE_WIDTH - currentPlayerPosition.y) < pixelsTolerance;
-            } else if (seenHorizontally) {
-                wallOnLineOfSight = Math.abs(wall.x * BattleBlast.TILE_WIDTH - currentPlayerPosition.x) < pixelsTolerance;
-            }
-            if (wallOnLineOfSight) {
-                return false;
-            }
-        }
-        return seenVertically || seenHorizontally;
     }
 
     private boolean reachedPosition(Vector2 position) {
