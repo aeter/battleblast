@@ -33,6 +33,7 @@ import me.battleblast.entities.Bullet;
 import me.battleblast.entities.EnemyTank;
 import me.battleblast.entities.PlayerTank;
 import me.battleblast.entities.Tank;
+import me.battleblast.entities.Tank.Direction;
 import me.battleblast.entities.Wall;
 
 
@@ -94,14 +95,17 @@ public class GameScreen implements Screen {
 
     private void handleInput() {
         if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-            player.moveLeft();
+            player.move(Direction.LEFT);
         } else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-            player.moveRight();
+            player.move(Direction.RIGHT);
         } else if (Gdx.input.isKeyPressed(Keys.UP)) {
-            player.moveUp();
+            player.move(Direction.UP);
         } else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-            player.moveDown();
-        } 
+            player.move(Direction.DOWN);
+        } else {
+            player.continueMovingUntilMidTile();
+        }
+
         if (Gdx.input.isKeyPressed(Keys.SPACE)) {
             player.shoot();
         }

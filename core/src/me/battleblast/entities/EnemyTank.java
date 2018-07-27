@@ -93,13 +93,13 @@ public class EnemyTank extends Tank {
             return;
         } else {
             if (nextNode.x < sprite.getX()) {
-                moveLeft();
+                move(Direction.LEFT);
             } else if (nextNode.y < sprite.getY()) {
-                moveDown();
+                move(Direction.DOWN);
             } else if (nextNode.x > sprite.getX()) {
-                moveRight();
+                move(Direction.RIGHT);
             } else if (nextNode.y > sprite.getY()) {
-                moveUp();
+                move(Direction.UP);
             }
         }
     }

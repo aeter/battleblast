@@ -11,6 +11,8 @@ import me.battleblast.screens.GameScreen;
 
 
 public class Tank {
+    public enum Direction { UP, DOWN, LEFT, RIGHT };
+
     protected static final float MOVE_SPEED = 100f; // ~pixels per second, depends on frame rate.
     protected static final long ONE_MILLISECOND = 1000000; // in nanoseconds
 
@@ -20,6 +22,8 @@ public class Tank {
     private long lastShootTime;
     private Rectangle bounds = new Rectangle(0, 0, 0, 0);
 
+    private Direction direction = Direction.LEFT;
+
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
     }
@@ -28,46 +32,87 @@ public class Tank {
         return sprite;
     }
 
-    // TODO - when turning somewhere (changing rotation with the current
-    // movement), if x or y is within 1-2 pixels of beginning of the tile, set
-    // to beginning of the tile. Otherwise it's very frustrating with 4-5 tries
-    // to get exactly to the 0th pixel of a position...
-    public void moveLeft() {
+    public void continueMovingUntilMidTile() {
+        move(null);
+    }
+
+    public void move(Direction direction) {
+        previousX = sprite.getX();
+        previousY = sprite.getY();
+
+        if (reachedMidTile() && direction == null) return;
+
+        if (reachedMidTile()) {
+            this.direction = direction;
+        }
+
+        float distance = MOVE_SPEED * Gdx.graphics.getDeltaTime();
+        if (this.direction == Direction.UP) moveUp(distance);
+        if (this.direction == Direction.DOWN) moveDown(distance);
+        if (this.direction == Direction.LEFT) moveLeft(distance);
+        if (this.direction == Direction.RIGHT) moveRight(distance);
+    }
+
+    public boolean reachedMidTile() {
+        if ((direction == Direction.UP || direction == Direction.DOWN) && sprite.getY() % 16 == 0) {
+            return true;
+        }
+        if ((direction == Direction.LEFT || direction == Direction.RIGHT) && sprite.getX() % 16 == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    private void moveLeft(float distance) {
         sprite.setRotation(270);
-        previousX = sprite.getX();
-        previousY = sprite.getY();
-        float movement = sprite.getX() - MOVE_SPEED * Gdx.graphics.getDeltaTime();
-        if (movement < 0) movement = 0;
-        sprite.setX(tiled(movement));
+        float screenBorderLeft = 0f;
+        boolean overPassingSixteenthTile = sprite.getX() % 16 < (sprite.getX() - distance) % 16;
+        if (sprite.getX() - distance < screenBorderLeft) {
+            sprite.setX(screenBorderLeft);
+        } else if (overPassingSixteenthTile && !reachedMidTile()) {
+            sprite.setX(sprite.getX() - (sprite.getX() % 16));
+        } else {
+            sprite.setX(sprite.getX() - distance);
+        }
     }
 
-    public void moveRight() {
+    private void moveRight(float distance) {
         sprite.setRotation(90);
-        previousX = sprite.getX();
-        previousY = sprite.getY();
-        float movement = sprite.getX() + MOVE_SPEED * Gdx.graphics.getDeltaTime();
-        float endOfScreen = Gdx.graphics.getWidth() - sprite.getWidth();
-        if (movement > endOfScreen) movement = endOfScreen;
-        sprite.setX(tiled(movement));
+        float screenBorderRight = Gdx.graphics.getWidth() - BattleBlast.TILE_WIDTH - BattleBlast.TILE_WIDTH;
+        boolean overPassingSixteenthTile =  sprite.getX() % 16 > (sprite.getX() + distance) % 16;
+        if (sprite.getX() + distance > screenBorderRight) {
+            sprite.setX(screenBorderRight);
+        } else if (overPassingSixteenthTile) {
+            sprite.setX(sprite.getX() + distance - ((sprite.getX() + distance) % 16));
+        } else {
+            sprite.setX(sprite.getX() + distance);
+        }
     }
 
-    public void moveUp() {
+    private void moveUp(float distance) {
         sprite.setRotation(180);
-        previousX = sprite.getX();
-        previousY = sprite.getY();
-        float movement = sprite.getY() + MOVE_SPEED * Gdx.graphics.getDeltaTime();
-        float endOfScreen = Gdx.graphics.getHeight() - sprite.getHeight();
-        if (movement > endOfScreen) movement = endOfScreen;
-        sprite.setY(tiled(movement));
+        float screenBorderTop = Gdx.graphics.getHeight() - BattleBlast.TILE_WIDTH - BattleBlast.TILE_WIDTH;
+        boolean overpassingSixteenthTile = sprite.getY() % 16 > (sprite.getY() + distance) % 16;
+        if (sprite.getY() + distance > screenBorderTop) {
+            sprite.setY(screenBorderTop);
+        } else if (overpassingSixteenthTile) {
+            sprite.setY(sprite.getY() + distance - ((sprite.getY() + distance) % 16));
+        } else {
+            sprite.setY(sprite.getY() + distance);
+        }
     }
 
-    public void moveDown() {
+    private void moveDown(float distance) {
         sprite.setRotation(0);
-        previousX = sprite.getX();
-        previousY = sprite.getY();
-        float movement = sprite.getY() - MOVE_SPEED * Gdx.graphics.getDeltaTime();
-        if (movement < 0) movement = 0;
-        sprite.setY(tiled(movement));
+        float screenBorderDown = 0f;
+        boolean overpassingSixteenthTile = sprite.getY() % 16 < (sprite.getY() - distance) % 16;
+        if (sprite.getY() - distance < screenBorderDown) {
+            sprite.setY(screenBorderDown);
+        } else if (overpassingSixteenthTile && !reachedMidTile()) {
+            sprite.setY(sprite.getY() - (sprite.getY() % 16));
+        } else {
+            sprite.setY(sprite.getY() - distance);
+        }
     }
 
     public void shoot() {
@@ -108,20 +153,5 @@ public class Tank {
     private void stepBack() {
         sprite.setX(previousX);
         sprite.setY(previousY);
-    }
-
-    /*
-     *  If the tank had moved too fast and missed the start or the end of the tile by
-     *  a few pixels, place the tank to the start/end of the tile (smoother movement)
-     */
-    private float tiled(float movement) {
-        int pixels_tolerance = 1;
-        if (movement % BattleBlast.TILE_WIDTH < pixels_tolerance) {
-            return movement - movement % BattleBlast.TILE_WIDTH;
-        }
-        if (movement % BattleBlast.TILE_WIDTH > BattleBlast.TILE_WIDTH - pixels_tolerance) {
-            return (movement - movement % BattleBlast.TILE_WIDTH) + BattleBlast.TILE_WIDTH;
-        }
-        return movement;
     }
 }
