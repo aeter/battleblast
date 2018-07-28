@@ -1,6 +1,6 @@
 # BattleBlast
 
-A (very simple) 2D game of tanks. 
+[:radio_button:](https://github.com/aeter/battleblast/releases/download/1.0.0/desktop-1.0.jar) A (very simple) 2D game of tanks.
 
 ![menu image](https://raw.githubusercontent.com/aeter/battleblast/main/readme_resources/menu.png)
 
