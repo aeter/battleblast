@@ -64,14 +64,7 @@ public class GameScreen implements Screen {
         handleInput(); 
         moveWorld(delta);
         handleCollisions();
-        if (enemies.size == 0) {
-            if (bossSpawnedAlready) {
-                showGameOverVictoryScreen();
-            } else {
-                spawnBoss();
-                bossSpawnedAlready = true;
-            }
-        }
+        handleBossSpawning();
         draw();
     }
 
@@ -331,5 +324,16 @@ public class GameScreen implements Screen {
                 dispose();
             }
         }, delayInSeconds);
+    }
+
+    private void handleBossSpawning() {
+        if (enemies.size == 0) {
+            if (bossSpawnedAlready) {
+                showGameOverVictoryScreen();
+            } else {
+                spawnBoss();
+                bossSpawnedAlready = true;
+            }
+        }
     }
 }

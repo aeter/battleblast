@@ -66,10 +66,10 @@ public class Tank {
     }
 
     public boolean reachedMidTile() {
-        if ((direction == Direction.UP || direction == Direction.DOWN) && sprite.getY() % 16 == 0) {
+        if ((direction == Direction.UP || direction == Direction.DOWN) && sprite.getY() % halfTile() == 0) {
             return true;
         }
-        if ((direction == Direction.LEFT || direction == Direction.RIGHT) && sprite.getX() % 16 == 0) {
+        if ((direction == Direction.LEFT || direction == Direction.RIGHT) && sprite.getX() % halfTile() == 0) {
             return true;
         }
         return false;
