@@ -7,7 +7,7 @@ public class BossTank extends EnemyTank {
     }
 
     @Override
-    protected boolean timeToShootAgain() {
+    protected boolean isTimeToShootAgain() {
         return nPercentChance(15);
     }
 }

@@ -12,16 +12,13 @@ import me.battleblast.screens.GameScreen;
 
 public class Tank {
     public enum Direction { UP, DOWN, LEFT, RIGHT };
-
     protected static final float MOVE_SPEED = 100f; // ~pixels per second, depends on frame rate.
     protected static final long ONE_MILLISECOND = 1000000; // in nanoseconds
-
     protected Sprite sprite;
     protected float previousX = 0f;
     protected float previousY = 0f;
     private long lastShootTime;
     private Rectangle bounds = new Rectangle(0, 0, 0, 0);
-
     private Direction direction = Direction.LEFT;
 
     public void setSprite(Sprite sprite) {

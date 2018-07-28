@@ -34,7 +34,7 @@ public class EnemyTank extends Tank {
         brain();
     }
 
-    protected boolean timeToShootAgain() {
+    protected boolean isTimeToShootAgain() {
         return nPercentChance(3);
     }
 
@@ -53,7 +53,9 @@ public class EnemyTank extends Tank {
         if (wallsHaveChanged) {
             recalculateCurrentPath(currentTarget);
         }
-        if (timeToShootAgain()) shoot();
+        if (isTimeToShootAgain()) {
+            shoot();
+        }
         followPath();
     }
 
@@ -82,15 +84,15 @@ public class EnemyTank extends Tank {
     }
 
     private void followPath() {
-        if (currentPath.size == 0) return;
+        if (currentPath.size == 0) {
+            return;
+        }
 
         Vector2 nextNode = currentPath.first().cpy();
         nextNode.x *= BattleBlast.TILE_WIDTH;
         nextNode.y *= BattleBlast.TILE_WIDTH;
         if (reachedPosition(nextNode)) {
             currentPath.removeIndex(0);
-            followPath();
-            return;
         } else {
             if (nextNode.x < sprite.getX()) {
                 move(Direction.LEFT);
