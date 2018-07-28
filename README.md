@@ -1,8 +1,14 @@
 # BattleBlast
 
-A 2D game of tanks. 
+A (very simple) 2D game of tanks. 
 
-[WIP][WIP][WIP][WIP]
+![menu image](https://raw.githubusercontent.com/aeter/battleblast/main/readme_resources/menu.png)
+![game image](https://raw.githubusercontent.com/aeter/battleblast/main/readme_resources/gamescreen.png)
+
+### For developers:
+```
+$ ./gradlew build|run|dist
+```
 
 ### Credits:
 * Game art by ["Kenney.nl"](https://kenney.nl) - [@opengameart](https://opengameart.org/content/top-down-tanks-redux), [@opengameart](https://opengameart.org/content/smoke-particle-assets)
