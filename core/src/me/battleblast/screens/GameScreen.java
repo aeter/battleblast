@@ -66,7 +66,7 @@ public class GameScreen implements Screen {
         handleCollisions();
         if (enemies.size == 0) {
             if (bossSpawnedAlready) {
-                // TODO - win GAMe animation
+                showGameOverVictoryScreen();
             } else {
                 spawnBoss();
                 bossSpawnedAlready = true;
@@ -315,6 +315,19 @@ public class GameScreen implements Screen {
             @Override
             public void run() {
                 game.setScreen(new GameOverLostScreen(game));
+                dispose();
+            }
+        }, delayInSeconds);
+    }
+
+    private void showGameOverVictoryScreen() {
+        // we want the boom animations to complete, this is why
+        // we use a delay before showing the game over screen.
+        float delayInSeconds = 0.2f;
+        Timer.schedule(new Task() {
+            @Override
+            public void run() {
+                game.setScreen(new GameOverVictoryScreen(game));
                 dispose();
             }
         }, delayInSeconds);

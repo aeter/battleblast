@@ -56,6 +56,7 @@ public class BattleBlast extends Game {
         assets.load("boom_sounds_pack_dklon/boom5.wav", Sound.class);
         assets.load("boom_sounds_pack_dklon/boom9.wav", Sound.class);
         assets.load("snd_music_victorytheme_0.ogg", Music.class);
+        assets.load("snd_music2.ogg", Music.class);
         assets.setLoader(TiledMap.class, new TmxMapLoader());
         assets.load("tanks.tmx", TiledMap.class);
         assets.setLoader(ParticleEffect.class, new ParticleEffectLoader(new InternalFileHandleResolver()));
