@@ -3,7 +3,6 @@
 A (very simple) 2D game of tanks. 
 
 ![menu image](https://raw.githubusercontent.com/aeter/battleblast/main/readme_resources/menu.png)
-![game image](https://raw.githubusercontent.com/aeter/battleblast/main/readme_resources/gamescreen.png)
 
 ### For developers:
 ```
