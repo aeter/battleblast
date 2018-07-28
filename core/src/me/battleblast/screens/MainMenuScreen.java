@@ -42,6 +42,9 @@ public class MainMenuScreen implements Screen {
         addNewGameButton(table);
 
         table.row();
+        addControlsButton(table);
+
+        table.row();
         addCreditsButton(table);
 
         table.row();
@@ -136,6 +139,19 @@ public class MainMenuScreen implements Screen {
             }
         });
     }
+
+    private void addControlsButton(Table table) {
+        final TextButton controlsButton = new TextButton("Controls", skin, "default");
+        table.add(controlsButton).colspan(2);
+        controlsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new ControlsScreen(game));
+                dispose();
+            }
+        });
+    }
+
 
     private void addCreditsButton(Table table) {
         final TextButton creditsButton = new TextButton("Credits", skin, "default");
