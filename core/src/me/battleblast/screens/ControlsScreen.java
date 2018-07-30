@@ -1,5 +1,7 @@
 package me.battleblast.screens;
 
+import java.lang.StringBuilder;
+
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -86,12 +88,14 @@ public class ControlsScreen implements Screen {
     private void addControlsText(Table table) {
         Window window = new Window("", skin);
         table.add(window);
-        String controls = "SPACE - shoot\n\n"
-                + "ARROW LEFT - move left\n\n"
-                + "ARROW RIGHT - move right\n\n"
-                + "ARROW UP - move up\n\n"
-                + "ARROW DOWN - move down\n\n"
-                + "ESC - exit\n\n";
+        String controls = new StringBuilder()
+            .append("SPACE - shoot\n\n")
+            .append("ARROW LEFT - move left\n\n")
+            .append("ARROW RIGHT - move right\n\n")
+            .append("ARROW UP - move up\n\n")
+            .append("ARROW DOWN - move down\n\n")
+            .append("ESC - exit\n\n")
+            .toString();
         Label controlsLabel  = new Label(controls, skin);
         controlsLabel.setWrap(true);
         controlsLabel.setWidth(500f);

@@ -1,5 +1,7 @@
 package me.battleblast.screens;
 
+import java.lang.StringBuilder;
+
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -86,16 +88,18 @@ public class CreditsScreen implements Screen {
     private void addCreditsText(Table table) {
         Window window = new Window("Special thanks to:", skin);
         table.add(window);
-        String credits = "Game art:\n"
-                + "* Kenney (kenney.nl)\n"
-                + "\nGame music:\n"
-                + "* 'Spring' (opengameart.org/users/spring)\n"
-                + "\nSounds:\n"
-                + "* 'dklon' (opengameart.org/users/dklon)\n"
-                + "\nGUI theme:\n"
-                + "* Raymond 'Raeleus' Buckley - (ray3k.wordpress.com)\n"
-                + "\nProgramming:\n"
-                + "* 'aeter' - (github.com/aeter)\n";
+        String credits = new StringBuilder()
+            .append("Game art:\n")
+            .append("* Kenney (kenney.nl)\n")
+            .append("\nGame music:\n")
+            .append("* 'Spring' (opengameart.org/users/spring)\n")
+            .append("\nSounds:\n")
+            .append("* 'dklon' (opengameart.org/users/dklon)\n")
+            .append("\nGUI theme:\n")
+            .append("* Raymond 'Raeleus' Buckley - (ray3k.wordpress.com)\n")
+            .append("\nProgramming:\n")
+            .append("* 'aeter' - (github.com/aeter)\n")
+            .toString();
         Label creditsLabel  = new Label(credits, skin);
         creditsLabel.setWrap(true);
         creditsLabel.setWidth(500f);

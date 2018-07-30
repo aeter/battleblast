@@ -12,11 +12,15 @@ public class Wall {
     private Sprite sprite;
     private Rectangle bounds;
 
-    public Wall(Rectangle bounds) {
+    private Wall(Rectangle bounds) {
         this.bounds = bounds;
     }
 
-    public static Wall getBreakableInstance(Rectangle bounds) {
+    public static Wall ofUnbreakableType(Rectangle bounds) {
+        return new Wall(bounds);
+    }
+
+    public static Wall ofBreakableType(Rectangle bounds) {
         Wall wall = new Wall(bounds);
         Sprite sprite = new Sprite(BattleBlast.getAtlas().findRegion("crateWood_32x32"));
         sprite.setBounds(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());

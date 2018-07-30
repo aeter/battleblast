@@ -162,7 +162,7 @@ public class GameScreen implements Screen {
                 Sound sound = game.assets.get("boom_sounds_pack_dklon/boom9.wav", Sound.class);
                 sound.play();
                 animations.add(new BigBoomAnimation(player.getBounds().getX(), player.getBounds().getY()));
-                player.getSprite().setSize(0, 0); // some way to hide it...
+                player.getSprite().setSize(0, 0); // hide the sprite while the boom animation runs
                 showGameOverLostScreen();
             }
             for (Iterator<EnemyTank> i = enemies.iterator(); i.hasNext(); ) {
@@ -267,7 +267,7 @@ public class GameScreen implements Screen {
         MapObjects breakableWalls = map.getLayers().get("breakable_obstacles").getObjects();
         for (MapObject wall: breakableWalls) {
             Rectangle bounds = ((RectangleMapObject) wall).getRectangle();
-            walls.add(Wall.getBreakableInstance(bounds));
+            walls.add(Wall.ofBreakableType(bounds));
         }
     }
 
@@ -275,7 +275,7 @@ public class GameScreen implements Screen {
         MapObjects unbreakableWalls = map.getLayers().get("unbreakable_obstacles").getObjects();
         for (MapObject wall: unbreakableWalls) {
             Rectangle bounds = ((RectangleMapObject) wall).getRectangle();
-            walls.add(new Wall(bounds));
+            walls.add(Wall.ofUnbreakableType(bounds));
         }
     }
 
